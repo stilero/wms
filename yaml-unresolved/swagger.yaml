@@ -1085,6 +1085,47 @@ components:
             enum: [high, mid, low]
             default: mid
             example: mid
+          dispatchFee:
+            type: number
+            maxLength: 22
+            description: "Costs for Service Charge (Used for paperwork)"
+            example: 15
+          codFee:
+            type: number
+            maxLength: 22
+            description: "Cash on Delivery Fee."
+          #fre_party_qualifier:
+            #type: string
+            #maxLength: 12
+            #description: "Forwarder's Party Type The Type of Party that has a forwarder agreement with the Forwarder."
+            ##HARDCODED TO CU?
+          freightPartyId:
+            type: string
+            maxLength: 140
+            description: "The identity of the Party that has a forwarder agreement with the Forwarder."
+            example: SE-EXAMPLE
+          freightCost:
+            type: number
+            maxLength: 22
+            description: "The cost for transporting the goods to the destination address."
+          division:
+            type: string
+            maxLength: 68
+            description: "Division, department, section, workshop or similar subordinate unit of a company / organization."
+          termsOfDelivery:
+            type: number
+            maxLength: 3
+            description: "The Terms of Shipment for the Consignment stated as a code according to Combiterm 2000."
+            enum: [100,150,300,400]
+            example: 150
+          termsOfDeliveryLocation:
+            type: string
+            maxLength: 140
+            description: "The destination for the goods according to the Terms of Shipment. Received from the external Carrier Compliancy Provider."
+          codReference:
+            type: string
+            maxLength: 140
+            description: "Reference for the Cash-on-Delivery, usually a bank or giro account for the Invoicing Customer."
           customerOrderLines:
             type: array
             items:
@@ -1121,47 +1162,13 @@ components:
           #type: number
           #maxLength: 22
           #description: "VAT(%) Conditions for the Customer Order like which VAT % will apply."
-        #dispatch_fee:
-          #type: number
-          #maxLength: 22
-          #description: "Service Charge Costs for Service Charge."
-        #cod_fee:
-          #type: number
-          #maxLength: 22
-          #description: "COD Fee Cash on Delivery Fee."
-        #fre_party_qualifier:
-          #type: string
-          #maxLength: 12
-          #description: "Forwarder's Party Type The Type of Party that has a forwarder agreement with the Forwarder."
-        #fre_party_id:
-          #type: string
-          #maxLength: 140
-          #description: "Forwarder's Party Identity The identity of the Party that has a forwarder agreement with the Forwarder."
-        #freight_cost:
-          #type: number
-          #maxLength: 22
-          #description: "Freight Cost The cost for transporting the goods to the Ship-to Customer."
+        
         
         #currency:
           #type: string
           #maxLength: 12
           #description: "Not used Obsolete."
-        #division:
-          #type: string
-          #maxLength: 68
-          #description: "Division Division, department, section, workshop or similar subordinate unit of a company / organization."
-        #terms_of_delivery:
-          #type: string
-          #maxLength: 24
-          #description: "Terms of Shipment The Terms of Shipment for the Consignment stated as a code according to Combiterm 2000."
-        #terms_of_delivery_location:
-          #type: string
-          #maxLength: 140
-          #description: "Terms of Shipment Destination The destination for the goods according to the Terms of Shipment. Received from the external Carrier Compliancy Provider."
-        #cod_reference:
-          #type: string
-          #maxLength: 140
-          #description: "Reference for Cash-on-Delivery Reference for the Cash-on-Delivery, usually a bank or giro account for the Bill-to Customer."
+        
     CustomerOrderOut:
       description: Customer order details for the request response.
       allOf:
