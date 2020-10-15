@@ -91,14 +91,14 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ProductItem'
-#        '400':
-#          $ref: '#/components/responses/InvalidInput'
-#        '403':
-#          $ref: '#/components/responses/Unauthorized'
-#        '404':
-#          $ref: '#/components/responses/NotFound'
-#        '503':
-#          $ref: '#/components/responses/ServiceUnavailable'
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
     post:
       tags:
         - master-data   
@@ -569,87 +569,87 @@ paths:
               $ref: '#/components/schemas/InventoryItem'
         description: Inventory item to add
 components:
-  #responses:
-  #  InvalidInput:
-  #    description: There is something wrong with the input
-  #    content:
-  #      application/json:
-  #        schema:
-  #          allOf:
-  #            - $ref: '#/components/schemas/Error'
-  #          properties:
-  #            type:
-  #              example: 'http://developer.example.com/errors/invalid-input'
-  #            title:
-  #              example: Invalid input
-  #            status: 
-  #              example: 400
-  #            detail:
-  #              example: Your request contains bad data or are missing mandatory parameters. Check your data and resend.
-  #  Unauthorized:
-  #    description: Unauthorized Request
-  #    content:
-  #      application/json:
-  #        schema:
-  #          allOf:
-  #            - $ref: '#/components/schemas/Error'
-  #          properties:
-  #            type:
-  #              example: 'http://developer.example.com/errors/unauthorized'
-  #            title:
-  #              example: Permission denied
-  #            status: 
-  #              example: 403
-  #            detail:
-  #              example: You do not have permission to read or write to the resource you are requesting. 
-  #  NotFound:
-  #    description: The resource cannot be found and an error occurs.
-  #    content:
-  #      application/json:
-  #        schema:
-  #          allOf:
-  #            - $ref: '#/components/schemas/Error'
-  #          properties:
-  #            type:
-  #              example: 'http://developer.example.com/errors/not-found'
-  #            title:
-  #              example: Not found
-  #            status: 
-  #              example: 404
-  #            detail:
-  #              example: The resource ID you specified does not exist.
-  #  Conflict:
-  #    description: Your request was denied. Resource already exists. Use PUT method to update resource.
-  #    content:
-  #      application/json:
-  #        schema:
-  #          allOf:
-  #            - $ref: '#/components/schemas/Error'
-  #          properties:
-  #            type:
-  #              example: 'http://developer.example.com/errors/conflict'
-  #            title:
-  #              example: Resource already exists
-  #            status: 
-  #              example: 409
-  #            detail:
-  #              example: Your request was denied. Resource already exists. Use PUT method to update resource.
-  #  ServiceUnavailable:
-  #    description: Your request was denied. Resource already exists. Use PUT method to update resource.
-  #    content:
-  #      application/json:
-  #        schema:
-  #          allOf:
-  #            - $ref: '#/components/schemas/Error'
-  #          properties:
-  #            type:
-  #              example: 'http://developer.example.com/errors/service-unavailable'
-  #            title:
-  #              example: Service unavailable
-  #            status: 
-  #              example: 503
-  #            detail:
-  #              example: Service is unavailable. Please try again later.
+  responses:
+    InvalidInput:
+      description: There is something wrong with the input
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Error'
+            properties:
+              type:
+                example: 'http://developer.example.com/errors/invalid-input'
+              title:
+                example: Invalid input
+              status: 
+                example: 400
+              detail:
+                example: Your request contains bad data or are missing mandatory parameters. Check your data and resend.
+    Unauthorized:
+      description: Unauthorized Request
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Error'
+            properties:
+              type:
+                example: 'http://developer.example.com/errors/unauthorized'
+              title:
+                example: Permission denied
+              status: 
+                example: 403
+              detail:
+                example: You do not have permission to read or write to the resource you are requesting. 
+    NotFound:
+      description: The resource cannot be found and an error occurs.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Error'
+            properties:
+              type:
+                example: 'http://developer.example.com/errors/not-found'
+              title:
+                example: Not found
+              status: 
+                example: 404
+              detail:
+                example: The resource ID you specified does not exist.
+    Conflict:
+      description: Your request was denied. Resource already exists. Use PUT method to update resource.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Error'
+            properties:
+              type:
+                example: 'http://developer.example.com/errors/conflict'
+              title:
+                example: Resource already exists
+              status: 
+                example: 409
+              detail:
+                example: Your request was denied. Resource already exists. Use PUT method to update resource.
+    ServiceUnavailable:
+      description: Your request was denied. Resource already exists. Use PUT method to update resource.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Error'
+            properties:
+              type:
+                example: 'http://developer.example.com/errors/service-unavailable'
+              title:
+                example: Service unavailable
+              status: 
+                example: 503
+              detail:
+                example: Service is unavailable. Please try again later.
   parameters:
       skipParam:
         name: skip
