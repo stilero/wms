@@ -218,14 +218,12 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ProductStockGroup'
-#        '400':
-#          $ref: '#/components/responses/InvalidInput'
-#        '403':
-#          $ref: '#/components/responses/Unauthorized'
-#        '404':
-#          $ref: '#/components/responses/NotFound'
-#        '503':
-#          $ref: '#/components/responses/ServiceUnavailable'
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
     post:
       tags:
         - master-data   
@@ -239,16 +237,14 @@ paths:
       responses:
         '201':
           description: product stock group created
-#        '400':
-#          $ref: '#/components/responses/InvalidInput'
-#        '403':
-#          $ref: '#/components/responses/Unauthorized'
-#        '404':
-#          $ref: '#/components/responses/NotFound'
-#        '409':
-#          $ref: '#/components/responses/Conflict'
-#        '503':
-#          $ref: '#/components/responses/ServiceUnavailable'
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
       requestBody:
         content:
           application/json:
@@ -282,14 +278,14 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ProductStockGroup'
-#        '400':
-#          $ref: '#/components/responses/InvalidInput'
-#        '403':
-#          $ref: '#/components/responses/Unauthorized'
-#        '404':
-#          $ref: '#/components/responses/NotFound'
-#        '503':
-#          $ref: '#/components/responses/ServiceUnavailable'
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
     put:
       tags:
         - master-data   
@@ -318,14 +314,14 @@ paths:
       responses:
         '201':
           description: product stock group updated
-#        '400':
-#          $ref: '#/components/responses/InvalidInput'
-#        '403':
-#          $ref: '#/components/responses/Unauthorized'
-#        '404':
-#          $ref: '#/components/responses/NotFound'
-#        '503':
-#          $ref: '#/components/responses/ServiceUnavailable'
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
   /customer-orders:
     get:
       tags:
