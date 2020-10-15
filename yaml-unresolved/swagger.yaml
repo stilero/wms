@@ -91,14 +91,14 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ProductItem'
-        '400':
-          $ref: '#/components/responses/InvalidInput'
-        '403':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '503':
-          $ref: '#/components/responses/ServiceUnavailable'
+#        '400':
+#          $ref: '#/components/responses/InvalidInput'
+#        '403':
+#          $ref: '#/components/responses/Unauthorized'
+#        '404':
+#          $ref: '#/components/responses/NotFound'
+#        '503':
+#          $ref: '#/components/responses/ServiceUnavailable'
     post:
       tags:
         - master-data   
@@ -112,16 +112,16 @@ paths:
       responses:
         '201':
           description: product created
-        '400':
-          $ref: '#/components/responses/InvalidInput'
-        '403':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '409':
-          $ref: '#/components/responses/Conflict'
-        '503':
-          $ref: '#/components/responses/ServiceUnavailable'
+#        '400':
+#          $ref: '#/components/responses/InvalidInput'
+#        '403':
+#          $ref: '#/components/responses/Unauthorized'
+#        '404':
+#          $ref: '#/components/responses/NotFound'
+#        '409':
+#          $ref: '#/components/responses/Conflict'
+#        '503':
+#          $ref: '#/components/responses/ServiceUnavailable'
       requestBody:
         content:
           application/json:
@@ -155,14 +155,14 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Product'
-        '400':
-          $ref: '#/components/responses/InvalidInput'
-        '403':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '503':
-          $ref: '#/components/responses/ServiceUnavailable'
+#        '400':
+#          $ref: '#/components/responses/InvalidInput'
+#        '403':
+#          $ref: '#/components/responses/Unauthorized'
+#        '404':
+#          $ref: '#/components/responses/NotFound'
+#        '503':
+#          $ref: '#/components/responses/ServiceUnavailable'
     put:
       tags:
         - master-data   
@@ -191,14 +191,14 @@ paths:
       responses:
         '201':
           description: product updated
-        '400':
-          $ref: '#/components/responses/InvalidInput'
-        '403':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '503':
-          $ref: '#/components/responses/ServiceUnavailable'
+#        '400':
+#          $ref: '#/components/responses/InvalidInput'
+#        '403':
+#          $ref: '#/components/responses/Unauthorized'
+#        '404':
+#          $ref: '#/components/responses/NotFound'
+#        '503':
+#          $ref: '#/components/responses/ServiceUnavailable'
   /master-data/product-stock-group:
     get:
       tags:
@@ -222,14 +222,14 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ProductStockGroup'
-        '400':
-          $ref: '#/components/responses/InvalidInput'
-        '403':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '503':
-          $ref: '#/components/responses/ServiceUnavailable'
+#        '400':
+#          $ref: '#/components/responses/InvalidInput'
+#        '403':
+#          $ref: '#/components/responses/Unauthorized'
+#        '404':
+#          $ref: '#/components/responses/NotFound'
+#        '503':
+#          $ref: '#/components/responses/ServiceUnavailable'
     post:
       tags:
         - master-data   
@@ -243,16 +243,16 @@ paths:
       responses:
         '201':
           description: product stock group created
-        '400':
-          $ref: '#/components/responses/InvalidInput'
-        '403':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '409':
-          $ref: '#/components/responses/Conflict'
-        '503':
-          $ref: '#/components/responses/ServiceUnavailable'
+#        '400':
+#          $ref: '#/components/responses/InvalidInput'
+#        '403':
+#          $ref: '#/components/responses/Unauthorized'
+#        '404':
+#          $ref: '#/components/responses/NotFound'
+#        '409':
+#          $ref: '#/components/responses/Conflict'
+#        '503':
+#          $ref: '#/components/responses/ServiceUnavailable'
       requestBody:
         content:
           application/json:
@@ -286,14 +286,14 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ProductStockGroup'
-        '400':
-          $ref: '#/components/responses/InvalidInput'
-        '403':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '503':
-          $ref: '#/components/responses/ServiceUnavailable'
+#        '400':
+#          $ref: '#/components/responses/InvalidInput'
+#        '403':
+#          $ref: '#/components/responses/Unauthorized'
+#        '404':
+#          $ref: '#/components/responses/NotFound'
+#        '503':
+#          $ref: '#/components/responses/ServiceUnavailable'
     put:
       tags:
         - master-data   
@@ -322,14 +322,14 @@ paths:
       responses:
         '201':
           description: product stock group updated
-        '400':
-          $ref: '#/components/responses/InvalidInput'
-        '403':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '503':
-          $ref: '#/components/responses/ServiceUnavailable'
+#        '400':
+#          $ref: '#/components/responses/InvalidInput'
+#        '403':
+#          $ref: '#/components/responses/Unauthorized'
+#        '404':
+#          $ref: '#/components/responses/NotFound'
+#        '503':
+#          $ref: '#/components/responses/ServiceUnavailable'
   /customer-orders:
     get:
       tags:
@@ -353,12 +353,12 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/CustomerOrderList'
-        '400':
-          $ref: '#/components/responses/InvalidInput'
-        '403':
-          $ref: '#/components/responses/Unauthorized'
-        '503':
-          $ref: '#/components/responses/ServiceUnavailable'
+#        '400':
+#          $ref: '#/components/responses/InvalidInput'
+#        '403':
+#          $ref: '#/components/responses/Unauthorized'
+#        '503':
+#          $ref: '#/components/responses/ServiceUnavailable'
     post:
       tags:
         - outbound   
@@ -372,16 +372,16 @@ paths:
       responses:
         '201':
           description: customer order created
-        '400':
-          $ref: '#/components/responses/InvalidInput'
-        '403':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '409':
-          $ref: '#/components/responses/Conflict'
-        '503':
-          $ref: '#/components/responses/ServiceUnavailable'
+#        '400':
+#          $ref: '#/components/responses/InvalidInput'
+#        '403':
+#          $ref: '#/components/responses/Unauthorized'
+#        '404':
+#          $ref: '#/components/responses/NotFound'
+#        '409':
+#          $ref: '#/components/responses/Conflict'
+#        '503':
+#          $ref: '#/components/responses/ServiceUnavailable'
       requestBody:
         content:
           application/json:
@@ -414,14 +414,14 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/CustomerOrderOut'
-        '400':
-          $ref: '#/components/responses/InvalidInput'
-        '403':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '503':
-          $ref: '#/components/responses/ServiceUnavailable'
+#        '400':
+#          $ref: '#/components/responses/InvalidInput'
+#        '403':
+#          $ref: '#/components/responses/Unauthorized'
+#        '404':
+#          $ref: '#/components/responses/NotFound'
+#        '503':
+#          $ref: '#/components/responses/ServiceUnavailable'
     put:
       tags:
         - outbound   
@@ -449,14 +449,14 @@ paths:
       responses:
         '201':
           description: customer order updated
-        '400':
-          $ref: '#/components/responses/InvalidInput'
-        '403':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '503':
-          $ref: '#/components/responses/ServiceUnavailable'
+#        '400':
+#          $ref: '#/components/responses/InvalidInput'
+#        '403':
+#          $ref: '#/components/responses/Unauthorized'
+#        '404':
+#          $ref: '#/components/responses/NotFound'
+#        '503':
+#          $ref: '#/components/responses/ServiceUnavailable'
     delete:
       tags:
         - outbound   
@@ -480,14 +480,14 @@ paths:
       responses:
         '201':
           description: customer order deleted
-        '400':
-          $ref: '#/components/responses/InvalidInput'
-        '403':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '503':
-          $ref: '#/components/responses/ServiceUnavailable'
+#        '400':
+#          $ref: '#/components/responses/InvalidInput'
+#        '403':
+#          $ref: '#/components/responses/Unauthorized'
+#        '404':
+#          $ref: '#/components/responses/NotFound'
+#        '503':
+#          $ref: '#/components/responses/ServiceUnavailable'
   /inventory:
     get:
       tags:
@@ -531,14 +531,14 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/InventoryItem'
-        '400':
-          $ref: '#/components/responses/InvalidInput'
-        '403':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '503':
-          $ref: '#/components/responses/ServiceUnavailable'
+#        '400':
+#          $ref: '#/components/responses/InvalidInput'
+#        '403':
+#          $ref: '#/components/responses/Unauthorized'
+#        '404':
+#          $ref: '#/components/responses/NotFound'
+#        '503':
+#          $ref: '#/components/responses/ServiceUnavailable'
     post:
       tags:
         - admins
@@ -552,16 +552,16 @@ paths:
       responses:
         '201':
           description: item created
-        '400':
-          $ref: '#/components/responses/InvalidInput'
-        '403':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '409':
-          $ref: '#/components/responses/Conflict'
-        '503':
-          $ref: '#/components/responses/ServiceUnavailable'
+#        '400':
+#          $ref: '#/components/responses/InvalidInput'
+#        '403':
+#          $ref: '#/components/responses/Unauthorized'
+#        '404':
+#          $ref: '#/components/responses/NotFound'
+#        '409':
+#          $ref: '#/components/responses/Conflict'
+#        '503':
+#          $ref: '#/components/responses/ServiceUnavailable'
       requestBody:
         content:
           application/json:
@@ -569,87 +569,87 @@ paths:
               $ref: '#/components/schemas/InventoryItem'
         description: Inventory item to add
 components:
-  responses:
-    InvalidInput:
-      description: There is something wrong with the input
-      content:
-        application/json:
-          schema:
-            allOf:
-              - $ref: '#/components/schemas/Error'
-            properties:
-              type:
-                example: 'http://developer.example.com/errors/invalid-input'
-              title:
-                example: Invalid input
-              status: 
-                example: 400
-              detail:
-                example: Your request contains bad data or are missing mandatory parameters. Check your data and resend.
-    Unauthorized:
-      description: Unauthorized Request
-      content:
-        application/json:
-          schema:
-            allOf:
-              - $ref: '#/components/schemas/Error'
-            properties:
-              type:
-                example: 'http://developer.example.com/errors/unauthorized'
-              title:
-                example: Permission denied
-              status: 
-                example: 403
-              detail:
-                example: You do not have permission to read or write to the resource you are requesting. 
-    NotFound:
-      description: The resource cannot be found and an error occurs.
-      content:
-        application/json:
-          schema:
-            allOf:
-              - $ref: '#/components/schemas/Error'
-            properties:
-              type:
-                example: 'http://developer.example.com/errors/not-found'
-              title:
-                example: Not found
-              status: 
-                example: 404
-              detail:
-                example: The resource ID you specified does not exist.
-    Conflict:
-      description: Your request was denied. Resource already exists. Use PUT method to update resource.
-      content:
-        application/json:
-          schema:
-            allOf:
-              - $ref: '#/components/schemas/Error'
-            properties:
-              type:
-                example: 'http://developer.example.com/errors/conflict'
-              title:
-                example: Resource already exists
-              status: 
-                example: 409
-              detail:
-                example: Your request was denied. Resource already exists. Use PUT method to update resource.
-    ServiceUnavailable:
-      description: Your request was denied. Resource already exists. Use PUT method to update resource.
-      content:
-        application/json:
-          schema:
-            allOf:
-              - $ref: '#/components/schemas/Error'
-            properties:
-              type:
-                example: 'http://developer.example.com/errors/service-unavailable'
-              title:
-                example: Service unavailable
-              status: 
-                example: 503
-              detail:
-                example: Service is unavailable. Please try again later.
+  #responses:
+  #  InvalidInput:
+  #    description: There is something wrong with the input
+  #    content:
+  #      application/json:
+  #        schema:
+  #          allOf:
+  #            - $ref: '#/components/schemas/Error'
+  #          properties:
+  #            type:
+  #              example: 'http://developer.example.com/errors/invalid-input'
+  #            title:
+  #              example: Invalid input
+  #            status: 
+  #              example: 400
+  #            detail:
+  #              example: Your request contains bad data or are missing mandatory parameters. Check your data and resend.
+  #  Unauthorized:
+  #    description: Unauthorized Request
+  #    content:
+  #      application/json:
+  #        schema:
+  #          allOf:
+  #            - $ref: '#/components/schemas/Error'
+  #          properties:
+  #            type:
+  #              example: 'http://developer.example.com/errors/unauthorized'
+  #            title:
+  #              example: Permission denied
+  #            status: 
+  #              example: 403
+  #            detail:
+  #              example: You do not have permission to read or write to the resource you are requesting. 
+  #  NotFound:
+  #    description: The resource cannot be found and an error occurs.
+  #    content:
+  #      application/json:
+  #        schema:
+  #          allOf:
+  #            - $ref: '#/components/schemas/Error'
+  #          properties:
+  #            type:
+  #              example: 'http://developer.example.com/errors/not-found'
+  #            title:
+  #              example: Not found
+  #            status: 
+  #              example: 404
+  #            detail:
+  #              example: The resource ID you specified does not exist.
+  #  Conflict:
+  #    description: Your request was denied. Resource already exists. Use PUT method to update resource.
+  #    content:
+  #      application/json:
+  #        schema:
+  #          allOf:
+  #            - $ref: '#/components/schemas/Error'
+  #          properties:
+  #            type:
+  #              example: 'http://developer.example.com/errors/conflict'
+  #            title:
+  #              example: Resource already exists
+  #            status: 
+  #              example: 409
+  #            detail:
+  #              example: Your request was denied. Resource already exists. Use PUT method to update resource.
+  #  ServiceUnavailable:
+  #    description: Your request was denied. Resource already exists. Use PUT method to update resource.
+  #    content:
+  #      application/json:
+  #        schema:
+  #          allOf:
+  #            - $ref: '#/components/schemas/Error'
+  #          properties:
+  #            type:
+  #              example: 'http://developer.example.com/errors/service-unavailable'
+  #            title:
+  #              example: Service unavailable
+  #            status: 
+  #              example: 503
+  #            detail:
+  #              example: Service is unavailable. Please try again later.
   parameters:
       skipParam:
         name: skip
@@ -671,51 +671,51 @@ components:
           maximum: 100
           default: 10
   schemas:
-    Error:
-      title: Error Response
-      type: object
-      description: |
-        <p>Response object for error responses as described by RFC7807.</p>
-      required: 
-        - type
-        - status
-        - title
-      properties:
-        type: 
-          type: string
-          format: uri
-          description: |
-            A URI reference [RFC3986] that identifies the
-            problem type.  This specification encourages that, when
-            dereferenced, it provide human-readable documentation for the
-            problem type (e.g., using HTML [W3C.REC-html5-20141028]).  When
-            this member is not present, its value is assumed to be
-            "about:blank".
-        title:
-          type: string
-          description: |
-            A short, human-readable summary of the problem
-            type.  It SHOULD NOT change from occurrence to occurrence of the
-            problem, except for purposes of localization (e.g., using
-            proactive content negotiation; see [RFC7231], Section 3.4).
-        status:
-          type: number
-          description: |
-            The HTTP status code ([RFC7231], Section 6) generated by the origin 
-            server for this occurrence of the problem.
-        detail:
-          type: string
-          description: |
-            A human-readable explanation specific to this
-            occurrence of the problem.
-        instance:
-          type: string
-          format: uri
-          example: '/path/to/the/instance'
-          description: |
-            A URI reference that identifies the specific
-            occurrence of the problem.  It may or may not yield further
-            information if dereferenced.
+#    Error:
+#      title: Error Response
+#      type: object
+#      description: |
+#        <p>Response object for error responses as described by RFC7807.</p>
+#      required: 
+#        - type
+#        - status
+#        - title
+#      properties:
+#        type: 
+#          type: string
+#          format: uri
+#          description: |
+#            A URI reference [RFC3986] that identifies the
+#            problem type.  This specification encourages that, when
+#            dereferenced, it provide human-readable documentation for the
+#            problem type (e.g., using HTML [W3C.REC-html5-20141028]).  When
+#            this member is not present, its value is assumed to be
+#            "about:blank".
+#        title:
+#          type: string
+#          description: |
+#            A short, human-readable summary of the problem
+#            type.  It SHOULD NOT change from occurrence to occurrence of the
+#            problem, except for purposes of localization (e.g., using
+#            proactive content negotiation; see [RFC7231], Section 3.4).
+#        status:
+#          type: number
+#          description: |
+#            The HTTP status code ([RFC7231], Section 6) generated by the origin 
+#            server for this occurrence of the problem.
+#        detail:
+#          type: string
+#          description: |
+#            A human-readable explanation specific to this
+#            occurrence of the problem.
+#        instance:
+#          type: string
+#          format: uri
+#          example: '/path/to/the/instance'
+#          description: |
+#            A URI reference that identifies the specific
+#            occurrence of the problem.  It may or may not yield further
+#            information if dereferenced.
 
 
     WhoAmI:
@@ -1157,7 +1157,6 @@ components:
           invoicingAdress:
             #BillToCustomer
             $ref: '#/components/schemas/Customer'
-          
           warehouseId:
             type: string
             maxLength: 4
@@ -1256,6 +1255,7 @@ components:
     CustomerOrderOut:
       description: Customer order details for the request response.
       allOf:
+      - $ref: '#/components/schemas/CustomerOrder'
       - type: object
         properties:
           insertDateTime:
@@ -1273,14 +1273,15 @@ components:
             description: |
               <p>The current customer order status.</p>
               <p>Possible combinations</p>
-              <ul>
-                <li>Registered - Customer order received by warehouse system</li>
-                <li>Started - Picking started</li>
-                <li>Finished - Picking completed</li>
-                <li>Reported - Order finished and despatched</li>
-              </ul>
+              <p>
+                <ul>
+                  <li>Registered - Customer order received by warehouse system</li>
+                  <li>Started - Picking started</li>
+                  <li>Finished - Picking completed</li>
+                  <li>Reported - Order finished and despatched</li>
+                </ul>
+              </p>
             example: started
-      - $ref: '#/components/schemas/CustomerOrder'
     Party:
       allOf:
       - $ref: '#/components/schemas/CommonClientId'
