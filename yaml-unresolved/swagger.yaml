@@ -1,0 +1,2541 @@
+openapi: 3.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: API for communicating with Schenker Logistics API
+    url: https://virtserver.swaggerhub.com/stilero/wms-rest-api/1.0.0
+info:
+  description: |
+    <h1>Customer Orders</h1>
+    <p>REST API for communicating with Schenker Logistics</p>
+  version: "1.0.0"
+  title: Schenker Logistics Rest-API
+  contact:
+    name: Daniel Eliasson
+    email: daniel.eliasson@dbschenker.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+tags:
+  - name: admins
+    description: Secured Admin-only calls
+  - name: developers
+    description: Operations available to regular developers
+  - name: outbound
+    description: |
+      <p>Outbound requests are sent from customer to warehouse with request to pick, pack and send an order from the warehouse. Also known as customer orders, picking orders, despatch advise</p>
+  - name: inbound
+    description: WMS operations related to inbound
+  - name: master-data
+    description: WMS operations related to master data
+  - name: inventory
+    description: WMS operations related to warehouse inventory
+  - name: general
+    description: General operations
+  - name: callbacks
+    description: Callbacks and webhooks to send information from warehouse to client
+paths:
+  /ping:
+    get:
+      tags: 
+      - general
+      summary: Server heartbeat operation
+      description: >-
+        Test if the server is responding.
+      security: []
+      responses:
+        '200':
+          description: OK
+  /WhoAmI:
+    get:
+      tags:
+      - general
+      summary: WhoAmI
+      description: Returns your client id
+      operationId: WhoAmI
+      security:
+        - schenker_auth:
+            - 'read'
+      responses:
+        200:
+          description: 'OK'
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WhoAmIOut'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/WhoAmIOut'
+      deprecated: false
+    
+  /master-data/products:
+    get:
+      security:
+        - schenker_auth:
+            - 'read'
+      tags:
+        - master-data   
+      summary: Returns all products for client
+      description: |
+        Returns a list of products for the client
+      operationId: getproducts
+      parameters: 
+        - $ref: '#/components/parameters/skipParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductItem'
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+    post:
+      tags:
+        - master-data   
+      summary: Creates a product 
+      description: Creates a new product
+      operationId: newProduct
+      security:
+        - schenker_auth:
+            - 'read'
+            - 'write'
+      responses:
+        '201':
+          description: product created
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+  /master-data/products/{productId}:
+    get:
+      tags:
+        - master-data   
+      summary: Returns a product based product-id
+      description: |
+        By passing product id you can get details of a specific product
+      operationId: getProductById
+      security:
+        - schenker_auth:
+            - 'read'
+      parameters: 
+        - in: path
+          name: productId
+          description: product id to use
+          required: true
+          schema:
+            type: string
+          example: ABC1234567
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+    put:
+      tags:
+        - master-data   
+      summary: Updates a product based on product id
+      description: |
+        Update product with new data
+      operationId: updateProductById
+      security:
+        - schenker_auth:
+            - 'read'
+            - 'write'
+            - 'update'
+      parameters: 
+        - in: path
+          name: productId
+          description: product id to use
+          required: true
+          schema:
+            type: string
+          example: ABC12345678
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '201':
+          description: product updated
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+  /master-data/product-stock-group:
+    get:
+      tags:
+        - master-data   
+      summary: Returns all product stock groups for client
+      description: |
+        Returns a list of product stock groups for the client
+      operationId: getproductStockGroups
+      security:
+        - schenker_auth:
+            - 'read'
+      parameters: 
+        - $ref: '#/components/parameters/skipParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductStockGroup'
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+    post:
+      tags:
+        - master-data   
+      summary: Creates a product stock group
+      description: Creates a new product stock group to the system
+      operationId: newProductStockGroup
+      security:
+        - schenker_auth:
+            - 'read'
+            - 'write'
+      responses:
+        '201':
+          description: product stock group created
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductStockGroup'
+  /master-data/product-stock-group/{productStockGroupId}:
+    get:
+      tags:
+        - master-data   
+      summary: Returns a product stock group based on id
+      description: |
+        By passing id you can get details of a specific product stock group
+      operationId: getProductStockGroupById
+      security:
+        - schenker_auth:
+            - 'read'
+      parameters: 
+        - in: path
+          name: productStockGroupId
+          description: product stock group id to use
+          required: true
+          schema:
+            type: string
+          example: ABC1234567
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductStockGroup'
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+    put:
+      tags:
+        - master-data   
+      summary: Updates a product stock group based on id
+      description: |
+        Update product with new data
+      operationId: updateProductStockGroupById
+      security:
+        - schenker_auth:
+            - 'read'
+            - 'write'
+            - 'update'
+      parameters: 
+        - in: path
+          name: productStockGroupId
+          description: product stock group id to use
+          required: true
+          schema:
+            type: string
+          example: ABC12345678
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductStockGroup'
+      responses:
+        '201':
+          description: product stock group updated
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+  /customer-orders:
+    get:
+      tags:
+        - outbound   
+      summary: Returns all active customer orders for client
+      description: |
+        Returns a list of all active customer orders for the client
+      operationId: getCustomerOrders
+      security:
+        - schenker_auth:
+            - 'read'
+      parameters: 
+        - $ref: '#/components/parameters/skipParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomerOrderList'
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+    post:
+      tags:
+        - outbound   
+      summary: Creates a customer order
+      description: Creates a new customer order to the system
+      operationId: newCustomerOrder
+      security:
+        - schenker_auth:
+            - 'read'
+            - 'write'
+      responses:
+        '201':
+          description: customer order created
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerOrder'
+  /customer-orders/{customerOrderId}:
+    get:
+      tags:
+        - outbound   
+      summary: Returns a customer order based on customer order id
+      description: |
+        By passing customer order id you can get details of a specific customer order
+      operationId: getCustomerOrderById
+      security:
+        - schenker_auth:
+            - 'read'
+      parameters: 
+        - in: path
+          name: customerOrderId
+          description: customer order id to use
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomerOrderOut'
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+    put:
+      tags:
+        - outbound   
+      summary: Updates customer order based on customer order id
+      description: |
+        Update customer order with new data
+      operationId: updateCustomerOrderById
+      security:
+        - schenker_auth:
+            - 'read'
+            - 'write'
+            - 'update'
+      parameters: 
+        - in: path
+          name: customerOrderId
+          description: customer order id to use
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerOrder'
+      responses:
+        '201':
+          description: customer order updated
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+    delete:
+      tags:
+        - outbound   
+      summary: Deletes a customer order based on customer order id
+      description: |
+        Delete customer order with customer order id. The delete operation can only be done when the customer order status has not proceeded from registered.
+      operationId: deleteCustomerOrderById
+      security:
+        - schenker_auth:
+            - 'read'
+            - 'write'
+            - 'update'
+            - 'delete'
+      parameters: 
+        - in: path
+          name: customerOrderId
+          description: customer order id to use
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: customer order deleted
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+  /inventory:
+    get:
+      tags:
+        - developers
+      summary: searches inventory
+      operationId: searchInventory
+      security:
+        - schenker_auth:
+            - 'read'
+      description: |
+        By passing in the appropriate options, you can search for
+        available inventory in the system
+      parameters:
+        - in: query
+          name: searchString
+          description: pass an optional search string for looking up inventory
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: skip
+          description: number of records to skip for pagination
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+        - in: query
+          name: limit
+          description: maximum number of records to return
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InventoryItem'
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+    post:
+      tags:
+        - admins
+      summary: adds an inventory item
+      operationId: addInventory
+      security:
+        - schenker_auth:
+            - 'read'
+            - 'write'
+      description: Adds an item to the system
+      responses:
+        '201':
+          description: item created
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryItem'
+        description: Inventory item to add
+components:
+  responses:
+    InvalidInput:
+      description: There is something wrong with the input
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Error'
+            properties:
+              type:
+                example: 'http://developer.example.com/errors/invalid-input'
+              title:
+                example: Invalid input
+              status: 
+                example: 400
+              detail:
+                example: Your request contains bad data or are missing mandatory parameters. Check your data and resend.
+    Unauthorized:
+      description: Unauthorized Request
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Error'
+            properties:
+              type:
+                example: 'http://developer.example.com/errors/unauthorized'
+              title:
+                example: Permission denied
+              status: 
+                example: 403
+              detail:
+                example: You do not have permission to read or write to the resource you are requesting. 
+    NotFound:
+      description: The resource cannot be found and an error occurs.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Error'
+            properties:
+              type:
+                example: 'http://developer.example.com/errors/not-found'
+              title:
+                example: Not found
+              status: 
+                example: 404
+              detail:
+                example: The resource ID you specified does not exist.
+    Conflict:
+      description: Your request was denied. Resource already exists. Use PUT method to update resource.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Error'
+            properties:
+              type:
+                example: 'http://developer.example.com/errors/conflict'
+              title:
+                example: Resource already exists
+              status: 
+                example: 409
+              detail:
+                example: Your request was denied. Resource already exists. Use PUT method to update resource.
+    ServiceUnavailable:
+      description: Your request was denied. Resource already exists. Use PUT method to update resource.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Error'
+            properties:
+              type:
+                example: 'http://developer.example.com/errors/service-unavailable'
+              title:
+                example: Service unavailable
+              status: 
+                example: 503
+              detail:
+                example: Service is unavailable. Please try again later.
+  parameters:
+      skipParam:
+        name: skip
+        in: query
+        description: number of items to skip
+        schema:
+          type: integer
+          format: int32
+          minimum: 0
+          default: 0
+      limitParam:
+        name: limit
+        in: query
+        description: max records to return
+        schema:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+          default: 10
+  schemas:
+    Error:
+      title: Error Response
+      type: object
+      description: |
+        <p>Response object for error responses as described by RFC7807.</p>
+      required: 
+        - type
+        - status
+        - title
+      properties:
+        type: 
+          type: string
+          format: uri
+          description: |
+            A URI reference [RFC3986] that identifies the
+            problem type.  This specification encourages that, when
+            dereferenced, it provide human-readable documentation for the
+            problem type (e.g., using HTML [W3C.REC-html5-20141028]).  When
+            this member is not present, its value is assumed to be
+            "about:blank".
+        title:
+          type: string
+          description: |
+            A short, human-readable summary of the problem
+            type.  It SHOULD NOT change from occurrence to occurrence of the
+            problem, except for purposes of localization (e.g., using
+            proactive content negotiation; see [RFC7231], Section 3.4).
+        status:
+          type: number
+          description: |
+            The HTTP status code ([RFC7231], Section 6) generated by the origin 
+            server for this occurrence of the problem.
+        detail:
+          type: string
+          description: |
+            A human-readable explanation specific to this
+            occurrence of the problem.
+        instance:
+          type: string
+          format: uri
+          example: '/path/to/the/instance'
+          description: |
+            A URI reference that identifies the specific
+            occurrence of the problem.  It may or may not yield further
+            information if dereferenced.
+
+
+    WhoAmI:
+      title: WhoAmI
+      type: object
+      description: ''
+      xml:
+        name: WhoAmI
+        namespace: http://im.se/wms/webservices/
+        attribute: false
+        wrapped: false
+    WhoAmIResponse:
+      title: WhoAmIResponse
+      type: object
+      properties:
+        WhoAmIResult:
+          type: string
+          example: SE-EXAMPLE
+          xml:
+            name: WhoAmIResult
+            namespace: http://im.se/wms/webservices/
+            attribute: false
+            wrapped: false
+      description: ''
+      xml:
+        name: WhoAmIResponse
+        namespace: http://im.se/wms/webservices/
+        attribute: false
+        wrapped: false
+    WhoAmIIn:
+      title: WhoAmIIn
+      required:
+      - WhoAmI
+      type: object
+      properties:
+        WhoAmI:
+          $ref: '#/components/schemas/WhoAmI'
+    WhoAmIOut:
+      title: WhoAmIOut
+      required:
+      - WhoAmIResponse
+      type: object
+      properties:
+        WhoAmIResponse:
+          $ref: '#/components/schemas/WhoAmIResponse'
+    InventoryItem:
+      type: object
+      required:
+        - id
+        - name
+        - manufacturer
+        - releaseDate
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        name:
+          type: string
+          example: Widget Adapter
+        releaseDate:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+        manufacturer:
+          $ref: '#/components/schemas/Manufacturer'
+    Manufacturer:
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          example: ACME Corporation
+        homePage:
+          type: string
+          format: url
+          example: 'https://www.acme-corp.com'
+        phone:
+          type: string
+          example: 408-867-5309
+      type: object
+    CustomerOrderLine:
+      allOf:
+      - $ref: '#/components/schemas/CommonProductOwner'
+      - $ref: '#/components/schemas/CommonUOM'
+      - type: object
+        required:
+          - customerOrderLineId
+          - quantity
+          - warehouseId
+        properties:
+          quantity:
+            type: number
+            maxLength: 22
+            description: "The ordered quantity of the product."
+            example: 100
+          minimumQuantity:
+            type: number
+            maxLength: 22
+            description: "The minimum allowed quantity to be picked for this Order Line. For flexible levels calculate the minimum level by a percentage of the quantity, i.e. 90% (0.9*quantity), or simply set the same value as quantity."
+            example: 90
+          maximumQuantity:
+            type: number
+            maxLength: 22
+            description: "The maximum allowed quantity to be picked for this Order Line. For flexible levels calculate the maximum level by a percentage of the quantity, i.e. 110% (1.1*quantity), or simply set the same value as quantity."
+            example: 110
+          customerOrderLineId:
+            type: number
+            maxLength: 22
+            description: "The customer order line identity."
+            example: 1
+          requestedShipDate:
+            type: string
+            format: date
+            description: "The date in UTC format that the receiver has requested that the shipment shall be sent from the Warehouse."
+            example: "2019-02-14T10:00:00Z"
+          requestedDeliveryDate:
+            type: string
+            format: date
+            description: "The date  in UTC format that the receiver has requested that the goods shall arrive at the receiver site."
+            example: "2019-02-14T10:00:00Z"
+          additionalInfo:
+            type: string
+            maxLength: 800
+            description: "Additional information for the Customer Order row. Could be used for paper work etc."
+            example: "Order line added by phone/JS"
+          instructions:
+            type: string
+            maxLength: 1600
+            description: "Customer Order Line Instructions Free text. Can be used to add extra info for the order."
+            example: "Handle with extra care."
+          purchaseOrderId:
+            type: string
+            maxLength: 140
+            description: "The identity of the Purchase Order that the customer order line is connected to."
+            example: POID123456
+          purchaseOrderSequence:
+            type: number
+            maxLength: 22
+            description: "Purchase Order Sequence Number. When there are multiple occurrences of the Purchase Order. This is the Purchase Order that the Customer Order Line is connected to."
+            example: 1
+          purchaseOrderLineId:
+            type: number
+            maxLength: 22
+            description: "The identity of the Purchase Order Line."
+            example: 1
+          purchaseOrderLineSequence:
+            type: number
+            maxLength: 22
+            description: "Purchase Order Line Sub Number Used as an extra identity of the Purchase Order Line."
+            example: 0
+          clientProductNumber:
+            type: string
+            maxLength: 140
+            description: "The Clients internal Product Number for this order line. To be used for paper work and extra info."
+            example: XYZ123456
+          customerOrderLineMetaData:
+            type: array
+            items:
+              $ref: '#/components/schemas/MetaData'
+    # NOT SUPPORTED IN THIS VERSION
+    # Fields have been hidden to simplify API for end-users.
+    
+    #GENERAL - TO BE SET DEFAULT IN GENERAL MAPPING
+      #company_id:
+        #type: string
+        #maxLength: 68
+        #description: "The identity of the Client. A combination of countrycode + dash + client name"
+        #pattern: '^[A-Z]{2}-/w+$'
+        #example: 'SE-EXAMPLE'
+      #allow_pallet_pick:
+          #type: string
+          #maxLength: 4
+          #description: "Allow Pallet Pick Controls if it is allowed (1=Yes,0=No) to create Pallet Pick Order Lines. Is set = No to force the system to only create Case Pick Order Lines when all stocked goods are placed at Pick Locations."
+      #corowtype:
+          #type: string
+          #maxLength: 4
+          #description: "Customer Order Line Type The type of Customer Order Line: N = Normal I = Information S = Service T = Transit"
+      #product_type:
+          #type: string
+          #maxLength: 4
+          #description: "Product Type The type of Product: N = Normal Product K = Kit Product C = Component Product"
+      #shiptocusid:
+          #type: string
+          #maxLength: 140
+          #description: "Ship-to Customer Identity The Party that finally will receive the goods. Used for transit goods and non-stocked Products."
+        #shiptocusqualifier:
+          #type: string
+          #maxLength: 12
+          #description: "Ship-to Customer Type The type of Party that is the Ship-to Customer. Used for transit goods and non-stocked Products."
+        #shiptopartyid:
+          #type: string
+          #maxLength: 140
+          #description: "Ship-to Party The Party (Consignee) that will receive the goods when they are shipped from the Ship-from Party (Warehouse)."
+        #shiptopartyqualifier:
+          #type: string
+          #maxLength: 12
+          #description: "Ship-to Party Type The type of Party that is the Ship-to Party. CU - Customer WH - Warehouse"
+        #shipsubadrid:
+          #type: string
+          #maxLength: 68
+          #description: "Ship-to Sub Address Identity Is received from the host system and might be a specification of the Ship-to Address for the shipping of the Customer Order Line, like Floor 3 or Gate 7."
+        
+    #CUSTOMER ORDER SEQUENCES
+      #customerOrderSequence:
+        #type: number
+        #maxLength: 22
+        #description: "A Sequence Number to make it possible to send a Customer Order more than once (e.g. backorder)."
+        #example: 0
+        #default: 0
+      #customerOrderLinePositionSequence:
+        #type: number
+        #maxLength: 22
+        #description: "Used as an extra identity of the Customer Order Line."
+        #example: 0
+        #default: 0
+        
+    # KIT AND ASSEMBLY FUNCTIONALITY
+      #kitdetailqty:
+        #type: number
+        #maxLength: 22
+        #description: "Quantity per Kit Product The Quantity of the Component Product that is needed for each copy of the Kit Product."
+      #isKitProduct:
+          #type: string
+          #maxLength: 4
+          #description: "Set (Y=Yes,N=No) if the Customer Order Line contains a Kit Product that has to be assembled."
+          #enum: [Y,N]
+      #assemble_to_stock:
+          #type: string
+          #maxLength: 4
+          #description: "Assemble-to-Stock Indicates (1=Yes,0=No) if the Order Line is an Assemble-to-Stock Order Line."
+      #corowkitpos:
+        #type: number
+        #maxLength: 22
+        #description: "Customer Order Line Kit Position The Customer Order Line contains an Assembly Product."
+      #for_assembly:
+          #type: string
+          #maxLength: 4
+          #description: "Assembly Indicates (1=Yes,0=No) if the corresponding Pick Order Line is destined to an Assembly Location. Only valid for lines where Product Type = Component Product!"
+          
+    # TRANSPORT EXTENDED FUNCTIONALITY
+      #acknowledgedDeliveryDate:
+        #type: string
+        #format: date
+        #maxLength: 7
+        #description: "The delivery date at the Ship-to Customer that the Warehouse System has acknowledged to the customer."
+      #acknowledgedShipDate:
+        #type: string
+        #format: date
+        #maxLength: 7
+        #description: "The Ship Date that the Warehouse System has acknowledged to the customer. This date is mandatory if there is no Selection Type defined for the Customer Order Line."
+      #allow_transit:
+          #type: string
+          #maxLength: 4
+          #description: "Allow transit departure Controls (1=Yes,0=No) if the goods may be transited via one or more Transit Nodes on the way to the Ship-to Customer or if the goods shall be shipped directly to the Ship-to Customer."
+        #arttrptypid:
+          #type: string
+          #maxLength: 20
+          #description: "Transport Condition Identity Gives the conditions (normal, freeze, cold, dry, non-vibrating etc.) for the vehicle that transports the goods / product."
+        #fpdeldtm:
+          #type: string
+          #format: date
+          #maxLength: 7
+          #description: "Earliest Delivery Date and Time The earliest delivery date and time at Customer site. Valid if Selection Type = Delivery. This date is mandatory if the Selection Type = Delivery and if the Transport Loads shall be connected to a departure."
+        #fpshipdtm:
+          #type: string
+          #format: date
+          #maxLength: 7
+          #description: "Earliest Ship Date and Time The earliest date and time for shipping the goods from the Warehouse. Only used when the Selection Type = Ship. This date is mandatory if the Selection Type = Ship and if the Transport Loads shall be connected to a departure."
+        #lpdeldtm:
+          #type: string
+          #format: date
+          #maxLength: 7
+          #description: "Latest Delivery Date and Time The latest delivery date and time at Customer site. Valid if Selection Type = Delivery.This date is mandatory if the Selection Type = Delivery and if the Transport Loads shall not be connected to a departure."
+        #lpshipdtm:
+          #type: string
+          #format: date
+          #maxLength: 7
+          #description: "Latest Ship Date and Time The latest date and time for shipping the goods from the Warehouse. Only used when the Selection Type = Ship. This date is mandatory if the Selection Type = Ship and if the Transport Loads shall not be connected to a departure."
+          
+    # ORDER QUANTITIES    
+      #abaldiff_minus:
+        #type: number
+        #maxLength: 22
+        #description: "Deficiency The number of Lowest UMs that the ordered quantity in a Pick Order Line can differ by downwards, so that this package / unit may still be picked without having to register a discrepancy code. This value is normally defined for each Package of the Product but that value is always overridden if there is a value transferred from the host system in the Customer Order Line."
+      #abaldiff_plus:
+        #type: number
+        #maxLength: 22
+        #description: "Surplus The number of Lowest UMs that the ordered quantity in a Pick Order Line can differ by upwards, so that this package / unit may still be picked without having to register a discrepancy code. This value is normally defined for each Package of the Product but that value is always overridden if there is a value transferred from the host system in the Customer Order Line."
+        
+    # LOT AND BLOCK REQUIREMENTS
+        #productionLotRequirement:
+          #type: number
+          #maxLength: 1
+          #description: "This Controls if warehouse is required to do extra checks against Manufacturing Lot when selecting the goods  NULL = No control 1 = Any Lot (must belong to a Lot) 2 = Only one Lot (must belong to the same Manufacturing Lot) 3 = Specified Lot (must belong to the stated Manufacturing Lot)"
+          #enum: [1,2,3]
+        #marketingLotIdentity:
+          #type: string
+          #maxLength: 80
+          #description: "The Marketing Lot that the picked goods must belong to."
+        #storageLotIdentity:
+          #type: string
+          #maxLength: 80
+          #description: "Quality Lot Can be used for optional classification of the stored goods in the Warehouse (quality, color, etc)."
+        #blockcod:
+          #type: string
+          #maxLength: 32
+          #description: "Hold Code A Hold Code may be applied on an Item Load or a Pick Location to temporarily restrict its processing. If a Hold Code is specified in the Customer Order Line only Pick Locations and Item Loads with the same Hold Code shall be selected."
+        #reqshelflife:
+          #type: number
+          #maxLength: 22
+          #description: "Requested Shelf Life The Requested Shelf Life is the number of days that the goods can be stored at the customer site before the Expiry Date occurs. When there is a Requested Shelf Life registered in a Customer Order Line it has to be taken into account when selecting Item Loads in the Pick Generation process when creating Pick Orders for Pick Locations of the Type = Floating. Only goods with an Expiry Date that is later than the Departure Date + Transport Time + Requested Shelf Life can be selected. This also means that Item Loads who's Last Ship Date has been passed, can be picked for the Customer Order Line. [The Last Ship Date is only used when there is NO Requested Shelf Life (=0 or NULL) registered for the Customer Order Line.]"
+        #pakfrce:
+          #type: string
+          #maxLength: 4
+          #description: "Forced Package Indicates (1=Yes,0=No) if forced to pick a specified Package / Unit of Measure of the Product."
+        #prodlot:
+          #type: string
+          #maxLength: 160
+          #description: "Manufacturing Lot The Manufacturing Lot that the picked goods have to belong to (if required by Manufacturing Lot Requirement)."
+        #prodsublot:
+          #type: string
+          #maxLength: 160
+          #description: "Manufacturing Sublot The Manufacturing Sublot that the picked goods have to belong to (if required by Manufacturing Lot Requirement)."
+      
+      # PICK FUNCTIONALITY EXTENDED
+        #postpick:
+          #type: string
+          #maxLength: 4
+          #description: "Post Pick Indicates (1=Yes,0=No) if the Customer Order Line includes quantity that shall be / has been Post Picked."
+        #itemLoadIdentity:
+          #type: string
+          #maxLength: 140
+          #description: "Item Load Identity The identity of the Item Load to connect to this customer order line."
+        #allowPartDelivery:
+          #type: string
+          #maxLength: 1
+          #description: "Allow Part Delivery Controls (Y=Yes,N=No) if the Customer Order Line can be partly delivered or not. If not set default = Y"
+          #enum: [Y,N]
+          #default: Y
+          
+      # CUSTOMS ETC
+        #customsrequirement:
+          #type: string
+          #maxLength: 4
+          #description: "Customs Requirement The Customs Requirement can be of different types: 0 = No requirement (default) 1 = Prefer Bonded goods 2 = Require Bonded goods"
+          
+      # SERIAL NUMBER HANDLING
+        #serial:
+          #type: string
+          #maxLength: 4
+          #description: "Serial Number Controls (1=Yes,0=No) if the Serial Number is required at Case Pick."
+        #sernumb:
+          #type: string
+          #maxLength: 84
+          #description: "Serial Number A unique identity for a single Item Load. Only used for Case Pick and Serial Number handling!"
+          
+      # EXTRA INFO
+        #account_ref:
+          #type: string
+          #maxLength: 140
+          #description: "Account Code Controls the financial conditions for the Customer Order Line (info)."
+        #document:
+          #type: string
+          #maxLength: 1600
+          #description: "Instructions Free text. (Document)"
+        #price1:
+          #type: number
+          #maxLength: 22
+          #description: "Price 1 Price for the Product per Package (info)."
+        #price2:
+          #type: number
+          #maxLength: 22
+          #description: "Price 2 Price for the Product per Package (info)."
+        #vat_percent:
+          #type: number
+          #maxLength: 22
+          #description: "VAT(%) The financial conditions for the Customer Order Line, which VAT applies."
+        #warranty:
+          #type: string
+          #maxLength: 4
+          #description: "Print Guarantee Certificate Controls (1=Yes,0=No) if a Guarantee Certificate shall be printed."
+    CustomerOrderList:
+      type: object
+      properties:
+        customerOrderId:
+          type: string
+          maxLength: 140
+          description: "The identity of the Customer Order."
+          example: SOUK123456
+        customerOrderSequence:
+          type: number
+          maxLength: 22
+          description: "A Sequence Number to make it possible to send a Customer Order more than once (e.g. backorder)."
+          example: 1
+          default: 0
+        customerOrderType:
+          type: string
+          maxLength: 2
+          description: "The Customer Order Type to classify this order. customer order types used must be agreed and activated by Warhouse prior to use. Common values are 'N' for normal orders, and 'E' for ecom order."
+          example: N
+    CustomerOrder:
+      allOf:
+      - $ref: '#/components/schemas/CommonClientId'
+      - type: object
+        required:
+          - customerOrderId
+          - customerOrderSequence
+          - customerOrderType
+          - warehouseId
+        properties:
+          customerOrderId:
+            type: string
+            maxLength: 140
+            description: "The identity of the Customer Order."
+            example: SOUK123456
+          customerOrderSequence:
+            type: number
+            maxLength: 22
+            description: "A Sequence Number to make it possible to send a Customer Order more than once (e.g. backorder)."
+            example: 1
+            default: 0
+          customerOrderType:
+            type: string
+            maxLength: 2
+            description: "The Customer Order Type to classify this order. customer order types used must be agreed and activated by Warhouse prior to use. Common values are 'N' for normal orders, and 'E' for ecom order."
+            example: N
+          customerOrderReference:
+            type: string
+            maxLength: 140
+            description: "A Reference text for the customer order. Could be used for paper work or additional search functionality."
+            example: "REF:1234567"
+          destinationAdress:
+            #ShipToParty
+            $ref: '#/components/schemas/Customer'
+          endCustomerAdress:
+            #ShipToCus
+            $ref: '#/components/schemas/Customer'
+          invoicingAdress:
+            #BillToCustomer
+            $ref: '#/components/schemas/Customer'
+          
+          warehouseId:
+            type: string
+            maxLength: 4
+            description: "The identity of the Warehouse."
+            pattern: '^[A-Z0-9]+$'
+            example: GOT1
+          deliveryMethodId:
+            type: string
+            maxLength: 68
+            description: "The identity of the method that will be used when shipping the goods from the Warehouse. This identy must be setup and agreed by warehouse before use. If omitted, the Warehouse Management system will select the most appropriate delivery method for the customer order"
+            example: SCHENKER_SP
+          priority:
+            type: string
+            maxLength: 4
+            description: "Customer Order priority can be used to mark high or low priority orders and if omitted, mid priority will be default."
+            enum: [high, mid, low]
+            default: mid
+            example: mid
+          customerOrderLines:
+            type: array
+            items:
+              $ref: '#/components/schemas/CustomerOrderLine'
+          customerOrderMetaData:
+            type: array
+            items:
+              $ref: '#/components/schemas/MetaData'
+    # NOT SUPPORTED IN THIS VERSION
+    # Fields have been hidden to simplify API for end-users.
+      # GENERAL - TO BE SET IN MAPPING
+        #cotypid:
+          #type: string
+          #maxLength: 8
+          #description: "Custom Order Type Identity The type of Customer Order: N  = Normal TR = Transit / Stock Replenishment Installation dependent. Controls e.g. choice of Method of Shipment."
+        #priority - Map from high, mid and low to 1-9 instead
+        #company_id:
+          #type: string
+          #maxLength: 68
+          #description: "Client Identity The identity of the Client."
+    
+      # ADDITIONAL INFO
+        #buyerAdress:
+          #$ref: '#/components/schemas/Party'
+        #instructions:
+          #type: string
+          #maxLength: 1600
+          #description: "Instructions Free text."
+        #document:
+          #type: string
+          #maxLength: 1600
+          #description: "Instructions Free text. (Document)"
+        #vat_percent:
+          #type: number
+          #maxLength: 22
+          #description: "VAT(%) Conditions for the Customer Order like which VAT % will apply."
+        #dispatch_fee:
+          #type: number
+          #maxLength: 22
+          #description: "Service Charge Costs for Service Charge."
+        #cod_fee:
+          #type: number
+          #maxLength: 22
+          #description: "COD Fee Cash on Delivery Fee."
+        #fre_party_qualifier:
+          #type: string
+          #maxLength: 12
+          #description: "Forwarder's Party Type The Type of Party that has a forwarder agreement with the Forwarder."
+        #fre_party_id:
+          #type: string
+          #maxLength: 140
+          #description: "Forwarder's Party Identity The identity of the Party that has a forwarder agreement with the Forwarder."
+        #freight_cost:
+          #type: number
+          #maxLength: 22
+          #description: "Freight Cost The cost for transporting the goods to the Ship-to Customer."
+        
+        #currency:
+          #type: string
+          #maxLength: 12
+          #description: "Not used Obsolete."
+        #division:
+          #type: string
+          #maxLength: 68
+          #description: "Division Division, department, section, workshop or similar subordinate unit of a company / organization."
+        #terms_of_delivery:
+          #type: string
+          #maxLength: 24
+          #description: "Terms of Shipment The Terms of Shipment for the Consignment stated as a code according to Combiterm 2000."
+        #terms_of_delivery_location:
+          #type: string
+          #maxLength: 140
+          #description: "Terms of Shipment Destination The destination for the goods according to the Terms of Shipment. Received from the external Carrier Compliancy Provider."
+        #cod_reference:
+          #type: string
+          #maxLength: 140
+          #description: "Reference for Cash-on-Delivery Reference for the Cash-on-Delivery, usually a bank or giro account for the Bill-to Customer."
+    CustomerOrderOut:
+      description: Customer order details for the request response.
+      allOf:
+      - type: object
+        properties:
+          insertDateTime:
+            type: string
+            format: date-time
+            description: Date and Time in ISO 8601 when the customer order was received by host system. Only used for get requests.
+            example: "2020-04-12T23:20:50.52Z"
+          status:
+            type: string
+            enum:
+              - registered
+              - started
+              - finished
+              - reported
+            description: |
+              <p>The current customer order status.</p>
+              <p>Possible combinations</p>
+              <ul>
+                <li>Registered - Customer order received by warehouse system</li>
+                <li>Started - Picking started</li>
+                <li>Finished - Picking completed</li>
+                <li>Reported - Order finished and despatched</li>
+              </ul>
+            example: started
+      - $ref: '#/components/schemas/CustomerOrder'
+    Party:
+      allOf:
+      - $ref: '#/components/schemas/CommonClientId'
+      - type: object
+        required:
+          - partyId
+          - partyType
+          - name1
+          - address1
+          - zipCode
+          - countryCode
+        properties:
+          partyId:
+            type: string
+            maxLength: 35
+            description: <p>A unique identity for the party.</p> <h1>Usage</h1><h2>For customer-order</h2><p>If <em>partyId</em> provided already exists when you send the <em>Party</em> object in a customer-order, then the existing data for the party will be overwritten.</p> <p>To avoid this, you could use the <em>customerOrderId</em> concatenated with additional random characters.</p>
+            example: CU123567X
+          partyType:
+              type: string
+              maxLength: 14
+              description: <p>The type of party used.</p><h1>Customer</h1><p>A customer receives goods, and is used for destination adress in <em>customer-order</em> endpoint </p><h1>Owner</h1><p>An owner is used in the <em>product</em> endpoint to set ownership of goods.</p><h1>Vendor</h1><p>Vendors are set for <em>purchase-order</em> endpoint, to specify which vendor the goods are delivered from.</p>
+              default: customer
+              enum: [customer, owner, vendor]
+              example: customer
+          name1:
+            type: string
+            maxLength: 100
+            description: The Name of the party.
+            example: John Smith
+          name2:
+            type: string
+            description: The Name of the party, line 2.
+            maxLength: 100
+            example: ACME Corporation
+          name3:
+            type: string
+            description: The Name of the party, line 3.
+            maxLength: 100
+            example: "Att: Betty"
+          #name4:
+            #type: string
+            #description: The Name of the party, line 4.
+            #maxLength: 100
+          #name5:
+            #type: string
+            #description: The Name of the party, line 5.
+            #maxLength: 100
+          address1:
+            type: string
+            maxLength: 35
+            description: Address to the party.
+            example: Company Street 5
+          address2:
+            type: string
+            maxLength: 35
+            description: Address to the party, line 2.
+            example: building 4
+          address3:
+            type: string
+            maxLength: 35
+            description: Address to the party, line 3.
+            example: PO Box 12345
+          #address4:
+            #type: string
+            #maxLength: 35
+            #description: Address to the party, line 4.
+          zipCode:
+            type: string
+            maxLength: 12
+            description: The Post / Zip Code of the address for the party.
+            example: 123 45
+          city:
+            type: string
+            maxLength: 35
+            description: The Ciry of the address
+            example: Gothenburg
+          region:
+            type: string
+            maxLength: 35
+            description: The State or region  of the address.
+            example: California
+          countryCode:
+            type: string
+            maxLength: 2
+            description: The ISO 3166-1 alpha-2 Country code
+            pattern: '^[A-Z]{2}$' 
+            example: SE
+          countryName:
+            type: string
+            maxLength: 35
+            description: The Country name in upper case
+            example: SWEDEN
+          isoLanguageCode:
+            type: string
+            maxLength: 3
+            description: Three letter ISO ISO 639-3 language code
+            enum: [ENU,SVE,DEU,FRA]
+            default: ENU
+            example: ENU
+          geographicalCode:
+            type: string
+            maxLength: 35
+            description: Could be used for dispatch route identity
+            example: 123456DX
+          phone:
+            type: string
+            maxLength: 35
+            example: +46311234567
+          email:
+            type: string
+            maxLength: 35
+            format: email
+            example: test@example.com
+          vatNumber:
+            type: string
+            maxLength: 35
+            description : VAT registration number for the party
+            example: SE123456084501
+        
+        
+    # NOT SUPPORTED IN THIS VERSION
+    # Fields have been hidden to simplify API for end-users.
+      # GENERAL - TO BE SET IN MAPPING
+    
+      # ADDITIONAL INFO
+        #division:
+          #type: string
+          #maxLength: 17
+          #description: Division, department, section, workshop or similar subordinate unit of a company / organization.
+          #example: sales department
+        #forwarderCustomerId:
+          #type: string
+          #maxLength: 35
+          #description: "The Customer's Identity in the Forwarder's system."
+          #example: 1234567
+    Customer:
+      allOf:
+      - $ref: '#/components/schemas/Party'
+      - type: object
+        properties:
+          partyType:
+            type: string
+            maxLength: 14
+            description: <p>The type of party used. A customer receives goods, and is used for destination adress in <em>customer-order</em> endpoint </p>
+            default: customer
+            enum: 
+              - customer
+            example: customer
+    Vendor:
+      allOf:
+      - $ref: '#/components/schemas/Party'
+      - type: object
+        properties:
+          partyType:
+            type: string
+            maxLength: 14
+            description: <p>Vendors are set for <em>purchase-order</em> endpoint, to specify which vendor the goods are delivered from.</p>
+            default: vendor
+            enum: 
+              - vendor
+            example: vendor
+    Owner:
+      allOf:
+      - $ref: '#/components/schemas/Party'
+      - type: object
+        properties:
+          partyType:
+            type: string
+            maxLength: 14
+            description: <p>An owner is used in the <em>product</em> endpoint to set ownership of goods.</p>
+            default: owner
+            enum: 
+              - owner
+            example: owner
+    MetaData:
+      type: object
+      required:
+        - attribute
+        - value
+      properties:
+        attribute:
+          type: string
+          maxLength: 3
+          description: "<p>The attribute controls how this metadata will be used and there are a couple of predefined attributes with special functions:
+            <ul><li><em>DEL</em> - (for customer-orders) Delivery instructions to forwarder. Could be used for i.e. time agreed service : <em>'Delivery time 18:00'</em></li></ul>
+            <ul><li><em>MKS</em> - (for customer-orders) Shipment memo. Could be used to set service point if transport service supports it i.e. Postnord: <em>'123456@posnord.se'</em></li></ul>
+            <ul><li><em>TSR</em> - (for customer-orders-lines) Transport Service Requirements. Is used to set the forwarder service code Postnord P18: <em>'18'</em></li></ul>
+            </p>
+            <p>Except for the predefined attributes, you can name your own attributes to use in paperwork.</p>"
+          pattern: '^[A-Z]{3}$'
+          example: DEL
+        value:
+          type: string
+          maxLength: 1600
+          description: "Free text to use with the attribute."
+          example: 'Delivery time 18:00'
+    Pagination:
+      type: object
+      properties:
+        limit:
+          type: number
+          format: int32
+          minimum: 0
+          maximum: 100
+          description: "Maxumum number of results to return."
+          example: 100
+        offset:
+          type: number
+          format: int32
+          minimum: 0
+          maximum: 10000
+          description: "An offset for the pagination. Set which result to start from."
+          example: 200
+    Product:
+      description: Product
+      required:
+        - productDescription
+      allOf:
+        - $ref: '#/components/schemas/CommonClientId'
+        - $ref: '#/components/schemas/CommonProductOwner'
+        #- $ref: '#/components/schemas/CommonUOM'
+        - type: object
+          required: 
+            - ownerId
+            - lowestUnitOfMeasure
+          properties:
+            productDescription:
+              type: string
+              maxLength: 1024
+              description: "The description / name of the Product."
+              example: A red widget for doing interesting stuff
+            productDescription2:
+              type: string
+              maxLength: 1024
+              description: "Extra description / name of the Product."
+              example: and the description didn't fit so I continued here for this awesome product.
+            productStockGroupId:
+              type: string
+              maxLength: 48
+              description: "The identity of the Product Stock Group controls how the product will be handled in the WMS. Either use an existing product stock group, or create a new using the <em>master-data/product-stock-group</em> endpoint."
+              example: 99X
+            productTypeId:
+              type: string
+              maxLength: 8
+              description: "The identity of the Product Type. With Product Types you can categorize / group all the products into more manageable groups internally in the Warehouse. Only use predefined and agreed productTypes"
+              example: N
+            instructions:
+              type: string
+              maxLength: 3200
+              description: "Instructions Free text."
+              example: "Handle with caution, this product is very fragile!."
+            lowestUnitOfMeasure:
+              type: string
+              maxLength: 35
+              description: "The identity of the Lowest Unit of Measure / Base Package of this Product"
+              example: PCE
+              default: PCE
+            isHazardous:
+              type: string
+              maxLength: 3
+              description: "<p>Set <em>yes</em> if product is Hazardous or <em>no</em> if product is not hazardous.</p><p>Use <em>dangerousGoodsInfo</em> to add additional dangerous goods information.</p>" 
+              enum: [yes, no]
+              example: yes
+            packages:
+              type: array
+              description: "Add additional packages to the product apart from the lowest unit of measure. This is where you add cartons and pallets for the product."
+              items:
+                $ref: '#/components/schemas/ProductPackage'
+            barcodes:
+              type: array
+              description: "Add standard barcodes for the product here. Note that all products requires at least one barcode added."
+              items:
+                $ref: '#/components/schemas/ProductBarcode'
+            additionalProductNumbers:
+              type: array
+              description: "Add extra product numbers for the product. Omit if not needed."
+              items:
+                $ref: '#/components/schemas/ProductNumber'
+            translations:
+              type: array
+              description: "Add extra translations to product descriptions. Omit if not needed."
+              items:
+                $ref: '#/components/schemas/ProductDescription'
+            vendorProductNumbers:
+              type: array
+              description: "Use Vendor / Supplier product numbers to add additional product numbers provided by vendor. Otherwise omit."
+              items:
+                $ref: '#/components/schemas/VendorProductNumber'
+            dangerousGoodsInfo:
+              $ref: '#/components/schemas/dangerousGoodsInfo'
+            productMetaData:
+              type: array
+              description: "Use meta data to add extra fields and information to products."
+              items:
+                $ref: '#/components/schemas/ProductMetaData'
+            # HIDDEN FIELDS
+            #GENERAL MAPPING - Set default in mapping
+            # termart:
+              #type: string
+              #maxLength: 4
+              #description: "Stocked Product Controls (1=Yes,0=No) if this is a Stocked Product. If it is not a Stocked Product (=No), then this might be Transit Goods, Information or a Service Product."
+            #local:
+              #type: string
+              #maxLength: 4
+              #description: "Internal Indicates (1=Yes,0=No) if this is an internal product, i.e. not included in the host system."
+            #hazardous:
+              #type: string
+              #maxLength: 4
+              #description: "Hazardous Goods Controls (1=Yes,0=No) if the Product is considered as Hazardous Goods."
+            #SERIAL NUMBER HANDLING
+              #            serial:
+              #              type: string
+              #              maxLength: 4
+              #              description: "Serial Number Controls (1=Yes,0=No) if the Serial Number is required at Case Pick."
+              #            serial_rcv:
+              #              type: string
+              #              maxLength: 4
+              #              description: "Serial Number at Receiving Controls (1=Yes,0=No) if the Serial Number shall be fetched when receiving from Purchase Order."
+              #            serial_iteid:
+              #              type: string
+              #              maxLength: 4
+              #              description: "Set Item Load ID = Serial Number Controls (1=Yes,0=No) if the Item Load and the adherent Load Carrier shall get their Identity from the Serial Number."
+            
+            #TEMPERATURE CONTROL / HANDLING
+            #artdtype:
+              #type: string
+              #maxLength: 4
+              #description: "Product Date Type The type of Product Date that is used: + = Expiry Date - = Manufacturing Date = = Arrival Date 0 = No Date"
+            #artlead1:
+              #type: number
+              #maxLength: 22
+              #description: "Arrival Date The number of days between the Arrival Date and the Expiry Date for the Product."
+            #artlead2:
+              #type: number
+              #maxLength: 22
+              #description: "Last Ship Date The number of days between the Last Ship Date and the Expiry Date for the Product."
+            #artlead3:
+              #type: number
+              #maxLength: 22
+              #description: "Manufacturing Date The number of days between the Manufacturing Date and the Expiry Date for the Product."
+            #tempture:
+              #type: number
+              #maxLength: 22
+              #description: "Temperature The storage temperature controls in which Temperature Class the goods will be stored."
+            #freqncy:
+              #type: number
+              #maxLength: 22
+              #description: "Product Handling Frequency The Handling Frequency (rate of turnover in the Warehouse) controls in which Handling Frequency Class the goods will be stored."
+            #pakchnge:
+              #type: string
+              #maxLength: 4
+              #description: "Enter Lowest Unit of Measure When the user has to register the Lowest Unit of Measure for the received goods containing the Product: - Never - During Package Change (the Lowest Unit of Measure must be registered until the first time the new Package is received) - Always"
+              #itetypid:
+              #type: string
+              #maxLength: 8
+              #description: "Item Load Type States which type of item load the product shall create at receiving."
+              #            edi_dlvrypakid:
+              #              type: string
+              #              maxLength: 68
+              #              description: "EDI Shipping Package The identity of the Shipping Package (=Movement Load Carrier) for clients with EDI interface are temporary saved here."
+              #            edi_palpakid:
+              #              type: string
+              #              maxLength: 68
+              #              description: "EDI Pallet Package The identity of the Pallet Package for clients with EDI interface are temporary saved here."
+              #            comprule:
+              #              type: string
+              #              maxLength: 8
+              #              description: "Pick Generation Rule How the system will create pick order lines for the product: N = Normal / Each C = Cable / Linear I = Item Load, Quantity J = Item Load, FIFO date"
+              #            storbat_out:
+              #              type: string
+              #              maxLength: 4
+              #              description: "Quality Lot at Outbound Controls (1=Yes,0=No) if the Quality Lot is used when generating Pick Order Lines."
+              #            prodlot_out:
+              #              type: string
+              #              maxLength: 4
+              #              description: "Manufacturing Lot at Outbound Controls (1=Yes,0=No) if the Manufacturing Lot is used when generating Pick Order Lines."
+              #            alpha:
+              #              type: number
+              #              maxLength: 22
+              #              description: "Alpha The percentage of the period's rate of turnover for the Product that shall be used when calculating a new average rate of turnover in the statistics."
+              #            costfu:
+              #              type: string
+              #              maxLength: 4
+              #              description: "Cost Follow Up Not used."
+              #            costfuper:
+              #              type: string
+              #              maxLength: 4
+              #              description: "Cost Follow Up Period Not used."
+              #            createdtm:
+              #              type: string
+              #              format: date
+              #              maxLength: 7
+              #              description: "Created Date The date and time when the Product was generated / created."
+              #            blockdays:
+              #              type: number
+              #              maxLength: 22
+              #              description: "Number of Hold Days The number of Hold Days is after how many days the hold will be released automatically if it has not been removed manually before that."
+              #            acchk:
+              #              type: string
+              #              maxLength: 4
+              #              description: "Acceptance Check Controls (1=Yes,0=No) if the user will have to check the received goods and acknowledge each ASN / Purchase Order Line containing this product."
+              #            arttrptypid:
+              #              type: string
+              #              maxLength: 20
+              #              description: "Transport Condition Identity Gives the conditions (normal, freeze, cold, dry, non-vibrating etc.) for the vehicle that transports the goods / product."
+              #            storbat_in:
+              #              type: string
+              #              maxLength: 4
+              #              description: "Quality Lot at Inbound Controls (1=Yes,0=No) if the Quality Lot has to be registered at the receiving."
+              #            prodlot_in:
+              #              type: string
+              #              maxLength: 4
+              #              description: "Manufacturing Lot at Inbound Controls (1=Yes,0=No) if the Manufacturing Lot has to be registered at receiving."
+              #            promotn_in:
+              #              type: string
+              #              maxLength: 4
+              #              description: "Marketing Lot at Inbound Controls (1=Yes,0=No) if the Marketing Lot has to be registered at the receiving."
+              #            artid_origin:
+              #              type: string
+              #              maxLength: 140
+              #              description: "Product Number The identity of the Product. Used for the origin Product."
+              #            prodlot_ver:
+              #              type: string
+              #              maxLength: 4
+              #              description: "Manufacturing Lot Required Controls (1=Yes,0=No) if the Manufacturing Lot has to be registered at Pick."
+              #            mix_prodlot:
+              #              type: string
+              #              maxLength: 4
+              #              description: "Allow mixed Manufacturing Lots Controls (1=Yes,0=No) if is allowed to mix Products with different Manufacturing Lots in the same Storage Location and in the same Pick Location with tracing. NOTE! This does not have any influence on Transit goods or goods for Inspection."
+              #            
+              #            product_check:
+              #              type: string
+              #              maxLength: 4
+              #              description: "Product Check Controls (1=Yes,0=No) if the received goods containing the Products have to be verified in the RF Receive component ."
+              #            
+              #            palpick:
+              #              type: string
+              #              maxLength: 4
+              #              description: "Pallet Pick allowed Controls (1=Yes,0=No) if the Product can be picked as a pallet."
+              #            instructions_in:
+              #              type: string
+              #              maxLength: 3200
+              #              description: "Inbound Instructions Instructions for the Inbound work flow. Free text."
+              #            instructions_out:
+              #              type: string
+              #              maxLength: 3200
+              #              description: "Outbound Instructions Instructions for the Outbound work flow. Free text."
+              
+            #INVENTORY
+            #            sttrigger:
+            #              type: string
+            #              maxLength: 8
+            #              description: "Inventory Audit Trigger Events in the Warehouse that initiates an Inventory Audit of the Product: H = Host System L = Slotting M = Manual Request N = None R = Shortage at Pick Replenishment S = Shortage at Pick T = From Template Z = At Balance Zero"
+            #            stfreq_item:
+            #              type: number
+            #              maxLength: 22
+            #              description: "Interval between Audits for Item Load (days) The number of days that has to pass from a previous inventory audit before the system is allowed to generate a new inventory audit order for the product's Item Loads."
+            #            stfreq_hour_item:
+            #              type: number
+            #              maxLength: 22
+            #              description: "Interval between Audits for Item Load (hours) The number of hours that has to pass from a previous inventory audit before the system is allowed to generate a new inventory audit order for the product's Item Loads."
+            #            stfreq_min_item:
+            #              type: number
+            #              maxLength: 22
+            #              description: "Interval between Audits for Item Load (minutes) The number of minutes that has to pass from a previous inventory audit before the system is allowed to generate a new inventory audit order for the product's Item Loads."
+            #            stfreq_pp:
+            #              type: number
+            #              maxLength: 22
+            #              description: "Interval between Audits for Pick Location (days) The number of days that has to pass from a previous inventory audit before the system is allowed to generate a new inventory audit order for the product's Pick Locations."
+            #            stfreq_hour_pp:
+            #              type: number
+            #              maxLength: 22
+            #              description: "Interval between Audits for Pick Location (hours) The number of hours that has to pass from a previous inventory audit before the system is allowed to generate a new inventory audit order for the product's Pick Locations."
+            #            stfreq_min_pp:
+            #              type: number
+            #              maxLength: 22
+            #              description: "Interval between Audits for Pick Location (minutes) The number of minutes that has to pass from a previous inventory audit before the system is allowed to generate a new inventory audit order for the product's Pick Locations."
+            #stzero:
+            #              type: string
+            #              maxLength: 4
+            #              description: "Autom Inv Audit when Zero Controls (1=Yes,0=No) if the system will initiate an Inventory Audit of the Product when the stock balance is zero."
+            
+            #CUSTOMIZATIONS
+            #wws_default_pakid:
+              #type: string
+              #maxLength: 68
+              #description: "Wws Default Package at RF Receiving Default Package in RF Receiving. Used if WWS_DEFAULT_PACK_LEVEL_REC set on Client"
+            #wws_ppselect_emptylocation:
+              #type: string
+              #maxLength: 4
+              #description: "Empty locations for pallet pick Prioritize emptying location(s) when assigning Item for pallet pick 1 = Yes, 0 = No"
+            #wws_refillfloatingpick:
+              #type: string
+              #maxLength: 4
+              #description: "Refill Floating pick location    Yes -> Refill floating pick location when destination rule Pick Loaction    No  -> default Standard destination rules"
+            #wws_serialnumbertype_id:
+              #type: string
+              #maxLength: 140
+              #description: "Serial Number Type Id Controls what type of Serial Number is allowed for this Product. (FSP748)"
+            #wws_enhanced_serial_in:
+              #type: string
+              #maxLength: 4
+              #description: "Flag (true/false) Controls if Enhanced Serial Number function will be used when receiving Purchase Order via RF (FSP748)"
+            #wws_enhanced_serial_out:
+              #type: string
+              #maxLength: 4
+              #description: "Flag(true/false) Controls if Enhanced Serial Number function will be used before shipping this Product (FSP748)"
+            #wws_fifodays:
+              #type: number
+              #maxLength: 22
+              #description: "Allowed number of FIFO day-difference The maximum number of days that load carrier dates are allowed to differ in one multiple storage area"
+            #wws_freespace:
+              #type: string
+              #maxLength: 4
+              #description: "Choose Item Load to free up space Controls (1=Yes, 0=No) if Item Load should be selected to free up storage or if standard sorting should be applied"
+            #wws_customer_shelf_life:
+              #type: string
+              #maxLength: 4
+              #description: "Wws Customer Shelf Life Controls (1=Yes or 0=No) if the Product will use Customer specific Shelf Life information."
+            #instructions_show_in_rf:
+              #type: string
+              #maxLength: 4
+              #description: "Show Instructions in RF Client    Yes -> Show Instruction    No  -> Do not show Instructions."
+            #instructions_in_show_in_rf:
+              #type: string
+              #maxLength: 4
+              #description: "Show Instructions_IN in RF Client    Yes -> Show Instruction    No  -> Do not show Instructions."
+            #instructions_out_show_in_rf:
+              #type: string
+              #maxLength: 4
+              #description: "Show Instructions_OUT in RF Client    Yes -> Show Instruction    No  -> Do not show Instructions."
+            #wws_artval_legalstatus:
+              #type: string
+              #maxLength: 4
+              #description: "WWS Artval Legal Status Configuration if Legal Status shall be used or not."
+            #wws_artval_legallot:
+              #type: string
+              #maxLength: 4
+              #description: "WWS Artval Legal Lot Configuration if Legal Lot shall be used or not."
+            
+    ProductItem:
+      description: Product
+      allOf:
+        - $ref: '#/components/schemas/CommonProduct'
+        - type: object
+          required: 
+            - ownerId
+            - lowestUnitOfMeasure
+          properties:
+            productDescription:
+              type: string
+              maxLength: 1024
+              description: "The description / name of the Product."
+              example: A red widget for doing interesting stuff
+
+    ProductNumber:
+      description: This is used for adding additional product numbers to the WMS. Additional product numbers used for identifying the product and support non-standard barcodes. EAN, GTIN and other standard barcodes should use the EAN-part of the product endpoint.
+      allOf:
+      - $ref: '#/components/schemas/CommonProduct'
+      - type: object
+        required:
+          - productNumberType
+          - productNumber
+        properties:
+          productNumberType:
+            type: string
+            maxLength: 2
+            description: "<p>The Type of Product Number. Use only values agreed with host before sending.</p><h1>Pre-Defined Types</h1><p><ul><li>UN - UN-number for Hazardous goods</li><li>CL - Class for Hazardous goods</li><li>PG - Packaging group för Hazardous goods</li></ul></p>"
+            example: BP
+          productNumber:
+            type: string
+            maxLength: 140
+            description: "The additional product number to identify the product"
+            example: XXXX12321355XXXX
+    dangerousGoodsInfo:
+      description: This is used for adding information about dangerous goods. Omit if product is not dangerous goods
+      allOf:
+      - $ref: '#/components/schemas/CommonProduct'
+      - type: object
+        required:
+          - dgClass
+          - unNumber
+        properties:
+          dgClass:
+            type: number
+            maxLength: 1
+            description: The Dangerous goods class (omit the subclass) this substance belongs to.
+            example: 1
+          imdgCode:
+            type: string
+            maxLength: 3
+            description: The IMDG Code this substance belongs to.
+            example: 1.3
+          unNumber:
+            type: number
+            maxLength: 4
+            description: "<p>A four digit number representing the UN-number"
+            example: 1403
+          properShipName:
+            type: string
+            maxLength: 140
+            description: "The proper shipping name to be used on paper work and declarations"
+            example: "Explosive material"
+    ProductMetaData:
+      description: Product Metadata is used to add additional data to products.
+      allOf:
+        - $ref: '#/components/schemas/CommonClientId'
+        - $ref: '#/components/schemas/CommonProduct'
+        - type: object
+          required:
+            - attribute
+            - value
+          properties:
+            attribute:
+              type: string
+              maxLength: 3
+              description: "<p>The attribute controls how this metadata will be used and needs to be agreed prior to use.</p>"
+              pattern: '^[A-Z]{3}$'
+              example: DEL
+            value:
+              type: string
+              maxLength: 1600
+              description: "Attribute Value"
+              example: 'Delivery time 18:00'
+    ProductDescription:
+      description: Add product description to multiple language to support translated product descriptions.
+      allOf:
+        - $ref: '#/components/schemas/CommonClientId'
+        - $ref: '#/components/schemas/CommonProduct'
+        - type: object
+          required:
+            - isoLanguageCode
+            - productDescription1
+          properties:
+            isoLanguageCode:
+              type: string
+              maxLength: 3
+              description: Three letter ISO ISO 639-3 language code
+              enum: [ENU,SVE,DEU,FRA]
+              default: ENU
+              example: ENU
+            productDescription1:
+              type: string
+              maxLength: 1024
+              description: "Product description for specified language."
+              example: 'Lorem Ipsum Dolor Sit Amet'
+            #productDescription2:
+              #type: string
+              #maxLength: 1024
+              #description: "Product description for specified language."
+              #example: 'Lorem Ipsum Dolor Sit Amet'
+    ProductBarcode:
+      description: Product Barcodes
+      allOf:
+        #- $ref: '#/components/schemas/CommonClientId'
+        #- $ref: '#/components/schemas/CommonProduct'
+        - $ref: '#/components/schemas/CommonUOM'
+        - type: object
+          required:
+            - barcode
+            - barcodeType
+          properties:
+            barcodeType:
+              type: string
+              maxLength: 28
+              description: "<h1>Supported barcode types</h1><p>The type of Bar Codes that are supported are:</p> <ul><li>DUN = Dispatch Unit Number</li><li>EAN = European Article Number</li><li>SCC = Shipping Container Code</li><li>UPC = Universal Product Code</li></ul><p></p><p>Use <em>Additional Product Number</em> to add other barcode types.</p>"
+              enum:
+                - EAN
+                - DUN
+                - SCC
+                - UPC
+              example: EAN
+            barcode:
+              type: string
+              maxLength: 80
+              description: "Bar Code Number The Bar Code Number."
+    ProductStockGroup:
+      description: Product Stock Groups
+      allOf:
+        - $ref: '#/components/schemas/CommonClientId'
+        - type: object
+          required:
+            - barcode
+            - barcodeType
+            - packageId
+          properties:
+            productStockGroupId:
+              type: string
+              maxLength: 48
+              description: "Product stock group identity"
+              example: XX32
+            productStockGroupName:
+              type: string
+              maxLength: 140
+              description: "Product stock group name"
+              example: "Decoration products"
+    ProductPackage:
+      description: "<p>A product can have multiple packages. A package consists of multiple units of measure.</p><h1>Examples</h1><h2>Carton</h2><p>Let's assume a carton contains 150 pieces. The setup for this package would be defined:<ul><li>unitOfMeasure=PCE</li><li>quantity=150</li><li>packageId=CRT</li></ul></p><h2>Pallet</h2><p>A pallet contains 20 cartons of the product. The setup for this pallet would be defined:<ul><li>unitOfMeasure=CRT</li><li>quantity=20</li><li>packageId=PALL</li></ul></p>"
+      allOf:
+        # - $ref: '#/components/schemas/CommonClientId'
+        # - $ref: '#/components/schemas/CommonProduct'
+        - $ref: '#/components/schemas/CommonUOM'
+        - type: object
+          required:
+            - quantity
+            - packageId
+            - packageName
+          properties:
+            quantity:
+              type: number
+              maxLength: 22
+              description: "The number of Unit of Measures that makes up the Package."
+              example: 130
+            packageId:
+              type: string
+              maxLength: 5
+              description: "The identity of the Package."
+              example: PALL
+            packageName:
+              type: string
+              maxLength: 140
+              description: "The description of the Package / Unit of Measure."
+              example: Pallet
+            weight:
+              type: number
+              maxLength: 22
+              description: "The total Weight of the Package without the weight of the package/load carrier itself"
+              example: 30
+            netWeight:
+              type: number
+              maxLength: 22
+              description: "The Net Weight for a Product including the weight of the package/load carrier itself."
+              example: 35
+            height:
+              type: number
+              maxLength: 22
+              description: "The heigth of the Package."
+              example: 10
+            length:
+              type: number
+              maxLength: 22
+              description: "The length of the Package."
+              example: 24
+            width:
+              type: number
+              maxLength: 22
+              description: "The width of the Package."
+              example: 35
+            volume:
+              type: number
+              maxLength: 22
+              description: "The total Volume for the Package."
+              example: 0.3
+            isPallet:
+              type: string
+              maxLength: 3
+              description: "Set yes if this package is a pallet, otherwise no"
+              enum: [yes, no]
+              example: yes
+            
+            
+            
+            
+            # HIDDEN FIELDS
+            # SET IN MAPPING
+            # - Conditional: If isPallet = yes then set palpak=1 and palpik=1
+            # ADDITIONAL INFO
+            #pakname2:
+              #type: string
+              #maxLength: 140
+              #description: "Alternative Package Description Used for Pick Package Description when picking via the Voice Pick component."
+            #consumerqty:
+              #type: number
+              #maxLength: 22
+              #description: "No of Consumer Packages The number of consumer packages that are included in the Package / Unit of Measure."
+            #price1:
+              #type: number
+              #maxLength: 22
+              #description: "Price 1 Price for the Product per Package (info)."
+            #price2:
+              #type: number
+              #3maxLength: 22
+              #description: "Price 2 Price for the Product per Package (info)."
+            #cartypid:
+              #type: string
+              #maxLength: 12
+              #description: "Load Carrier Type Identity The identity of the Type of Load Carrier. The Item Load's Load Carrier Type is the type of Load Carrier the Package normally exists on."
+            #car_cartypid:
+              #type: string
+              #maxLength: 12
+              #description: "Movement Load Carrier Type The type of Movement Load Carrier the Load Carrier normally exists on."
+            #nopaks_carcar:
+              #type: number
+              #maxLength: 22
+              #description: "Number of Load Carriers States how many of the Item Load's Load Carriers will fit on the Movement Load Carrier."
+            #maxtload:
+              #type: number
+              #maxLength: 22
+              #description: "Top Load The maximum Weight that can be stacked on top of the Package."
+            #abaldiff_plus:
+              #type: number
+              #maxLength: 22
+              #description: "Surplus The number of Lowest UMs that the ordered quantity in a Pick Order Line can differ by upwards, so that this package / unit may still be picked without having to register a discrepancy code. At Pallet Pick the system will select an Item Load with a quantity that lies within this upper and lower limit. This value is normally defined for each Package of the Product but that value is always overridden if there is a value transferred from the host system in the Customer Order Line."
+            #abaldiff_minus:
+              #type: number
+              #maxLength: 22
+              #description: "Deficiency The number of Lowest UMs that the ordered quantity in a Pick Order Line can differ by downwards, so that this package / unit may still be picked without having to register a discrepancy code. At Pallet Pick the system will select an Item Load with a quantity that lies within this upper and lower limit. This value is normally defined for each Package of the Product but that value is always overridden if there is a value transferred from the host system in the Customer Order Line."
+            #deposit_type:
+              #type: string
+              #maxLength: 32
+              #description: "Deposit Type For Packages that the Customer can / will return, e.g. bottles, it shows which Type of deposit this Package makes up."
+            #pmtypid_in:
+              #type: string
+              #maxLength: 140
+              #description: "Packing Material Type at Inbound Packing Material Type that is always connected to the Product Package when receiving. Can be empty <null>."
+            #pmtypid_out:
+              #type: string
+              #maxLength: 140
+              #description: "Packing Material Type at Outbound Packing Material Type that is always connected to the Product Package when picking / shipping. Can be empty <null>."
+            #dlvrypak:
+              #type: string
+              #maxLength: 4
+              #description: "Mix on Pick Load Carrier at Case Pick Values: 0 = Yes: A mix of different Products, Packages and quantities can be planned on the same Pick Load Carrier. 1 = No: A mix of different Products and Packages is NOT allowed. Always 1 Pick Package for each Pick Load Carrier. 2 = No, Product Package:  A mix of different Products and Packages is NOT allowed.     But one or many units of the same Product Package can be planned for the same Pick Load Carrier. If there is a Movement Load Carrier Type defined for the Package, the system will create a Pick Load Carrier of this type for the package at Case Pick. Otherwise the system creates a Pick Load Carrier of the type that is stated for the Pick Zone."
+            #volume_fill_percent:
+              #type: number
+              #maxLength: 22
+              #description: "Case Pick Volume (%) The fill factor of the Package / Unit of Measure on a Pick Load Carrier. This is normally empty <null> which has the same effect as 100%. For example, balls will take up more volume in the pick load carrier (Case Pick Volume % is greater than 100) while flower pots that can be piled one onto the other take up less volume (Case Pick Volume % is less than 100)."
+            #layerpak:
+              #type: string
+              #maxLength: 4
+              #description: "Layer Pallet Package Controls (1=Yes,0=No) if the Package is a layer package in a pallet. Used for calculating the number of and height of Item Load, e.g. when receiving goods."
+            #eandun:
+              #type: string
+              #maxLength: 80
+              #description: "Bar Code Bar Code used in outgoing ASN."
+            #barcodetype:
+              #type: string
+              #maxLength: 28
+              #description: "Bar Code Type The types of Bar Codes that may be used: DUN = Dispatch Unit Number EAN = European Article Number SCC = Shipping Container Code UPC = Universal Product Code"
+    VendorProductNumber:
+      allOf:
+        - $ref: '#/components/schemas/CommonProduct'
+        - $ref: '#/components/schemas/CommonUOM'
+      type: object
+      required:
+        - vendorId
+        - vendorProductId
+      properties:
+        vendorId:
+          type: string
+          maxLength: 140
+          description: "The identity of the Vendor. The <em>vendorId</em> must exist in host system, otherwise add with <em>master-data/vendor</em> endpoint."
+          pattern: '^[A-Z0-9_-]+$'
+          example: ACME_CORP
+        vendorProductId:
+          type: string
+          maxLength: 140
+          description: "The Vendors identity of the Product."
+          example: XYZ12345
+        #coocod:
+          #type: string
+          #maxLength: 24
+          #description: "Original Country Country of origin."
+    PurchaseOrder:
+      description: Purchase orders contains information about goods delivered to the warehouse
+      allOf:
+        - $ref: '#/components/schemas/CommonWarehouseId'
+        - $ref: '#/components/schemas/CommonClientId'
+        - type: object
+          required:
+            - purchaseOrderId
+            - purchaseOrderSequence
+            - vendorId
+            - purchaseOrderTypeId
+          properties:
+            purchaseOrderId:
+              type: string
+              maxLength: 140
+              description: "The identity of the Purchase Order."
+              example: POID12345
+            purchaseOrderSequence:
+              type: number
+              maxLength: 22
+              description: "When there are multiple occurrences of the Purchase Order in the Warehouse system this tells in which order they have been received from the host system."
+              example: 0
+              default: 0
+            purchaseOrderTypeId:
+              type: string
+              maxLength: 8
+              description: "<p>The identity of the Type of Purchase Order. Purchase order type must be agreed with host prior to use.</p><p>Common values are <ul><li>N - Normal purchase orders</li><li>R - Returns</li></p>"
+              example: N
+              default: N
+            scheduledArrivalDateTime:
+              type: string
+              format: date-time
+              maxLength: 7
+              description: "The date and time in ISO 8601 when the goods are estimated to arrive." 
+              example: "2020-04-12T23:20:50.52Z"
+            #transportMethod:
+              #type: string
+              #maxLength: 68
+              #description: "How the goods are transported (boat, plane, train, vehicle, etc). Only used as information." 
+              #enum: [boat, plane, train, vehicle, other]
+              #example: vehicle
+            vendorId:
+              type: string
+              maxLength: 140
+              description: "The identity of the Vendor that sent the goods. Vendor identity must be sent to host system prior to use. Use endpoint <em>master-data/vendor</em> to add new vendors."
+              example: VEND-ACME
+            instructions:
+              type: string
+              maxLength: 1600
+              description: "Instructions Free text."
+              example: This is an instruction for the entire purchase order
+            #division:
+              #type: string
+              #maxLength: 68
+              #description: "Division Division, department, section, workshop or similar subordinate unit of a company / organization."
+              #example: home depot
+            #farrdtm:
+              #type: string
+              #format: date
+              #maxLength: 7
+              #description: "Earliest Planned Arrival Time First possible Arrival Date and Time for the Vehicle."
+            #larrdtm:
+              #type: string
+              #format: date
+              #maxLength: 7
+              #description: "Latest Planned Arrival Time Last possible Arrival Date and Time for the Vehicle."  
+            purchaseOrderLines:
+              type: array
+              items:
+                $ref: '#/components/schemas/PurchaseOrderLine'
+            purchaseOrderMetaData:
+              type: array
+              items:
+                $ref: '#/components/schemas/MetaData'
+    PurchaseOrderLine:
+      allOf:
+        - $ref: '#/components/schemas/CommonWarehouseId'
+        - $ref: '#/components/schemas/CommonProductOwner'
+        - $ref: '#/components/schemas/CommonClientId'
+        - $ref: '#/components/schemas/CommonUOM'
+        - type: object
+          required:
+            - quantity
+          properties:
+            quantity:
+              type: number
+              maxLength: 22
+              description: "The number of Lowest Unit of Measure of the Products that is expected to be received." 
+              example: 456
+            productDescription:
+              type: string
+              maxLength: 1024
+              description: "The description / name of the Product."
+              example: Great Widget
+            purchaseOrderLinePosition:
+              type: number
+              maxLength: 22
+              description: "The identity of the Purchase Order Line."
+              example: 1
+              default: 1
+            purchaseOrderLineSequence:
+              type: number
+              maxLength: 22
+              description: "Sequence is used as an extra identity of the Purchase Order Line."
+              example: 1
+              default: 0
+            vendorProductNumber:
+              type: string
+              maxLength: 140
+              description: "The Vendors identity of the Product."
+              example: ABC123456
+            scheduledArrivalDateTime:
+              type: string
+              format: date-time
+              maxLength: 7
+              description: "The date and time in ISO 8601 when the goods are estimated to arrive." 
+              example: "2020-04-12T23:20:50.52Z"
+            instructions:
+              type: string
+              maxLength: 1600
+              description: "Instructions Free text."
+              example: Move to buffer on receival
+            metaData:
+              type: array
+              items:
+                $ref: '#/components/schemas/MetaData'
+              
+            #productionLotId:
+              #type: string
+              #maxLength: 160
+              #description: "The Manufacturing Lot for the received goods."
+              #example: XXX1234
+            #productionSubLotId:
+              #type: string
+              #maxLength: 160
+              #description: "The Manufacturing Sublot for the received goods."
+              #example: XT-2445
+            #marketingLotId:
+              #type: string
+              #maxLength: 80
+              #description: "The Marketing Lot for the received goods."  
+              #example: XTER2346
+            #purchasePrice:
+              #type: number
+              #maxLength: 22
+              #description: "Purchase price per Lowest Unit of Measure (Base Package) of the Product."  
+              #example: 33
+            #shiptopartyid:
+              #type: string
+              #maxLength: 140
+              #description: "Ship-to Party Identity The identity of the Party that will receive the goods when they are shipped from the Ship-from Party. So in this case the Ship-to Party is your own Warehouse."
+            #shiptopartyqualifier:
+              #type: string
+              #maxLength: 12
+              #description: "Ship-to Party Type The type of Party that is the Ship-to Party."
+            #shiptocusid:
+              #type: string
+              #maxLength: 140
+              #description: "Ship-to Customer Identity The Party that finally will receive the goods."
+            #shiptocusqualifier:
+              #type: string
+              #maxLength: 12
+              #description: "Ship-to Customer Type The type of Party that is the Ship-to Customer."  
+            #      coid:
+            #              type: string
+            #              maxLength: 140
+            #              description: "Customer Order Number The identity of the Customer Order. Used for transit / warehouse transfer goods."
+            #            coseq:
+            #              type: number
+            #              maxLength: 22
+            #              description: "Customer Order Sequence Number A Sequence Number used by the Host system to make it possible to send a Customer Order more than once (e.g. backorder). Used for transit / warehouse transfer goods."
+            #            copos:
+            #              type: number
+            #              maxLength: 22
+            #              description: "Customer Order Line Number The identity of the Customer Order Line. Used for transit / warehouse transfer goods."
+            #            cosubpos:
+            #              type: number
+            #              maxLength: 22
+            #              description: "Customer Order Line Sub Number Used as an extra identity of the Customer Order Line. Used for transit / warehouse transfer goods."
+            #            corowkitpos:
+            #              type: number
+            #              maxLength: 22
+            #              description: "Customer Order Line Kit Position The Customer Order Line contains an Assembly Product. Used for transit / warehouse transfer goods."  
+            #            blockcod:
+            #              type: string
+            #              maxLength: 32
+            #              description: "Hold Code A Hold Code may be applied on an Item Load or a Pick Location to temporarily restrict its processing."
+            #            blockdays:
+            #              type: number
+            #              maxLength: 22
+            #              description: "Number of Hold Days The number of Hold Days is after how many days the hold will be released automatically if it has not been removed manually before that."
+            #            blockkey:
+            #              type: string
+            #              maxLength: 48
+            #              description: "Hold Key If a Hold Key is registered for the Hold then the same key value has to be entered to remove the hold manually."
+            #            blocktxt:
+            #              type: string
+            #              maxLength: 800
+            #              description: "Hold Text Free hold text."
+            #            farrdtm:
+            #              type: string
+            #              format: date
+            #              maxLength: 7
+            #              description: "Earliest Planned Arrival Time First possible Arrival Date and Time for the Vehicle."
+            #            larrdtm:
+            #              type: string
+            #              format: date
+            #              maxLength: 7
+            #              description: "Latest Planned Arrival Time Last possible Arrival Date and Time for the Vehicle."
+            #            selltocusid:
+            #              type: string
+            #              maxLength: 140
+            #              description: "Sell-to Customer Identity The Customer that made the Order according to the Customer Order."
+            #            selltocusqualifier:
+            #              type: string
+            #              maxLength: 12
+            #              description: "Sell-to Customer Type The type of Party that is the Sell-to Customer."  
+            #            ordqtyuptol:
+            #              type: number
+            #              maxLength: 22
+            #              description: "Upper Limit for Received Quantity The maximum quantity (number of Lowest Units of Measure) that can be received in this Inbound Order Line. This quantity is transferred from the Host System."
+            #            measqtyuptol:
+            #              type: number
+            #              maxLength: 22
+            #              description: "Upper Limit for Measured Quantity The maximum accepted Measured Quantity per ordered unit. It is used to check that the registered Measured Quantity is within the limits of reason. This tolerance quantity is transferred from the Host System. Example: The Ordered Quantity is 20 cheeses of 700 gram each. The Upper Limit for Measured Quantity = 770 gram. When the user measures all 20 cheeses, the system will accept any registered weight that is below 15.4 kg (=20x770g)."
+            #            measqtylotol:
+            #              type: number
+            #              maxLength: 22
+            #              description: "Lower Limit for Measured Quantity The minimum accepted Measured Quantity per ordered unit. It is used to check that the registered Measured Quantity is within the limits of reason. This tolerance quantity is transferred from the Host System. Example: The Ordered Quantity is 20 cheeses of 700 gram each. The Lower Limit for Measured Quantity = 550 gram. When the user measures all 20 cheeses, the system will accept any registered weight that is above 11,0 kg (=20x550g)."  
+            #            measure:
+            #              type: string
+            #              maxLength: 4
+            #              description: "Catch Measure Controls (1=Yes,0=No) if the Products shall go through Catch Measure (Quantity check). If nothing is registered (null), then the Product configuration will decide if the Products shall go through Catch Measure."
+            #            measure_qualifier:
+            #              type: string
+            #              maxLength: 16
+            #              description: "Catch Measure Unit States in which unit to measure the goods if Catch Measure is set."
+            #            cotype:
+            #              type: string
+            #              maxLength: 8
+            #              description: "Customer Order Type The type of the Customer Order. Comes from the Host System and does not control any logic in the Warehouse except for what is described below: - LO = Local Order inhibits sending of Order-related information via the HAPI        and EDI interface, such as Pick Result and Receipt Report. - Other values are just information in the Warehouse system."  
+            #            reserve_for_assembly:
+            #              type: string
+            #              maxLength: 4
+            #              description: "Reserve for Assembly Controls (1=Yes,0=No) if the goods should be used for an Assembly Order."
+            #            customsrequirement:
+            #              type: string
+            #              maxLength: 4
+            #              description: "Customs Requirement The Customs Requirement states (1=Yes,0=No) if the customs handling is required."
+            #            country_of_origin:
+            #              type: string
+            #              maxLength: 24
+            #              description: "Original Country Country of origin for the goods."
+            #            country_of_export:
+            #              type: string
+            #              maxLength: 24
+            #              description: "Exporting Country Country that exported the goods."
+            #            country_of_destination:
+            #              type: string
+            #              maxLength: 24
+            #              description: "Destination Country Country that the goods are destined to."
+            #            goods_carriertype:
+            #              type: string
+            #              maxLength: 4
+            #              description: "Carrier Type Container Indicates (1=Yes,0=No) if the Goods Carrier Type is a Container."
+            #            marks_and_numbers:
+            #              type: string
+            #              maxLength: 140
+            #              description: "Goods Marking Additional goods marking."
+            #            main_trpmeth:
+            #              type: string
+            #              maxLength: 68
+            #              description: "Mode of Transport How the goods are transported (boat, plane, train, vehicle, etc). Only used as information."
+            #            main_freid_countrycode:
+            #              type: string
+            #              maxLength: 24
+            #              description: "Country Code for Main Forwarder Country Code for the Forwarder of the main transport."  
+            #            post_trpmeth:
+            #              type: string
+            #              maxLength: 68
+            #              description: "Post Forwarding Transport Type How the goods are transported (boat, plane, train, vehicle, etc). Only used as information."
+            #            post_freid_countrycode:
+            #              type: string
+            #              maxLength: 24
+            #              description: "Country Code for Final Forwarder Country Code for the Forwarder's Vehicle Load Unit (VLU) of the final transport."
+            #            incoming_goods_no:
+            #              type: string
+            #              maxLength: 140
+            #              description: "Incoming Goods Number Goods number for the incoming goods."
+            #            type_of_goods:
+            #              type: string
+            #              maxLength: 140
+            #              description: "Type of Goods The Type of Goods that is handled. Free text."
+            #            main_freid:
+            #              type: string
+            #              maxLength: 140
+            #              description: "Main Forwarder Identity The identity of the main Forwarder's Vehicle Load Unit (VLU) that transports the goods to or from the Warehouse / Node."
+            #            post_freid:
+            #              type: string
+            #              maxLength: 140
+            #              description: "Final Forwarder Identity The identity of the final Forwarder's Vehicle Load Unit (VLU) that transports the goods to or from the Warehouse / Node."
+            #            artdate:
+            #              type: string
+            #              format: date
+            #              maxLength: 7
+            #              description: "Product Date The Product Date as stated by the Product Date Type (Arrival Date, Manufacturing Date or Expiry Date)."  
+            #            manufacturingdate:
+            #              type: string
+            #              format: date
+            #              maxLength: 7
+            #              description: "Manufacturing Date The date when the goods were manufactured."
+            #            expirydate:
+            #              type: string
+            #              format: date
+            #              maxLength: 7
+            #              description: "Expiry Date The date when the goods can no longer be used."
+    CommonClientId:
+      type: object
+      required: 
+        - clientId
+      description: Base model with fields used in all IMI Models. Used for inheritance.
+      properties:
+        clientId:
+          type: string
+          maxLength: 35
+          description: The identity of the client. This value must be agreed by service provider before being used.
+          pattern: '^[A-Z]{2}-/w+$'
+          example: SE-EXAMPLE
+    CommonProduct:
+      type: object
+      required: 
+        - productId
+      description: Base model for products with fields used in all IMI Models. Used for inheritance.
+      properties:
+        productId:
+          type: string
+          maxLength: 140
+          description: "The identity of the Product."
+          example: abc1234567
+          
+    CommonProductOwner:
+      allOf:
+      - $ref: '#/components/schemas/CommonProduct'
+      - type: object
+        required: 
+          - productId
+        description: Base model for products with fields used in all IMI Models. Used for inheritance.
+        properties:
+          productId:
+            type: string
+            maxLength: 140
+            description: "The identity of the Product."
+            example: abc1234567
+          ownerId:
+              type: string
+              maxLength: 140
+              description: "The identity of the Owner of the product. I most applications this ID will be identical to clientId"
+              example: SE-EXAMPLE
+    CommonUOM:
+      type: object
+      description: Unit Of Measure
+      required:
+        - unitOfMeasure
+      properties:
+        unitOfMeasure:
+            type: string
+            maxLength: 35
+            description: "The unit of measure to be used. Common values are 'PCE', 'PALLET', 'CRT'"
+            example: PCE
+    CommonWarehouseId:
+      type: object
+      required:
+        - warehouseId
+      properties:
+        warehouseId:
+          type: string
+          maxLength: 4
+          description: "The identity of the Warehouse."
+          pattern: '^[A-Z0-9]+$'
+          example: GOT1
+  securitySchemes:
+    schenker_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: 'http://api.example.com/oauth/dialog'
+          scopes:
+            'write': modify resources in your account
+            'read': read your resources
+            'update': update resources
+            'delete': delete resources
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
