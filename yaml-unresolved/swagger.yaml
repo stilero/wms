@@ -95,8 +95,6 @@ paths:
           $ref: '#/components/responses/InvalidInput'
         '403':
           $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
         '503':
           $ref: '#/components/responses/ServiceUnavailable'
     post:
@@ -112,16 +110,14 @@ paths:
       responses:
         '201':
           description: product created
-#        '400':
-#          $ref: '#/components/responses/InvalidInput'
-#        '403':
-#          $ref: '#/components/responses/Unauthorized'
-#        '404':
-#          $ref: '#/components/responses/NotFound'
-#        '409':
-#          $ref: '#/components/responses/Conflict'
-#        '503':
-#          $ref: '#/components/responses/ServiceUnavailable'
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
       requestBody:
         content:
           application/json:
@@ -155,14 +151,14 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Product'
-#        '400':
-#          $ref: '#/components/responses/InvalidInput'
-#        '403':
-#          $ref: '#/components/responses/Unauthorized'
-#        '404':
-#          $ref: '#/components/responses/NotFound'
-#        '503':
-#          $ref: '#/components/responses/ServiceUnavailable'
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
     put:
       tags:
         - master-data   
@@ -191,14 +187,14 @@ paths:
       responses:
         '201':
           description: product updated
-#        '400':
-#          $ref: '#/components/responses/InvalidInput'
-#        '403':
-#          $ref: '#/components/responses/Unauthorized'
-#        '404':
-#          $ref: '#/components/responses/NotFound'
-#        '503':
-#          $ref: '#/components/responses/ServiceUnavailable'
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
   /master-data/product-stock-group:
     get:
       tags:
