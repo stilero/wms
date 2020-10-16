@@ -707,8 +707,24 @@ paths:
                   type: string
                   format: uri
                   example: https://myserver.com/send/callback/here
+                event:
+                  description: |
+                    <p>The event you want to add a subscription to</p>
+                    <h1>Available events</h1>
+                    <h2>deliveryReceiptFinished</h2>
+                    <p>Triggered when goods from vendor purchase orders and customer return orders are received to the warehouse.</p>
+                    <h2>pickReport</h2>
+                    <p>Triggered when a customer order is picked and shipped from the warehouse.</p>
+                    <h2>itemChange</h2>
+                    <p>Triggered when on item changes</p>
+                    <h2>inventorySnapshot</h2>
+                    <p>Triggered nightly with storage quantities of all goods in the warehouse</p>
+                  type: string
+                  enum: [deliveryReceiptFinished, pickReport, itemChange, inventorySnapshot]
+                  example: deliveryReceiptFinished
               required:
                 - callbackUrl
+                - event
       callbacks:   # Callback definition
         deliveryReceiptFinished:
           '{$request.body#/callbackUrl}':   # The callback URL,
