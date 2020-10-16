@@ -2684,6 +2684,52 @@ components:
           maxLength: 35
           description: "The legal log to be used."
           example: LEGALLOT_ABX1234
+    DeliveryReceipt:
+      allOf:
+        - $ref: '#/components/schemas/CommonWarehouseId'
+        - type: object
+          required:
+            - arrivalDateTime
+            - receiptId
+          properties:
+            receiptId:
+              #delid
+              type: number
+              maxLength: 22
+              description: "The identity of the Receipt."
+            arrivalDateTime:
+              type: string
+              format: date
+              maxLength: 7
+              description: |
+                Date and Time when the goods arrived to the warehouse
+                The date and time in ISO 8601.
+              example: "2020-04-12T23:20:50.52Z"
+            employeeIdentity:
+              type: string
+              maxLength: 140
+              description: "The identity of the User. This is the User that received and registered the goods."
+            receiveType:
+              type: string
+              maxLength: 8
+              description: |
+                <p>The identity of the Receive Type describes how the goods were received.</p>
+              example: N
+            packingSlipNumber:
+              type: string
+              maxLength: 140
+              description: "The identity / number of the Packing Slip."
+              example: PS1234567ABC
+            BillOfLadingNumber:
+              type: string
+              maxLength: 140
+              description: "The identity / number of the Bill of Lading."
+              example: BOL1234567ABC
+            VehicleIdentity:
+              type: string
+              maxLength: 68
+              description: "The identity of the vehicle that transported the goods to the Warehouse. The identity can be the registration number, license plate or similar."
+              example: ABC123
     CommonClientId:
       type: object
       required: 
