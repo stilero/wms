@@ -16,16 +16,16 @@ info:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
 tags:
-  - name: outbound
-    description: |
-      <p>Outbound requests are sent from customer to warehouse with request to pick, pack and send an order from the warehouse.</p>
-      <p>Also known as customer orders, picking orders, despatch advise</p>
+  - name: master-data
+    description: WMS operations related to master data.
   - name: inbound
     description:  |
       <p>Inbound requests are sent from customer to warehouse with notification that a replenishment order has been sceduled to arrive at the warehouse with goods.</p>
       <p>Also known as purchase orders, replenishment orders.</p>
-  - name: master-data
-    description: WMS operations related to master data
+  - name: outbound
+    description: |
+      <p>Outbound requests are sent from customer to warehouse with request to pick, pack and send an order from the warehouse.</p>
+      <p>Also known as customer orders, picking orders, despatch advise</p>
   - name: inventory
     description: WMS operations related to warehouse inventory
   - name: general
