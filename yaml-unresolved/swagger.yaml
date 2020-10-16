@@ -2083,7 +2083,7 @@ components:
     ProductNumber:
       description: This is used for adding additional product numbers to the WMS. Additional product numbers used for identifying the product and support non-standard barcodes. EAN, GTIN and other standard barcodes should use the EAN-part of the product endpoint.
       allOf:
-      - $ref: '#/components/schemas/CommonProduct'
+      #- $ref: '#/components/schemas/CommonProduct'
       - type: object
         required:
           - productNumberType
