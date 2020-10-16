@@ -343,7 +343,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/CustomerOrderList'
+                  $ref: '#/components/schemas/OrderList'
         '400':
           $ref: '#/components/responses/InvalidInput'
         '403':
@@ -499,7 +499,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/CustomerOrderList'
+                  $ref: '#/components/schemas/OrderList'
         '400':
           $ref: '#/components/responses/InvalidInput'
         '403':
@@ -2217,6 +2217,31 @@ components:
           #type: string
           #maxLength: 24
           #description: "Original Country Country of origin."
+    OrderList:
+      description: Lists customer orders and purchase orders for the client.
+      type: object
+      properties:
+        orderId:
+          type: string
+          maxLength: 140
+          description: "The identity of the Order."
+          example: SOUK123456
+        orderSequence:
+          type: number
+          maxLength: 22
+          description: "The sequence number of the order."
+          example: 1
+          default: 0
+        orderType:
+          type: string
+          maxLength: 2
+          description: "Order Type to classify this order. "
+          example: N
+        status:
+          type: string
+          maxLength: 10
+          description: The current status of the order
+          example: Started
     PurchaseOrder:
       description: Purchase orders contains information about goods delivered to the warehouse
       allOf:
