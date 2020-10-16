@@ -1068,12 +1068,12 @@ components:
           - quantity
           - warehouseId
         properties:
-          minimumQuantity:
+          minQuantity:
             type: number
             maxLength: 22
             description: "The minimum allowed quantity to be picked for this Order Line. For flexible levels calculate the minimum level by a percentage of the quantity, i.e. 90% (0.9*quantity), or simply set the same value as quantity."
             example: 90
-          maximumQuantity:
+          maxQuantity:
             type: number
             maxLength: 22
             description: "The maximum allowed quantity to be picked for this Order Line. For flexible levels calculate the maximum level by a percentage of the quantity, i.e. 110% (1.1*quantity), or simply set the same value as quantity."
@@ -1098,26 +1098,10 @@ components:
             maxLength: 1600
             description: "Customer Order Line Instructions Free text. Can be used to add extra info for the order."
             example: "Handle with extra care."
-          purchaseOrderId:
-            type: string
-            maxLength: 140
-            description: "The identity of the Purchase Order that the customer order line is connected to."
-            example: POID123456
-          purchaseOrderSequence:
-            type: number
-            maxLength: 22
-            description: "Purchase Order Sequence Number. When there are multiple occurrences of the Purchase Order. This is the Purchase Order that the Customer Order Line is connected to."
-            example: 1
-          purchaseOrderLineId:
-            type: number
-            maxLength: 22
-            description: "The identity of the Purchase Order Line."
-            example: 1
-          purchaseOrderLineSequence:
-            type: number
-            maxLength: 22
-            description: "Purchase Order Line Sub Number Used as an extra identity of the Purchase Order Line."
-            example: 0
+      - $ref: '#/components/schemas/PurchaseOrderId'
+      - $ref: '#/components/schemas/PurchaseOrderLineNumber'
+      - type: object
+        properties:
           clientProductNumber:
             type: string
             maxLength: 140
