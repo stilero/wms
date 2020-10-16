@@ -741,7 +741,7 @@ paths:
       summary: Subscribe to events in the WMS
       description: |
         <p>Subscribe to a warehouse system event to get a notification for certain events within the warehouse. For example when a customer order status changes, or when a purchase order is received.</p>
-        <p>Please note that updates are not allowed. In order to update or change a callback uri for a subscription, you will need to unsubscribe first and then subscribe with your new information.</p>
+        <p>Please note that you cannot update a subscription. In order to change a callback uri for a subscription, you will need to unsubscribe first and then subscribe with your new information.</p>
       tags:
         - callbacks
       security:
