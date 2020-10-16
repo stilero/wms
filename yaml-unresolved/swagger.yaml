@@ -69,6 +69,7 @@ paths:
     
   /master-data/products:
     get:
+      deprecated: false
       security:
         - schenker_auth:
             - 'read'
@@ -97,6 +98,7 @@ paths:
         '503':
           $ref: '#/components/responses/ServiceUnavailable'
     post:
+      deprecated: false
       tags:
         - master-data   
       summary: Creates a product 
@@ -124,6 +126,7 @@ paths:
               $ref: '#/components/schemas/Product'
   /master-data/products/{productId}:
     get:
+      deprecated: false
       tags:
         - master-data   
       summary: Returns a product based product-id
@@ -159,6 +162,7 @@ paths:
         '503':
           $ref: '#/components/responses/ServiceUnavailable'
     put:
+      deprecated: false
       tags:
         - master-data   
       summary: Updates a product based on product id
@@ -196,6 +200,7 @@ paths:
           $ref: '#/components/responses/ServiceUnavailable'
   /master-data/product-stock-group:
     get:
+      deprecated: false
       tags:
         - master-data   
       summary: Returns all product stock groups for client
@@ -224,6 +229,7 @@ paths:
         '503':
           $ref: '#/components/responses/ServiceUnavailable'
     post:
+      deprecated: false
       tags:
         - master-data   
       summary: Creates a product stock group
@@ -251,6 +257,7 @@ paths:
               $ref: '#/components/schemas/ProductStockGroup'
   /master-data/product-stock-group/{productStockGroupId}:
     get:
+      deprecated: false
       tags:
         - master-data   
       summary: Returns a product stock group based on id
@@ -286,6 +293,7 @@ paths:
         '503':
           $ref: '#/components/responses/ServiceUnavailable'
     put:
+      deprecated: false
       tags:
         - master-data   
       summary: Updates a product stock group based on id
@@ -323,6 +331,7 @@ paths:
           $ref: '#/components/responses/ServiceUnavailable'
   /purchase-orders:
     get:
+      deprecated: false
       tags:
         - inbound   
       summary: Returns all active purchase orders for client
@@ -351,6 +360,7 @@ paths:
         '503':
           $ref: '#/components/responses/ServiceUnavailable'
     post:
+      deprecated: false
       tags:
         - inbound   
       summary: Creates a purchase order
@@ -378,6 +388,7 @@ paths:
               $ref: '#/components/schemas/PurchaseOrder'
   /purchase-orders/{purchaseOrderId}:
     get:
+      deprecated: false
       tags:
         - inbound   
       summary: Returns a purchase order based on order id
@@ -412,6 +423,7 @@ paths:
         '503':
           $ref: '#/components/responses/ServiceUnavailable'
     put:
+      deprecated: false
       tags:
         - inbound   
       summary: Updates purchase order based on purchase order id
@@ -447,6 +459,7 @@ paths:
         '503':
           $ref: '#/components/responses/ServiceUnavailable'
     delete:
+      deprecated: false
       tags:
         - inbound   
       summary: Deletes a purchase order based on purchase order id
@@ -479,6 +492,7 @@ paths:
           $ref: '#/components/responses/ServiceUnavailable'
   /customer-orders:
     get:
+      deprecated: false
       tags:
         - outbound   
       summary: Returns all active customer orders for client
@@ -507,6 +521,7 @@ paths:
         '503':
           $ref: '#/components/responses/ServiceUnavailable'
     post:
+      deprecated: false
       tags:
         - outbound   
       summary: Creates a customer order
@@ -534,6 +549,7 @@ paths:
               $ref: '#/components/schemas/CustomerOrder'
   /customer-orders/{customerOrderId}:
     get:
+      deprecated: false
       tags:
         - outbound   
       summary: Returns a customer order based on customer order id
@@ -568,6 +584,7 @@ paths:
         '503':
           $ref: '#/components/responses/ServiceUnavailable'
     put:
+      deprecated: false
       tags:
         - outbound   
       summary: Updates customer order based on customer order id
@@ -603,6 +620,7 @@ paths:
         '503':
           $ref: '#/components/responses/ServiceUnavailable'
     delete:
+      deprecated: false
       tags:
         - outbound   
       summary: Deletes a customer order based on customer order id
