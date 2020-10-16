@@ -687,6 +687,36 @@ paths:
           $ref: '#/components/responses/NotFound'
         '503':
           $ref: '#/components/responses/ServiceUnavailable'
+  /subscriptions:
+    get:
+      deprecated: false
+      tags:
+        - callbacks   
+      summary: Returns all active subscriptions for the client
+      description: |
+        Returns a list of all active subscriptions for the client
+      operationId: getSubscriptions
+      security:
+        - schenker_auth:
+            - 'read'
+      parameters: 
+        - $ref: '#/components/parameters/skipParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subscription'
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
   /subscribe:
     post:
       summary: Subscribe to a webhook to get a notification for certain events within the warehouse. For example when a customer order status changes
@@ -742,6 +772,9 @@ paths:
     post:
       tags:
         - callbacks
+      security:
+        - schenker_auth:
+            - 'subscribe'
       requestBody:
         required: true
         content:
@@ -759,6 +792,7 @@ paths:
       responses:
           '201':
             description: Webhook created
+  
 components:
   responses:
     InvalidInput:
@@ -3095,6 +3129,30 @@ components:
           maxLength: 140
           description: "The identity of the Item Load. When goods are received to the warehouse they are assigned an internal warehouse identification of the goods called item load id."
           example: ITEID1234567
+    Subscription:
+      type: object
+      description: Details about a subscription
+      required:
+        - subscriptionId
+        - callBackUri
+        - event
+      properties:
+        subscriptionId:
+          type: string
+          format: uuid
+          description: Unique id of your description. Use this id to unsubscribe to events
+          example: 'f81d4fae-7dec-11d0-a765-00a0c91e6bf6'
+        callBackUri:
+            type: string
+            format: uri
+            maxLength: 35
+            description: "The callback uri we send events from warehouse system to client."
+            example: 'http://example.com/your/path/here'
+        event:
+            type: string
+            maxLength: 35
+            description: "The callback event you have subscribed to"
+            example: 'deliveryReceiptReport'
   securitySchemes:
     schenker_auth:
       type: oauth2
