@@ -1749,7 +1749,7 @@ components:
       required:
         - productDescription
       allOf:
-        - $ref: '#/components/schemas/CommonClientId'
+        #- $ref: '#/components/schemas/CommonClientId'
         - $ref: '#/components/schemas/CommonProductOwner'
         #- $ref: '#/components/schemas/CommonUOM'
         - type: object
@@ -1788,12 +1788,6 @@ components:
               description: "The identity of the Lowest Unit of Measure / Base Package of this Product"
               example: PCE
               default: PCE
-            isHazardous:
-              type: string
-              maxLength: 3
-              description: "<p>Set <em>yes</em> if product is Hazardous or <em>no</em> if product is not hazardous.</p><p>Use <em>dangerousGoodsInfo</em> to add additional dangerous goods information.</p>" 
-              enum: [yes, no]
-              example: yes
             packages:
               type: array
               description: "Add additional packages to the product apart from the lowest unit of measure. This is where you add cartons and pallets for the product."
@@ -2108,12 +2102,17 @@ components:
     dangerousGoodsInfo:
       description: This is used for adding information about dangerous goods. Omit if product is not dangerous goods
       allOf:
-      - $ref: '#/components/schemas/CommonProduct'
+      #- $ref: '#/components/schemas/CommonProduct'
       - type: object
         required:
-          - dgClass
-          - unNumber
+          - isHazardous
         properties:
+          isHazardous:
+              type: string
+              maxLength: 3
+              description: "<p>Set <em>yes</em> if product is Hazardous or <em>no</em> if product is not hazardous.</p><p>Use <em>dangerousGoodsInfo</em> to add additional dangerous goods information.</p>" 
+              enum: [yes, no]
+              example: yes
           dgClass:
             type: number
             maxLength: 1
@@ -2158,8 +2157,8 @@ components:
     ProductDescription:
       description: Add product description to multiple language to support translated product descriptions.
       allOf:
-        - $ref: '#/components/schemas/CommonClientId'
-        - $ref: '#/components/schemas/CommonProduct'
+        #- $ref: '#/components/schemas/CommonClientId'
+        #- $ref: '#/components/schemas/CommonProduct'
         - type: object
           required:
             - isoLanguageCode
@@ -2210,7 +2209,7 @@ components:
     ProductStockGroup:
       description: Product Stock Groups
       allOf:
-        - $ref: '#/components/schemas/CommonClientId'
+        #- $ref: '#/components/schemas/CommonClientId'
         - type: object
           required:
             - barcode
@@ -2372,7 +2371,7 @@ components:
               #description: "Bar Code Type The types of Bar Codes that may be used: DUN = Dispatch Unit Number EAN = European Article Number SCC = Shipping Container Code UPC = Universal Product Code"
     VendorProductNumber:
       allOf:
-        - $ref: '#/components/schemas/CommonProduct'
+        #- $ref: '#/components/schemas/CommonProduct'
         - $ref: '#/components/schemas/CommonUOM'
       type: object
       required:
