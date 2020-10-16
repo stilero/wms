@@ -2767,6 +2767,11 @@ components:
               maxLength: 22
               description: "The quantity that was measured for the received goods. Used when Catch Measure/Quality checks at inbound is activated for the Product."
               example: 400
+            measuredUnit:
+              type: string
+              maxLength: 16
+              description: "States in which unit to measure the goods if Catch Measure is set."
+              example: g
         - $ref: '#/components/schemas/ProductLOT'
         - type: object
           properties:
@@ -2817,225 +2822,72 @@ components:
               type: string
               maxLength: 8
               description: "Performed Action Code Identity The identity of the code for the Action that has been performed for the goods."
-            #Returns
-            FromPartyId:
-              type: string
-              maxLength: 140
-              description: "Id of the party here the goods originated from. Used for returns."
-            FromPartyType:
-              type: string
-              maxLength: 12
-              description: "The type of Party that is the From Party."
-              enum: [customer, owner, vendor]
-              example: customer
-            
-            supid:
-              type: string
-              maxLength: 140
-              description: "Vendor Identity The identity of the Vendor. This is the Vendor that has delivered the goods."
-            ownid:
-              type: string
-              maxLength: 140
-              description: "Owner Identity The identity of the Owner."
-            
-            
-            
-            shiptocusid:
-              type: string
-              maxLength: 140
-              description: "Ship-to Customer Identity The Party that finally will receive the goods."
-            shiptocusqualifier:
+            customerReturnOrderInfo:
+              description: Information about customer return orders
+              allOf:
+              - $ref: '#/components/schemas/CustomerReturnOrderInfo'
+            discrepancyCode:
               type: string
               maxLength: 12
-              description: "Ship-to Customer Type The type of Party that is the Ship-to Customer."
-            
-            
-            
-            
-            asninseq:
-              type: number
-              maxLength: 22
-              description: "ASN Sequence Number A Sequence Number to make the ASN identity unique."
-            shipfrompartynodeid:
-              type: string
-              maxLength: 140
-              description: "Ship-from Party Node Identity The identity of the Node for the Party that has shipped the goods to the Warehouse."
-            asninrowid:
-              type: number
-              maxLength: 22
-              description: "Inbound ASN Line Number The line number in the inbound ASN."
-            asninrowseq:
-              type: number
-              maxLength: 22
-              description: "ASN Line Sequence Number A Sequence Number to make the ASN Line identity unique"
-            carid:
-              type: string
-              maxLength: 140
-              description: "Load Carrier Identity The identity of the Load Carrier. Used for received transit goods."
-            shiptopartyid:
-              type: string
-              maxLength: 140
-              description: "Ship-to Party Identity The identity of the Party that will receive the goods when it is shipped from the Warehouse as Transit goods."
-            shiptopartyqualifier:
-              type: string
-              maxLength: 12
-              description: "Ship-to Party Type The type of Party that is the Ship-to Party."
-            artidqualifier:
-              type: string
-              maxLength: 4
-              description: "Product Number Type Indicates whether the Product has a known Identity within the Warehouse: 0 = Without known Product Number. Alternative Number in ARTID2 (e.g. transit goods) 1 = With known Identity in ARTID"
-            artid2:
-              type: string
-              maxLength: 140
-              description: "Alternative Product Number E.g. transit goods unknown within the Warehouse."
-            artname2:
-              type: string
-              maxLength: 1024
-              description: "Product Description The extra description / name of the Product."
-            meastemp:
-              type: number
-              maxLength: 22
-              description: "Measured Temperature When the receiving has included an individual temperature check for one or more products, this is the result of the check, i.e. the registered Measured Temperature."
-            company_id:
-              type: string
-              maxLength: 68
-              description: "Client Identity The identity of the Client."
-            
-            
-            whid:
-              type: string
-              maxLength: 16
-              description: "Warehouse Identity The identity of the Warehouse."
-            towsid:
-              type: string
-              maxLength: 12
-              description: "To Area The identity of the destination Area, i.e. that the moving unit will drive to or that the load carrier will be moved to."
-            towpadr:
-              type: string
-              maxLength: 48
-              description: "To Location Address The Address of the To Location that the Load Carrier will be moved to."
-            returns:
-              type: string
-              maxLength: 4
-              description: "Returns Indicates (1=Yes,0=No) if this is a Customer Return Order."
-            
-            
-            
-            croid:
-              type: string
-              maxLength: 140
-              description: "Customer Return Order Number The identity of the Customer Return Order."
-            croseq:
-              type: number
-              maxLength: 22
-              description: "Customer Return Order Sequence Number A Sequence Number to make the Customer Return Order identity unique."
-            cropos:
-              type: number
-              maxLength: 22
-              description: "Customer Return Order Line Number The number of the Customer Return Order Line."
-            crokitpos:
-              type: number
-              maxLength: 22
-              description: "Kit Indicates (1=Yes,0=No) if the Customer Return Order Line contains a Kit Product."
-            crosubpos:
-              type: number
-              maxLength: 22
-              description: "Customer Return Order Line Sub Number A Sub Number to make the Customer Return Order Line Number unique."
-            disccod:
-              type: string
-              maxLength: 12
-              description: "Discrepancy Code The reason for the Discrepancy."
-            disc_actcodid:
+              description: "The reason for the Discrepancy."
+              example: LL
+            discrepancyActionCode:
               type: string
               maxLength: 8
-              description: "Action at Discrepancy The action that has been taken with the discrepancy goods."
-            rcvrowid:
-              type: string
-              maxLength: 140
-              description: "Inbound Order Line Number The number / identity of the Inbound Order Line."
-            manufacturingdate:
-              type: string
-              format: date
-              maxLength: 7
-              description: "Manufacturing Date The date when the goods were manufactured."
-            measure_qualifier_rcv:
-              type: string
-              maxLength: 16
-              description: "Catch Measure Unit States in which unit the goods were measured during the reception process."
-            shipfrompartyid:
-              type: string
-              maxLength: 68
-              description: "Ship-from Party Identity The identity of the Party that has shipped the goods to the Warehouse."
-            shipfrompartyqualifier:
-              type: string
-              maxLength: 12
-              description: "Ship-from Party Type The type of Party that is the Ship-from Party."
-            rcvtype:
-              type: string
-              maxLength: 8
-              description: "Inbound Order Type The type of Inbound Order: A1 = ASN Product (Product numbers and total Shipment quantities) A3 = ASN Load Carrier (Load Carriers uniquely identified.      Load Carrier contents, i.e. the Products and quantities are defined) CR = Customer Return Order PO = Purchase Order NN = Not Notified"
-            ordqty:
-              type: number
-              maxLength: 22
-              description: "Ordered Quantity The ordered quantity of the product."
-            exparrdtm:
-              type: string
-              format: date
-              maxLength: 7
-              description: "Expected Arrival Date and Time The date and time when the goods are estimated to arrive."
-            farrdtm:
-              type: string
-              format: date
-              maxLength: 7
-              description: "Earliest Planned Arrival Time First possible Arrival Date and Time for the Vehicle."
-            larrdtm:
-              type: string
-              format: date
-              maxLength: 7
-              description: "Latest Planned Arrival Time Last possible Arrival Date and Time for the Vehicle."
-            blockcod:
+              description: "The action that has been taken with the discrepancy goods."
+              example: LL
+            InventoryStatusCode:
               type: string
               maxLength: 32
-              description: "Hold Code A Hold Code may be applied on an Item Load or a Pick Location to temporarily restrict its processing."
-            arttrptypid:
-              type: string
-              maxLength: 20
-              description: "Transport Condition Identity Gives the conditions (normal, freeze, cold, dry, non-vibrating etc.) for the vehicle that transports the goods / product."
-            insertdtm:
-              type: string
-              format: date
-              maxLength: 7
-              description: "Inserted Date and Time The date and time when the record was inserted."
-            rcvheadid:
-              type: string
-              maxLength: 140
-              description: "Inbound Order Number The number / identity of the Inbound Order."
-            proid:
-              type: string
-              maxLength: 140
-              description: "Process Identity (inserted by trigger)."
-            upddtm:
-              type: string
-              format: date
-              maxLength: 7
-              description: "Update Time (inserted by trigger)."
-            wws_snddtm:
-              type: string
-              format: date
-              maxLength: 7
-              description: "WWS Send Date Time   Date/time when DELVRY was created"
-            sernumb:
+              description: "If inventory status code is set on an item load, this is where the status is displayed."
+              example: BL
+            SerialNumber:
               type: string
               maxLength: 84
-              description: "Serial Number A unique identity for a single Item Load. Only used for Case Pick and Serial Number handling!"
-            wws_legalstatus:
-              type: string
-              maxLength: 8
-              description: "WWS Legal Status Legal Status is a coded value where  0 - Free  1 - Legal handling."
-            wws_legallot:
-              type: string
-              maxLength: 140
-              description: "WWS Legal Lot Describes the legal LOT to be used."
+              description: "A unique serial number identity for a single Item Load. Only used for Case Pick and Serial Number handling."  
+              example: XEE1700742-54
+            legalLot:
+              description: Information about customer return orders
+              allOf:
+              - $ref: '#/components/schemas/LegalLot'  
+    CustomerReturnOrderInfo:
+      type: object
+      properties:
+        fromPartyId:
+          type: string
+          maxLength: 140
+          description: "Id of the party here the goods originated from. Used for returns."
+        fromPartyType:
+          type: string
+          maxLength: 12
+          description: "The type of Party that is the From Party."
+          enum: [customer, owner, vendor]
+          example: customer
+        customerReturnOrderId:
+          type: string
+          maxLength: 140
+          description: "The identity of the Customer Return Order."
+          example: CR_12345
+        customerReturnOrderSequence:
+          type: number
+          maxLength: 22
+          description: "A Sequence Number to make the Customer Return Order identity unique."
+          example: 1
+        customerReturnOrderLineNumber:
+          type: number
+          maxLength: 22
+          description: "The number of the Customer Return Order Line."
+          example: 1
+        customerReturnOrderLineKitPos:
+          type: number
+          maxLength: 22
+          description: "If set, this will indicate that the Customer Return Order Line contains a Kit Product."
+          example: 1
+        CustomerReturnOrderLineSeq:
+          type: number
+          maxLength: 22
+          description: "A Sub Number to make the Customer Return Order Line Number unique."
+          example: 0
     CommonClientId:
       type: object
       required: 
