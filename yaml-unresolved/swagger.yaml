@@ -16,10 +16,6 @@ info:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
 tags:
-  - name: admins
-    description: Secured Admin-only calls
-  - name: developers
-    description: Operations available to regular developers
   - name: outbound
     description: |
       <p>Outbound requests are sent from customer to warehouse with request to pick, pack and send an order from the warehouse.</p>
