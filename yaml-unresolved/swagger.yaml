@@ -687,6 +687,85 @@ paths:
           $ref: '#/components/responses/NotFound'
         '503':
           $ref: '#/components/responses/ServiceUnavailable'
+  /subscribe:
+    post:
+      summary: Subscribe to a webhook to get a notification for certain events within the warehouse. For example when a customer order status changes
+      tags:
+        - callbacks
+      security:
+        - schenker_auth:
+            - 'subscribe'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                callbackUrl:   # Callback URL
+                  type: string
+                  format: uri
+                  example: https://myserver.com/send/callback/here
+              required:
+                - callbackUrl
+      callbacks:   # Callback definition
+        myEvent:   # Event name
+          '{$request.body#/callbackUrl}':   # The callback URL,
+                                            # Refers to the passed URL
+            post:
+              requestBody:   # Contents of the callback message
+                required: true
+                content:
+                  application/json:
+                    schema:
+                      type: object
+                      properties:
+                        message:
+                          type: string
+                          example: Some event happened
+                      required:
+                        - message
+              responses:   # Expected responses to the callback message
+                '200':
+                  description: Your server returns this code if it accepts the callback
+        deliveryReceiptFinished:
+          '{$request.body#/callbackUrl}':   # The callback URL,
+                                            # Refers to the passed URL
+            post:
+              requestBody:   # Contents of the callback message
+                required: true
+                content:
+                  application/json:
+                    schema:
+                      allOf:
+                      - $ref: '#/components/schemas/DeliveryReceipt'
+              responses:   # Expected responses to the callback message
+                '200':
+                  description: Your server returns this code if it accepts the callback
+      responses:
+        '201':
+          description: Webhook created
+  /unsubscribe:
+    post:
+      tags:
+        - callbacks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                callbackUrl:   # Callback URL
+                  type: string
+                  format: uri
+                  example: https://myserver.com/send/callback/here
+              required:
+                - callbackUrl
+      operationId: unsubscribeOperation
+      responses:
+          '201':
+            description: Webhook created
 components:
   responses:
     InvalidInput:
@@ -3027,6 +3106,7 @@ components:
             'read': read your resources
             'update': update resources
             'delete': delete resources
+            'subscribe': subscribe to webhooks
     api_key:
       type: apiKey
       name: api_key
