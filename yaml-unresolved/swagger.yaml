@@ -2720,16 +2720,22 @@ components:
               maxLength: 140
               description: "The identity / number of the Packing Slip."
               example: PS1234567ABC
-            BillOfLadingNumber:
+            billOfLadingNumber:
               type: string
               maxLength: 140
               description: "The identity / number of the Bill of Lading."
               example: BOL1234567ABC
-            VehicleIdentity:
+            vehicleIdentity:
               type: string
               maxLength: 68
               description: "The identity of the vehicle that transported the goods to the Warehouse. The identity can be the registration number, license plate or similar."
               example: ABC123
+            deliveryReceiptAttributes:
+              description: Additional information and attributes of the delivery receipt. These values are usually passed from the purchase order.
+              type: array
+              items:
+                $ref: '#/components/schemas/MetaData'
+    
     CommonClientId:
       type: object
       required: 
