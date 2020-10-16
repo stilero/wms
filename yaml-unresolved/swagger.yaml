@@ -490,6 +490,42 @@ paths:
           $ref: '#/components/responses/NotFound'
         '503':
           $ref: '#/components/responses/ServiceUnavailable'
+  /receipts/{receiptId}:
+    get:
+      deprecated: false
+      tags:
+        - inbound   
+      summary: Returns a receipt based on receipt id
+      description: |
+        By passing receipt id you can get details of a specific receipt
+      operationId: getReceiptById
+      security:
+        - schenker_auth:
+            - 'read'
+      parameters: 
+        - in: path
+          name: receiptId
+          description: receipt id to use
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeliveryReceipt'
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
   /customer-orders:
     get:
       deprecated: false
@@ -2746,6 +2782,11 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/MetaData'
+            deliveryReceiptLines:
+              description: The delivery receipt lines that the warehouse has received.
+              type: array
+              items:
+                $ref: '#/components/schemas/DeliveryReceiptLine'
     DeliveryReceiptLine:
       allOf:
         - type: object
@@ -2849,7 +2890,12 @@ components:
             legalLot:
               description: Information about customer return orders
               allOf:
-              - $ref: '#/components/schemas/LegalLot'  
+              - $ref: '#/components/schemas/LegalLot' 
+            properties:
+              description: Delivery receipt line properties
+              type: array
+              items:
+                $ref: '#/components/schemas/MetaData'
     CustomerReturnOrderInfo:
       type: object
       properties:
