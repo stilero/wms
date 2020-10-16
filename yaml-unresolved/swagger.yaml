@@ -2191,25 +2191,6 @@ components:
               maxLength: 1600
               description: "Instructions Free text."
               example: Move to buffer on receival
-            metaData:
-              type: array
-              items:
-                $ref: '#/components/schemas/MetaData'
-            productionLotId:
-              type: string
-              maxLength: 160
-              description: "The Manufacturing Lot for the received goods."
-              example: PRODLOTXXX1234
-            productionSubLotId:
-              type: string
-              maxLength: 160
-              description: "The Manufacturing Sublot for the received goods."
-              example: PRODSUBLOT_XT-2445
-            marketingLotId:
-              type: string
-              maxLength: 80
-              description: "The Marketing Lot for the received goods."  
-              example: XTER2346
             purchasePrice:
               type: number
               maxLength: 22
@@ -2220,8 +2201,13 @@ components:
               maxLength: 140
               description: "Additional goods markings to help identify goods."
               example: XYZ123456
+            productLot:
+              allOf:
+                - $ref: '#/components/schemas/ProductLOT'
+            productDates:
+              allOf:
+                - $ref: '#/components/schemas/ProductDates'
             qualityChecks:
-              description: Settings and data related to quality checks.
               allOf:
                 - $ref: '#/components/schemas/QualityCheck'
             customsRequirements:
@@ -2232,6 +2218,15 @@ components:
               description: Additional transport information
               allOf:
                 - $ref: '#/components/schemas/AdditionalTransportInfo'
+            metaData:
+              type: array
+              items:
+                $ref: '#/components/schemas/MetaData'
+            #Hidden to simplify endpoint. Not used by any clients yet
+            #legalLot:
+            #  description: Settings for legal lot
+            #  allOf:
+            #    - $ref: '#/components/schemas/LegalLot'
             #NOT USED BY ANY CLIENT EXCPT FOR WEBSERVICE/HAPI. ERROR ENTRIES?
             #shiptopartyid:
               #type: string
@@ -2315,24 +2310,10 @@ components:
             #              description: "Reserve for Assembly Controls (1=Yes,0=No) if the goods should be used for an Assembly Order."
             
             
-            #            artdate:
-            #              type: string
-            #              format: date
-            #              maxLength: 7
-            #              description: "Product Date The Product Date as stated by the Product Date Type (Arrival Date, Manufacturing Date or Expiry Date)."  
-            #            manufacturingdate:
-            #              type: string
-            #              format: date
-            #              maxLength: 7
-            #              description: "Manufacturing Date The date when the goods were manufactured."
-            #            expirydate:
-            #              type: string
-            #              format: date
-            #              maxLength: 7
-            #              description: "Expiry Date The date when the goods can no longer be used."
+           
     QualityCheck:
       type: object
-      description: Testing
+      description: Use these setting to activate and set tolerances for quality checks during receiving.
       properties:
         catchMeasure:
           type: string
@@ -2434,6 +2415,61 @@ components:
           maxLength: 140
           description: "The identity of the final Forwarder's Vehicle Load Unit (VLU) that transports the goods to or from the Warehouse / Node." 
           example: MSKU98765-4
+    ProductDates:
+      description: Product dates to handle expiration and manufacturing dates for products
+      type: object
+      properties:
+        productDate:
+          type: string
+          format: date-time
+          maxLength: 7
+          description: "The date and time in ISO 8601. The Product Date as stated by the Product Date Type."  
+          example: "2020-04-12T23:20:50.52Z"
+        manufacturingDate:
+          type: string
+          format: date
+          maxLength: 7
+          description: "The date and time in ISO 8601. The date when the goods were manufactured."
+          example: "2020-04-12T23:20:50.52Z"
+        expiryDate:
+          type: string
+          format: date
+          maxLength: 7
+          description: "The expiration date when the goods can no longer be used. The date and time in ISO 8601."
+          example: "2020-04-12T23:20:50.52Z"
+    ProductLOT:
+      type: object
+      description: Production LOT information for product requiring LOT information.
+      properties:
+        productionLotId:
+          type: string
+          maxLength: 160
+          description: "The Manufacturing Lot for the received goods."
+          example: PRODLOTXXX1234
+        productionSubLotId:
+          type: string
+          maxLength: 160
+          description: "The Manufacturing Sublot for the received goods."
+          example: PRODSUBLOT_XT-2445
+        marketingLotId:
+          type: string
+          maxLength: 80
+          description: "The Marketing Lot for the received goods."  
+          example: XTER2346
+    LegalLot:
+      #IMPROVE. Hide status and set to yes if legallot i set?
+      type: object
+      properties:
+        useLegalLot:
+          type: string
+          maxLength: 3
+          description: "Activate Legal lot. Set to yes to activate, no or blank to deactivate."
+          enum: [yes, no]
+        legalLOT:
+          type: string
+          maxLength: 35
+          description: "The legal log to be used."
+          example: LEGALLOT_ABX1234
     CommonClientId:
       type: object
       required: 
