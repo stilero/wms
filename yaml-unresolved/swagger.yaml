@@ -719,7 +719,8 @@ paths:
           $ref: '#/components/responses/ServiceUnavailable'
   /subscribe:
     post:
-      summary: Subscribe to a webhook to get a notification for certain events within the warehouse. For example when a customer order status changes
+      summary: Subscribe to events in the WMS
+      description: Subscribe to a webhook to get a notification for certain events within the warehouse. For example when a customer order status changes
       tags:
         - callbacks
       security:
@@ -770,6 +771,8 @@ paths:
           description: Subscription created
   /unsubscribe:
     post:
+      summary: Unsubscribe to events
+      description: Unsubscribe to events to stop receiving updates on event changes. Find your subscription ID from the /subscriptions endpoint
       tags:
         - callbacks
       security:
@@ -782,12 +785,13 @@ paths:
             schema:
               type: object
               properties:
-                callbackUrl:   # Callback URL
+                subscriptionId:
                   type: string
-                  format: uri
-                  example: https://myserver.com/send/callback/here
+                  format: uuid
+                  description: Unique id of your subscription. Find your id by endpoint /subscriptions
+                  example: 'f81d4fae-7dec-11d0-a765-00a0c91e6bf6'
               required:
-                - callbackUrl
+                - subscriptionId
       operationId: unsubscribeOperation
       responses:
           '201':
