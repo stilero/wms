@@ -322,6 +322,162 @@ paths:
           $ref: '#/components/responses/NotFound'
         '503':
           $ref: '#/components/responses/ServiceUnavailable'
+  /purchase-orders:
+    get:
+      tags:
+        - inbound   
+      summary: Returns all active purchase orders for client
+      description: |
+        Returns a list of all active purchase orders for the client
+      operationId: getPurchaseOrders
+      security:
+        - schenker_auth:
+            - 'read'
+      parameters: 
+        - $ref: '#/components/parameters/skipParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomerOrderList'
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+    post:
+      tags:
+        - inbound   
+      summary: Creates a purchase order
+      description: Creates a new purchase order to the system
+      operationId: newPurchaseOrder
+      security:
+        - schenker_auth:
+            - 'read'
+            - 'write'
+      responses:
+        '201':
+          description: purchase order created
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PurchaseOrder'
+  /purchase-orders/{purchaseOrderId}:
+    get:
+      tags:
+        - inbound   
+      summary: Returns a purchase order based on order id
+      description: |
+        By passing purchase order id you can get details of a specific order
+      operationId: getPurchaseOrderById
+      security:
+        - schenker_auth:
+            - 'read'
+      parameters: 
+        - in: path
+          name: purchaseOrderId
+          description: purchase order id to use
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PurchaseOrderOut'
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+    put:
+      tags:
+        - inbound   
+      summary: Updates purchase order based on purchase order id
+      description: |
+        Update purchase order with new data
+      operationId: updatePurchaseOrderById
+      security:
+        - schenker_auth:
+            - 'read'
+            - 'write'
+            - 'update'
+      parameters: 
+        - in: path
+          name: purchaseOrderId
+          description: purchase order id to use
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PurchaseOrder'
+      responses:
+        '201':
+          description: customer order updated
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+    delete:
+      tags:
+        - inbound   
+      summary: Deletes a purchase order based on purchase order id
+      description: |
+        Delete purchase order with customer order id. The delete operation can only be done when the purchase order status has not proceeded from registered. Otherwise you will receive a 503 response
+      operationId: deletePurchaseOrderById
+      security:
+        - schenker_auth:
+            - 'read'
+            - 'write'
+            - 'update'
+            - 'delete'
+      parameters: 
+        - in: path
+          name: purchaseOrderId
+          description: purchase order id to use
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: purchase order deleted
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
   /customer-orders:
     get:
       tags:
@@ -2308,9 +2464,38 @@ components:
             #              type: string
             #              maxLength: 4
             #              description: "Reserve for Assembly Controls (1=Yes,0=No) if the goods should be used for an Assembly Order."
-            
-            
-           
+    PurchaseOrderOut:
+      description: Purchase Order response output.
+      allOf:
+      - $ref: '#/components/schemas/PurchaseOrder'
+      - type: object
+        properties:
+          insertDateTime:
+            type: string
+            format: date-time
+            description: Date and Time in ISO 8601 when the order was received by host system.
+            example: "2020-04-12T23:20:50.52Z"
+          status:
+            type: string
+            enum:
+              - registered
+              - started
+              - received
+              - processed
+              - rejected
+            description: |
+              <p>The current customer order status.</p>
+              <p>Possible combinations</p>
+              <p>
+                <ul>
+                  <li>Registered - Order inserted to warehouse system</li>
+                  <li>Started - Warehouse has started receiving goods</li>
+                  <li>Received - Warehouse has received all goods on the order</li>
+                  <li>Processed - Order fully received and reported back</li>
+                  <li>Rejected - Order cancelled</li>
+                </ul>
+              </p>
+            example: started           
     QualityCheck:
       type: object
       description: Use these setting to activate and set tolerances for quality checks during receiving.
