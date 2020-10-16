@@ -31,7 +31,7 @@ tags:
   - name: general
     description: General operations
   - name: callbacks
-    description: Callbacks and webhooks to send information from warehouse to client
+    description: Callbacks are used to send updates from warehouse to client
 paths:
   /ping:
     get:
