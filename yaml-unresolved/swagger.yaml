@@ -2153,6 +2153,11 @@ components:
               maxLength: 22
               description: "The number of Lowest Unit of Measure of the Products that is expected to be received." 
               example: 456
+            quantityMax:
+              type: number
+              maxLength: 22
+              description: "The maximum quantity (number of Lowest Units of Measure) that can be received in this Inbound Order Line. This quantity is transferred from the Host System."
+              example: 500
             productDescription:
               type: string
               maxLength: 1024
@@ -2173,13 +2178,13 @@ components:
             vendorProductNumber:
               type: string
               maxLength: 140
-              description: "The Vendors identity of the Product."
+              description: "The Vendor product number of the Product."
               example: ABC123456
             scheduledArrivalDateTime:
               type: string
               format: date-time
               maxLength: 7
-              description: "The date and time in ISO 8601 when the goods are estimated to arrive." 
+              description: "The date and time in ISO 8601 when the purchase order line is estimated to arrive." 
               example: "2020-04-12T23:20:50.52Z"
             instructions:
               type: string
@@ -2190,27 +2195,44 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/MetaData'
-              
-            #productionLotId:
-              #type: string
-              #maxLength: 160
-              #description: "The Manufacturing Lot for the received goods."
-              #example: XXX1234
-            #productionSubLotId:
-              #type: string
-              #maxLength: 160
-              #description: "The Manufacturing Sublot for the received goods."
-              #example: XT-2445
-            #marketingLotId:
-              #type: string
-              #maxLength: 80
-              #description: "The Marketing Lot for the received goods."  
-              #example: XTER2346
-            #purchasePrice:
-              #type: number
-              #maxLength: 22
-              #description: "Purchase price per Lowest Unit of Measure (Base Package) of the Product."  
-              #example: 33
+            productionLotId:
+              type: string
+              maxLength: 160
+              description: "The Manufacturing Lot for the received goods."
+              example: PRODLOTXXX1234
+            productionSubLotId:
+              type: string
+              maxLength: 160
+              description: "The Manufacturing Sublot for the received goods."
+              example: PRODSUBLOT_XT-2445
+            marketingLotId:
+              type: string
+              maxLength: 80
+              description: "The Marketing Lot for the received goods."  
+              example: XTER2346
+            purchasePrice:
+              type: number
+              maxLength: 22
+              description: "Purchase price per Lowest Unit of Measure (Base Package) of the Product. Could be used for paper work."  
+              example: 33
+            goodsMarking:
+              type: string
+              maxLength: 140
+              description: "Additional goods markings to help identify goods."
+              example: MSKU1234552
+            qualityChecks:
+              description: Settings and data related to quality checks.
+              allOf:
+                - $ref: '#/components/schemas/QualityCheck'
+            customsRequirements:
+              description: Settings related to goods with customs requirements
+              allOf:
+                - $ref: '#/components/schemas/CustomsRequirements'
+            additionalTransportInfo:
+              description: Additional transport information
+              allOf:
+                - $ref: '#/components/schemas/AdditionalTransportInfo'
+            #NOT USED BY ANY CLIENT EXCPT FOR WEBSERVICE/HAPI. ERROR ENTRIES?
             #shiptopartyid:
               #type: string
               #maxLength: 140
@@ -2281,26 +2303,8 @@ components:
             #              type: string
             #              maxLength: 12
             #              description: "Sell-to Customer Type The type of Party that is the Sell-to Customer."  
-            #            ordqtyuptol:
-            #              type: number
-            #              maxLength: 22
-            #              description: "Upper Limit for Received Quantity The maximum quantity (number of Lowest Units of Measure) that can be received in this Inbound Order Line. This quantity is transferred from the Host System."
-            #            measqtyuptol:
-            #              type: number
-            #              maxLength: 22
-            #              description: "Upper Limit for Measured Quantity The maximum accepted Measured Quantity per ordered unit. It is used to check that the registered Measured Quantity is within the limits of reason. This tolerance quantity is transferred from the Host System. Example: The Ordered Quantity is 20 cheeses of 700 gram each. The Upper Limit for Measured Quantity = 770 gram. When the user measures all 20 cheeses, the system will accept any registered weight that is below 15.4 kg (=20x770g)."
-            #            measqtylotol:
-            #              type: number
-            #              maxLength: 22
-            #              description: "Lower Limit for Measured Quantity The minimum accepted Measured Quantity per ordered unit. It is used to check that the registered Measured Quantity is within the limits of reason. This tolerance quantity is transferred from the Host System. Example: The Ordered Quantity is 20 cheeses of 700 gram each. The Lower Limit for Measured Quantity = 550 gram. When the user measures all 20 cheeses, the system will accept any registered weight that is above 11,0 kg (=20x550g)."  
-            #            measure:
-            #              type: string
-            #              maxLength: 4
-            #              description: "Catch Measure Controls (1=Yes,0=No) if the Products shall go through Catch Measure (Quantity check). If nothing is registered (null), then the Product configuration will decide if the Products shall go through Catch Measure."
-            #            measure_qualifier:
-            #              type: string
-            #              maxLength: 16
-            #              description: "Catch Measure Unit States in which unit to measure the goods if Catch Measure is set."
+            
+            
             #            cotype:
             #              type: string
             #              maxLength: 8
@@ -2309,62 +2313,8 @@ components:
             #              type: string
             #              maxLength: 4
             #              description: "Reserve for Assembly Controls (1=Yes,0=No) if the goods should be used for an Assembly Order."
-            #            customsrequirement:
-            #              type: string
-            #              maxLength: 4
-            #              description: "Customs Requirement The Customs Requirement states (1=Yes,0=No) if the customs handling is required."
-            #            country_of_origin:
-            #              type: string
-            #              maxLength: 24
-            #              description: "Original Country Country of origin for the goods."
-            #            country_of_export:
-            #              type: string
-            #              maxLength: 24
-            #              description: "Exporting Country Country that exported the goods."
-            #            country_of_destination:
-            #              type: string
-            #              maxLength: 24
-            #              description: "Destination Country Country that the goods are destined to."
-            #            goods_carriertype:
-            #              type: string
-            #              maxLength: 4
-            #              description: "Carrier Type Container Indicates (1=Yes,0=No) if the Goods Carrier Type is a Container."
-            #            marks_and_numbers:
-            #              type: string
-            #              maxLength: 140
-            #              description: "Goods Marking Additional goods marking."
-            #            main_trpmeth:
-            #              type: string
-            #              maxLength: 68
-            #              description: "Mode of Transport How the goods are transported (boat, plane, train, vehicle, etc). Only used as information."
-            #            main_freid_countrycode:
-            #              type: string
-            #              maxLength: 24
-            #              description: "Country Code for Main Forwarder Country Code for the Forwarder of the main transport."  
-            #            post_trpmeth:
-            #              type: string
-            #              maxLength: 68
-            #              description: "Post Forwarding Transport Type How the goods are transported (boat, plane, train, vehicle, etc). Only used as information."
-            #            post_freid_countrycode:
-            #              type: string
-            #              maxLength: 24
-            #              description: "Country Code for Final Forwarder Country Code for the Forwarder's Vehicle Load Unit (VLU) of the final transport."
-            #            incoming_goods_no:
-            #              type: string
-            #              maxLength: 140
-            #              description: "Incoming Goods Number Goods number for the incoming goods."
-            #            type_of_goods:
-            #              type: string
-            #              maxLength: 140
-            #              description: "Type of Goods The Type of Goods that is handled. Free text."
-            #            main_freid:
-            #              type: string
-            #              maxLength: 140
-            #              description: "Main Forwarder Identity The identity of the main Forwarder's Vehicle Load Unit (VLU) that transports the goods to or from the Warehouse / Node."
-            #            post_freid:
-            #              type: string
-            #              maxLength: 140
-            #              description: "Final Forwarder Identity The identity of the final Forwarder's Vehicle Load Unit (VLU) that transports the goods to or from the Warehouse / Node."
+            
+            
             #            artdate:
             #              type: string
             #              format: date
@@ -2380,6 +2330,103 @@ components:
             #              format: date
             #              maxLength: 7
             #              description: "Expiry Date The date when the goods can no longer be used."
+    QualityCheck:
+      type: object
+      description: Testing
+      properties:
+        catchMeasure:
+          type: string
+          maxLength: 3
+          description: "Activates Catch Measure (Quantity check) for the product. If nothing is registered (null), then the Product configuration will decide if the Products shall go through Catch Measure."
+          enum: [yes, no]
+          example: no
+        measureUnit:
+          type: string
+          maxLength: 16
+          description: "States in which unit to measure the goods if Catch Measure is set."
+          example: g
+        measureLowerLimit:
+          type: number
+          maxLength: 22
+          description: |
+            <p>The minimum accepted Measure per ordered unit. Set to verify that the registered Measured Quantity is within the lower limits.</p>
+              <h1>Example</h1> <p>The Ordered Quantity is 20 cheeses of 700 gram each. The Lower Limit for Measured Quantity = 550 gram. When the user measures all 20 cheeses, the system will accept any registered weight that is above 11,0 kg (=20x550g).</p> 
+          example: 700
+        measureUpperLimit:
+          type: number
+          maxLength: 22
+          description: |
+            <p>The maximum accepted Measure per ordered unit. Set to verify that the registered Measured Quantity is within the upper limits.</p>
+            <h1>Example</h1><p>The Ordered Quantity is 20 cheeses of 700 gram each. The Upper Limit for Measured Quantity = 770 gram. When the user measures all 20 cheeses, the system will accept any registered weight that is below 15.4 kg (=20x770g).</p>
+          example: 770
+    CustomsRequirements:
+      type: object
+      description: Settings related to customs requirements
+      properties:
+        hasCustomsRequirement:
+          type: string
+          maxLength: 3
+          description: "Set to yes if the purchase order line has customs handling requirements."
+        countryOfOrigin:
+          type: string
+          maxLength: 2
+          description: "Two character ISO country code. country of origin for the goods."
+          pattern: '^[A-Z]{2}$'
+          example: CN
+        countryOfExport:
+          type: string
+          maxLength: 2
+          description: "Two character ISO country code. Country that exported the goods."
+          pattern: '^[A-Z]{2}$'
+          example: CN
+        countryOfDestination:
+          type: string
+          maxLength: 2
+          description: "Two character ISO country code. Country that the goods are destined to."
+          pattern: '^[A-Z]{2}$'
+          example: CN
+    AdditionalTransportInfo:
+      type: object
+      description: Additional transport information related to purchase orders
+      properties:
+        isContainer:
+          type: string
+          maxLength: 3
+          description: "Set to yes if the Goods Carrier Type is a Container."
+          enum: [yes, no]
+          example: yes
+        main_trpmeth:
+          type: string
+          maxLength: 68
+          description: "Mode of Transport How the goods are transported (boat, plane, train, vehicle, etc). Only used as information."
+        main_freid_countrycode:
+          type: string
+          maxLength: 24
+          description: "Country Code for Main Forwarder Country Code for the Forwarder of the main transport."  
+        post_trpmeth:
+          type: string
+          maxLength: 68
+          description: "Post Forwarding Transport Type How the goods are transported (boat, plane, train, vehicle, etc). Only used as information."
+        post_freid_countrycode:
+          type: string
+          maxLength: 24
+          description: "Country Code for Final Forwarder Country Code for the Forwarder's Vehicle Load Unit (VLU) of the final transport."
+        incoming_goods_no:
+          type: string
+          maxLength: 140
+          description: "Incoming Goods Number Goods number for the incoming goods."
+        type_of_goods:
+          type: string
+          maxLength: 140
+          description: "Type of Goods The Type of Goods that is handled. Free text."
+        main_freid:
+          type: string
+          maxLength: 140
+          description: "Main Forwarder Identity The identity of the main Forwarder's Vehicle Load Unit (VLU) that transports the goods to or from the Warehouse / Node."
+        post_freid:
+          type: string
+          maxLength: 140
+          description: "Final Forwarder Identity The identity of the final Forwarder's Vehicle Load Unit (VLU) that transports the goods to or from the Warehouse / Node." 
     CommonClientId:
       type: object
       required: 
