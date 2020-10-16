@@ -1135,26 +1135,7 @@ components:
           #description: "Serial Number Controls (1=Yes,0=No) if the Serial Number is required at Case Pick."
         #sernumb:
           #type: string
-          #maxLength: 84
-          #description: "Serial Number A unique identity for a single Item Load. Only used for Case Pick and Serial Number handling!"
-          
-      # EXTRA INFO
-        #account_ref:
-          #type: string
-          #maxLength: 140
-          #description: "Account Code Controls the financial conditions for the Customer Order Line (info)."
-        #document:
-          #type: string
-          #maxLength: 1600
-          #description: "Instructions Free text. (Document)"
-        #price1:
-          #type: number
-          #maxLength: 22
-          #description: "Price 1 Price for the Product per Package (info)."
-        #price2:
-          #type: number
-          #maxLength: 22
-          #description: "Price 2 Price for the Product per Package (info)."
+          #maxLeage (info)."
         #vat_percent:
           #type: number
           #maxLength: 22
@@ -2242,6 +2223,12 @@ components:
           maxLength: 10
           description: The current status of the order
           example: Started
+        createDateTime:
+          type: string
+          format: date-time
+          maxLength: 7
+          description: "The date and time in ISO 8601 when the order was registered by warehouse system" 
+          example: "2020-04-12T23:20:50.52Z"  
     PurchaseOrder:
       description: Purchase orders contains information about goods delivered to the warehouse
       allOf:
