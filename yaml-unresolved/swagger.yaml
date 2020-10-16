@@ -782,6 +782,8 @@ paths:
           '{$request.body#/callbackUrl}':   # The callback URL,
                                             # Refers to the passed URL
             post:
+              summary: deliveryReceiptFinished - When purchase orders are received
+              description: The deliveryReceiptFinished event triggered when purchase orders are received. It sends the a detailed response to the callback uri you have specified.
               requestBody:   # Contents of the callback message
                 $ref: '#/components/requestBodies/DeliveryReceiptBody'
               responses:   # Expected responses to the callback message
