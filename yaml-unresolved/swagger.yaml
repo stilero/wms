@@ -818,7 +818,7 @@ paths:
       operationId: unsubscribeOperation
       responses:
           '201':
-            description: Webhook created
+            description: Successfully unsubscribed
   
 components:
   responses:
