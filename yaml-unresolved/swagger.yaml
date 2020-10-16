@@ -2097,12 +2097,12 @@ components:
               maxLength: 7
               description: "The date and time in ISO 8601 when the goods are estimated to arrive." 
               example: "2020-04-12T23:20:50.52Z"
-            #transportMethod:
-              #type: string
-              #maxLength: 68
-              #description: "How the goods are transported (boat, plane, train, vehicle, etc). Only used as information." 
-              #enum: [boat, plane, train, vehicle, other]
-              #example: vehicle
+            transportMethod:
+              type: string
+              maxLength: 68
+              description: "How the goods are transported (boat, plane, train, vehicle, etc). Only used as information." 
+              enum: [boat, plane, train, vehicle, other]
+              example: vehicle
             vendorId:
               type: string
               maxLength: 140
@@ -2113,21 +2113,23 @@ components:
               maxLength: 1600
               description: "Instructions Free text."
               example: This is an instruction for the entire purchase order
-            #division:
-              #type: string
-              #maxLength: 68
-              #description: "Division Division, department, section, workshop or similar subordinate unit of a company / organization."
-              #example: home depot
-            #farrdtm:
-              #type: string
-              #format: date
-              #maxLength: 7
-              #description: "Earliest Planned Arrival Time First possible Arrival Date and Time for the Vehicle."
-            #larrdtm:
-              #type: string
-              #format: date
-              #maxLength: 7
-              #description: "Latest Planned Arrival Time Last possible Arrival Date and Time for the Vehicle."  
+            division:
+              type: string
+              maxLength: 68
+              description: "Division Division, department, section, workshop or similar subordinate unit of a company / organization."
+              example: home depot
+            earliestArrivalDateTime:
+              type: string
+              format: date-time
+              maxLength: 7
+              description: "First possible Arrival Date and Time for the Vehicle."
+              example: "2020-04-12T23:20:50.52Z"
+            latestArrivalDateTime:
+              type: string
+              format: date
+              maxLength: 7
+              description: "Last possible Arrival Date and Time for the Vehicle."  
+              example: "2020-04-12T23:20:50.52Z"
             purchaseOrderLines:
               type: array
               items:
