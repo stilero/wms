@@ -2136,8 +2136,8 @@ components:
     ProductMetaData:
       description: Product Metadata is used to add additional data to products.
       allOf:
-        - $ref: '#/components/schemas/CommonClientId'
-        - $ref: '#/components/schemas/CommonProduct'
+        #- $ref: '#/components/schemas/CommonClientId'
+        #- $ref: '#/components/schemas/CommonProduct'
         - type: object
           required:
             - attribute
