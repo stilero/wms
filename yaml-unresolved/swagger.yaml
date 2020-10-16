@@ -2219,7 +2219,7 @@ components:
               type: string
               maxLength: 140
               description: "Additional goods markings to help identify goods."
-              example: MSKU1234552
+              example: XYZ123456
             qualityChecks:
               description: Settings and data related to quality checks.
               allOf:
@@ -2367,19 +2367,19 @@ components:
           type: string
           maxLength: 3
           description: "Set to yes if the purchase order line has customs handling requirements."
-        countryOfOrigin:
+        originCountryCode:
           type: string
           maxLength: 2
           description: "Two character ISO country code. country of origin for the goods."
           pattern: '^[A-Z]{2}$'
           example: CN
-        countryOfExport:
+        exportCountryCode:
           type: string
           maxLength: 2
           description: "Two character ISO country code. Country that exported the goods."
           pattern: '^[A-Z]{2}$'
           example: CN
-        countryOfDestination:
+        destinationCountryCode:
           type: string
           maxLength: 2
           description: "Two character ISO country code. Country that the goods are destined to."
@@ -2395,38 +2395,45 @@ components:
           description: "Set to yes if the Goods Carrier Type is a Container."
           enum: [yes, no]
           example: yes
-        main_trpmeth:
+        mainModeofTransport:
           type: string
-          maxLength: 68
+          maxLength: 10
           description: "Mode of Transport How the goods are transported (boat, plane, train, vehicle, etc). Only used as information."
-        main_freid_countrycode:
+        mainModeofTransportCountrycode:
           type: string
           maxLength: 24
-          description: "Country Code for Main Forwarder Country Code for the Forwarder of the main transport."  
-        post_trpmeth:
+          description: "Two character ISO country code. Country Code for Main Forwarder Country Code for the Forwarder of the main transport."  
+          pattern: '^[A-Z]{2}$'
+          example: DE
+        finalModeofTransport:
           type: string
           maxLength: 68
           description: "Post Forwarding Transport Type How the goods are transported (boat, plane, train, vehicle, etc). Only used as information."
-        post_freid_countrycode:
+        finalModeofTransportCountryCode:
           type: string
-          maxLength: 24
-          description: "Country Code for Final Forwarder Country Code for the Forwarder's Vehicle Load Unit (VLU) of the final transport."
-        incoming_goods_no:
+          maxLength: 2
+          description: "Two character ISO country code. Country Code for Final Forwarder Country Code for the Forwarder's Vehicle Load Unit (VLU) of the final transport."
+          pattern: '^[A-Z]{2}$'
+          example: DE
+        incomingGoodsNumber:
           type: string
           maxLength: 140
           description: "Incoming Goods Number Goods number for the incoming goods."
-        type_of_goods:
+        typeofGoods:
           type: string
           maxLength: 140
           description: "Type of Goods The Type of Goods that is handled. Free text."
-        main_freid:
+          example: Home interior
+        mainVLUIdentity:
           type: string
           maxLength: 140
-          description: "Main Forwarder Identity The identity of the main Forwarder's Vehicle Load Unit (VLU) that transports the goods to or from the Warehouse / Node."
-        post_freid:
+          description: "The identity of the main Forwarder's Vehicle Load Unit (VLU) that transports the goods to or from the Warehouse / Node. Also known as container unit number"
+          example: MSKU123456-7
+        finalFreightIdentity:
           type: string
           maxLength: 140
-          description: "Final Forwarder Identity The identity of the final Forwarder's Vehicle Load Unit (VLU) that transports the goods to or from the Warehouse / Node." 
+          description: "The identity of the final Forwarder's Vehicle Load Unit (VLU) that transports the goods to or from the Warehouse / Node." 
+          example: MSKU98765-4
     CommonClientId:
       type: object
       required: 
