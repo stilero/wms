@@ -2254,6 +2254,7 @@ components:
     PurchaseOrder:
       description: Purchase orders contains information about goods delivered to the warehouse
       allOf:
+        - $ref: '#/components/schemas/PurchaseOrderId'
         - $ref: '#/components/schemas/CommonWarehouseId'
         - $ref: '#/components/schemas/CommonClientId'
         - type: object
@@ -2263,17 +2264,6 @@ components:
             - vendorId
             - purchaseOrderTypeId
           properties:
-            purchaseOrderId:
-              type: string
-              maxLength: 140
-              description: "The identity of the Purchase Order."
-              example: POID12345
-            purchaseOrderSequence:
-              type: number
-              maxLength: 22
-              description: "When there are multiple occurrences of the Purchase Order in the Warehouse system this tells in which order they have been received from the host system."
-              example: 0
-              default: 0
             purchaseOrderTypeId:
               type: string
               maxLength: 8
@@ -2329,19 +2319,17 @@ components:
                 $ref: '#/components/schemas/MetaData'
     PurchaseOrderLine:
       allOf:
+        - $ref: '#/components/schemas/PurchaseOrderLineNumber'
         - $ref: '#/components/schemas/CommonWarehouseId'
         - $ref: '#/components/schemas/CommonProductOwner'
         - $ref: '#/components/schemas/CommonClientId'
+        - $ref: '#/components/schemas/CommonQuantity'
         - $ref: '#/components/schemas/CommonUOM'
         - type: object
           required:
             - quantity
+            - purchaseOrderLineNumber
           properties:
-            quantity:
-              type: number
-              maxLength: 22
-              description: "The number of Lowest Unit of Measure of the Products that is expected to be received." 
-              example: 456
             quantityMax:
               type: number
               maxLength: 22
@@ -2352,12 +2340,6 @@ components:
               maxLength: 1024
               description: "The description / name of the Product."
               example: Great Widget
-            PurchaseOrderLineNumber:
-              type: number
-              maxLength: 22
-              description: "The identity of the Purchase Order Line."
-              example: 1
-              default: 1
             purchaseOrderLineSequence:
               type: number
               maxLength: 22
@@ -2528,7 +2510,32 @@ components:
                   <li>Rejected - Order cancelled</li>
                 </ul>
               </p>
-            example: started           
+            example: started  
+    PurchaseOrderId:
+      type: object
+      description: Purchase order id to uniquely identify an purchase order
+      properties:
+        purchaseOrderId:
+          type: string
+          maxLength: 140
+          description: "The identity of the Purchase Order."
+          example: POID12345
+        purchaseOrderSequence:
+          type: number
+          maxLength: 22
+          description: "When there are multiple occurrences of the Purchase Order in the Warehouse system this tells in which order they have been received from the host system."
+          example: 0
+          default: 0
+    PurchaseOrderLineNumber:
+      type: object
+      description: Line number to identify the purchase order line row
+      properties:
+        purchaseOrderLineNumber:
+          type: number
+          maxLength: 22
+          description: "The identity of the Purchase Order Line."
+          example: 1
+          default: 1
     QualityCheck:
       type: object
       description: Use these setting to activate and set tolerances for quality checks during receiving.
@@ -2754,49 +2761,24 @@ components:
         - $ref: '#/components/schemas/CommonUOM'
         - $ref: '#/components/schemas/CommonQuantity'
         - type: object
-          required:
-            - lineNumber
           properties:
             measuredQuantity:
               type: number
               maxLength: 22
               description: "The quantity that was measured for the received goods. Used when Catch Measure/Quality checks at inbound is activated for the Product."
               example: 400
-            productionLotIdentity:
-              type: string
-              maxLength: 160
-              description: "The Manufacturing Lot for the received goods."
-              example: PRODLOT_ABC123
-            productionSubLotIdentity:
-              type: string
-              maxLength: 160
-              description: "The Manufacturing Sublot for the received goods."
-              example: PROD_SUBLOT_ABC123
-            marketingLotIdentity:
-              type: string
-              maxLength: 80
-              description: "The Marketing Lot for the received goods."
-              example: MARKLOT_ABC123
+        - $ref: '#/components/schemas/ProductLOT'
+        - type: object
+          properties:
             qualityLotIdentity:
               type: string
               maxLength: 80
               description: "Quality Lot Can be used for optional classification of the stored goods in the Warehouse (quality, color, etc)."  
               example: STORBAT_ABC123
-            purchaseOrderId:
-              type: string
-              maxLength: 140
-              description: "The identity of the Purchase Order."
-              example: PURORD12345
-            purchaseOrderSequence:
-              type: number
-              maxLength: 22
-              description: "When there are multiple occurrences of the Purchase Order in the Warehouse system this tells in which order they have been received from the host system. This is the Purchase Order that the Receipt is connected to."
-              example: 1
-            purchaseOrderLineNumber:
-              type: number
-              maxLength: 22
-              description: "Purchase Order Line Number The identity of the Purchase Order Line."
-              example: 1
+        - $ref: '#/components/schemas/PurchaseOrderId'
+        - $ref: '#/components/schemas/PurchaseOrderLineNumber'
+        - type: object
+          properties:
             purchaseOrderLineSequence:
               type: number
               maxLength: 22
@@ -2810,11 +2792,43 @@ components:
         - $ref: '#/components/schemas/CustomerOrderLineNumber'
         - type: object
           properties:
-            corowkitpos:
+            customerOrderLineKitPosition:
               type: number
               maxLength: 22
-              description: "Customer Order Line Kit Position The Customer Order Line contains an Assembly Product."  
-              
+              description: " The Customer Order Line contains an Assembly Product."  
+            asnIdentity:
+              #DespatchadvicenoticeIdentity
+              type: string
+              maxLength: 140
+              description: "The identity / number of the inbound ASN."
+              example: 1234567
+        - $ref: '#/components/schemas/CommonItemLoadId'
+        - $ref: '#/components/schemas/ProductDates'
+        - type: object
+          properties:      
+            returnsFinished:
+              type: string
+              maxLength: 3
+              description: "Indicates if the handling of the returned goods is finished in the receiving process or if the goods will be handled later in the inspection process."
+              enum: [yes, no]
+              example: yes
+            decidedActionCode:
+              #dactcodid
+              type: string
+              maxLength: 8
+              description: "Performed Action Code Identity The identity of the code for the Action that has been performed for the goods."
+            #Returns
+            FromPartyId:
+              type: string
+              maxLength: 140
+              description: "Id of the party here the goods originated from. Used for returns."
+            FromPartyType:
+              type: string
+              maxLength: 12
+              description: "The type of Party that is the From Party."
+              enum: [customer, owner, vendor]
+              example: customer
+            
             supid:
               type: string
               maxLength: 140
@@ -2834,16 +2848,10 @@ components:
               type: string
               maxLength: 12
               description: "Ship-to Customer Type The type of Party that is the Ship-to Customer."
-            iteid:
-              type: string
-              maxLength: 140
-              description: "Item Load Identity The identity of the Item Load."
             
             
-            asninid:
-              type: string
-              maxLength: 140
-              description: "Inbound ASN Identity The identity / number of the inbound ASN."
+            
+            
             asninseq:
               type: number
               maxLength: 22
@@ -2893,11 +2901,7 @@ components:
               maxLength: 68
               description: "Client Identity The identity of the Client."
             
-            last_consuming_date:
-              type: string
-              format: date
-              maxLength: 7
-              description: "Expiry Date The date when the goods can no longer be used."
+            
             whid:
               type: string
               maxLength: 16
@@ -2914,22 +2918,9 @@ components:
               type: string
               maxLength: 4
               description: "Returns Indicates (1=Yes,0=No) if this is a Customer Return Order."
-            returnsfinished:
-              type: string
-              maxLength: 4
-              description: "Returns Finished Controls (1=Yes,0=No) if the handling of the returned goods is finished in the receiving process or if the goods will be handled later in the inspection process."
-            dactcodid:
-              type: string
-              maxLength: 8
-              description: "Performed Action Code Identity The identity of the code for the Action that has been performed for the goods."
-            frompartyid:
-              type: string
-              maxLength: 140
-              description: "From Party Identity Party where the goods originated from. Used for returns."
-            frompartyqualifier:
-              type: string
-              maxLength: 12
-              description: "From Party Type The type of Party that is the From Party."
+            
+            
+            
             croid:
               type: string
               maxLength: 140
@@ -3107,7 +3098,7 @@ components:
         quantity:
             type: number
             maxLength: 10
-            description: "Quantity describes the how many units of measure (i.e. Pieces)."
+            description: "Quantity describes how many units of measure (UOM)."
             example: 150
     CommonWarehouseId:
       type: object
@@ -3120,6 +3111,13 @@ components:
           description: "The identity of the Warehouse."
           pattern: '^[A-Z0-9]+$'
           example: GOT1
+    CommonItemLoadId:
+      properties:
+        ItemLoadIdentity:
+          type: string
+          maxLength: 140
+          description: "The identity of the Item Load. When goods are received to the warehouse they are assigned an internal warehouse identification of the goods called item load id."
+          example: ITEID1234567
   securitySchemes:
     schenker_auth:
       type: oauth2
