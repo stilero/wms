@@ -3247,11 +3247,7 @@ components:
         # Cncode
         - type: object
           properties:
-            attributes:
-              type: array
-              description: Additional information about the customer order line. These attributes are passed from the customer order back to the pick receipt
-              items:
-                $ref: '#/components/schemas/Attribute'
+            
             serials:
               type: array
               description: Serial numbers scanned for the pick order line
@@ -3261,7 +3257,12 @@ components:
               type: array
               description: Packing materials used to pack the pick order line
               items:
-                $ref: '#/components/schemas/CommonSerial'
+                $ref: '#/components/schemas/PackingMaterial'
+            attributes:
+              type: array
+              description: Additional information about the customer order line. These attributes are passed from the customer order back to the pick receipt
+              items:
+                $ref: '#/components/schemas/Attribute'
     CommonClientId:
       type: object
       required: 
