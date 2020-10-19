@@ -1749,15 +1749,17 @@ components:
           type: string
           maxLength: 3
           description: |
-            "<p>Attibutes should be agreed prior to use, and there are a couple of predefined attributes that adds extra functionality to the order.</p>
+            <p>Attibutes should be agreed prior to use, and there are a couple of predefined attributes that adds extra functionality to the order.</p>
             <p>Except for the predefined attributes, you can name your own attributes to use in paperwork.</p>
-            <p>For example, to add <em>Recommended Retail Price (RRP) = €35</em> to an object, you could use the attribute RRP=€35</p>"
+            <p>For example, to add <em>Recommended Retail Price (RRP) = €35</em> to an object, you would use the attribute <em>RRP</em></p>
           pattern: '^[A-Z]{3}$'
           example: RRP
         value:
           type: string
           maxLength: 35
-          description: "Free text value to use with the attribute."
+          description: |
+            <p>Free text value to use with the attribute.</p>
+            <p>For example, to add <em>Recommended Retail Price (RRP) = €35</em> to an object, you would set the value <em>€35</em></p>
           example: '€35'
     Pagination:
       type: object
