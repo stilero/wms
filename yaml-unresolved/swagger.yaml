@@ -3349,8 +3349,9 @@ components:
             type: object
             description: The values that we have changed to. Properties will be omitted if no change is made.
             #This is due to save bandwith
+            required:
+              - quantityChange
             allOf:
-            - $ref: '#/components/schemas/InventoryChangeLine'
             - type: object
               properties:
                 quantityChange:
@@ -3367,6 +3368,7 @@ components:
                       </ul>
                     </p>
                   example: 100
+            - $ref: '#/components/schemas/InventoryChangeLine'
     InventoryChangeLine:
       type: object
       properties:
