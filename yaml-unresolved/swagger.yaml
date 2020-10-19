@@ -3273,8 +3273,7 @@ components:
       - $ref: '#/components/schemas/CommonTimeStamp'
       - $ref: '#/components/schemas/CommonItemLoadId'
       - $ref: '#/components/schemas/CommonWarehouseId'
-      - $ref: '#/components/schemas/CustomerOrderId'
-      - $ref: '#/components/schemas/CustomerOrderLineNumber'
+      
       - type: object
         properties:
           inventoryChangeCode:
@@ -3306,179 +3305,127 @@ components:
             maxLength: 35
             description: Freetext to describe the inventory change
             example: Blocked due to audit
-          despatchadviceId:
-            #ASNIN
-            type: string
-            maxLength: 35
-            description: "The identity / number of the inbound ASN." 
-            example: ASNIN12313DNKS
-      - $ref: '#/components/schemas/PurchaseOrderId'
-      - $ref: '#/components/schemas/PurchaseOrderLineNumber'
       - type: object
-        properties:   
-          vendorId:
-            type: string
-            maxLength: 35
-            description: "Old identity of the Vendor. The value changed from."
-            example: VEND_ACME1
-          vendorIdNew:
-            type: string
-            maxLength: 35
-            description: "New Vendor Identity. What the value has changed to."
-            example: VEND_ACME2
-          ownerId:
-            type: string
-            maxLength: 35
-            description: "Old identity of the Owner. The value changed from."
-            example: OWN_ACME1
-          ownerIdNew:
-            type: string
-            maxLength: 35
-            description: "The new identity of the Owner. The value changed to."  
-            example: OWN_ACME2
-          productId:
-            type: string
-            maxLength: 35
-            description: "The old identity of the Product. The value changed from."
-            example: PRODOLD1234
-          productIdNew:
-            type: string
-            maxLength: 35
-            description: "New Product ID"
-            example: PRODNEW1234
-          productDate:
-            type: string
-            format: date-time
-            maxLength: 0
-            description: "The old product date. Date and Time in ISO 8601."
-            example: "2020-04-12T23:20:50.52Z"
-          productDateNew:
-            type: string
-            format: date-time
-            maxLength: 0
-            description: "The new product date. Date and Time in ISO 8601."
-            example: "2020-04-12T23:20:50.52Z"
-          packageIdentity:
-            type: string
-            maxLength: 17
-            description: "The old identity of the Package / Unit of Measure."
-            example: PCE
-          packageIdentityNew:
-            type: string
-            maxLength: 17
-            description: "The new identity of the Package / Unit of Measure." 
-            example: PCE
-          quantity:
-            type: number
-            maxLength: 0
-            description: "The old number of Lowest Units of Measure (Base Packages)."
-            example: 110
-          quantityNew:
-            type: number
-            maxLength: 0
-            description: "The new number of Lowest Units of Measure (Base Packages)."
-            example: 100
-          quantityChange:
-            #Added this to compensate for removing old quantity and to
-            #facilitate calculations that are usually made in the mapping
-            type: number
-            maxLength: 0
-            description: |
-              <p>How the quantity is changed between old and new (quantityChange = quantityNew - quantityOld).</p>
-              <p>
-                <ul>
-                  <li>Positive value - quantity increased</li>
-                  <li>Negative value - quantity decreased</li>
-                </ul>
-              </p>
-            example: 100
-          measuredQty:
-            type: number
-            maxLength: 0
-            description: "Old Measured Quantity. The quantity that was measured for the received goods. Used when Catch Measure at inbound is activated for the Product."
-            example: 35
-          measuredQtyNew:
-            type: number
-            maxLength: 0
-            description: "New Measured Quantity. The quantity that was measured for the received goods. Used when Catch Measure at inbound is activated for the Product."
-            example: 35
-          inventoryStatusCode:
-            type: string
-            maxLength: 8
-            description: "The old Inventory status code that we have changed from."
-          inventoryStatusCodeNew:
-            type: string
-            maxLength: 8
-            description: "The New Hold Code that we changed to."
-          productionLotIdentity:
-            type: string
-            maxLength: 40
-            description: "Manufacturing Lot The Manufacturing Lot for the goods."
-            example: PRODLOT12345
-          productionLotIdentityNew:
-            type: string
-            maxLength: 40
-            description: "New Manufacturing Lot."
-            example: PRODLOT123456
-          productionSubLotIdentity:
-            type: string
-            maxLength: 40
-            description: "Manufacturing Sublot The Manufacturing Sublot for the goods."
-            example: PRODSUBLOT123
-          productionSubLotIdentityNew:
-            type: string
-            maxLength: 40
-            description: "New Manufacturing Sublot"
-            example: PRODSUBLOT1234
-          marketingLotIdentity:
-            type: string
-            maxLength: 20
-            description: "Marketing Lot The Marketing Lot for the goods."
-            example: PROMTN123
-          marketingLotIdentityNew:
-            type: string
-            maxLength: 20
-            description: "New Marketing Lot Only used when Operation Code = Change."
-            example: PROMTN1234
-          qualityLotIdentity:
-            type: string
-            maxLength: 20
-            description: "Quality Lot Can be used for optional classification of the stored goods in the Warehouse (quality, color, etc)."
-            example: STORBAT1234
-          qualityLotIdentityNew:
-            type: string
-            maxLength: 20
-            description: "New Quality Lot Only used when Operation Code = Change."
-            example: STORBAT12345
-          serialNumber:
-            type: string
-            maxLength: 21
-            description: "Serial Number A unique identity for a single Item Load. Only used for Case Pick and Serial Number handling!"
-            example: SERDKCM1235DESE
-          serialNumberNew:
-            type: string
-            maxLength: 21
-            description: "New Serial Number."
-            example: SERDKCM1235DESE12  
-          legalStatus:
-            type: boolean
-            nullable: true
-            description: "Indicates if Legal LOT should be used or not."
-            example: false
-          legalStatusNew:
-            type: boolean
-            nullable: true
-            description: "Indicates if Legal LOT should be used or not."
-            example: true
-          legalLOT:
-            type: string
-            maxLength: 35
-            description: "Legal Lot New legal LOT to be used."
-          legalLOTNew:
-            type: string
-            maxLength: 35
-            description: "NEW Legal Lot"
-          
+        properties: 
+          additionalInfo:
+            type: object
+            description: Additional inventory info
+            allOf:
+              - $ref: '#/components/schemas/PurchaseOrderId'
+              - $ref: '#/components/schemas/PurchaseOrderLineNumber'
+              - $ref: '#/components/schemas/CustomerOrderId'
+              - $ref: '#/components/schemas/CustomerOrderLineNumber'
+              - type: object
+                properties:
+                  despatchadviceId:
+                    #ASNIN
+                    type: string
+                    maxLength: 35
+                    description: "The identity / number of the inbound ASN." 
+                    example: ASNIN12313DNKS
+          current:
+            type: object
+            description: The values that we have changed from
+            allOf:
+            - $ref: '#/components/schemas/InventoryChangeLine'
+          new:
+            type: object
+            description: The values that we have changed to
+            allOf:
+            - $ref: '#/components/schemas/InventoryChangeLine'
+            - type: object
+              properties:
+                quantityChange:
+                  #Added this to compensate for removing old quantity and to
+                  #facilitate calculations that are usually made in the mapping
+                  type: number
+                  maxLength: 0
+                  description: |
+                    <p>How the quantity is changed between old and new (quantityChange = quantityNew - quantityOld).</p>
+                    <p>
+                      <ul>
+                        <li>Positive value - quantity increased</li>
+                        <li>Negative value - quantity decreased</li>
+                      </ul>
+                    </p>
+                  example: 100
+    InventoryChangeLine:
+      type: object
+      properties:
+        vendorId:
+          type: string
+          maxLength: 35
+          description: "identity of the Vendor."
+          example: VEND_ACME1
+        ownerId:
+          type: string
+          maxLength: 35
+          description: "Identity of the Owner."
+          example: OWN_ACME1
+        productId:
+          type: string
+          maxLength: 35
+          description: "The identity of the Product."
+          example: PRODOLD1234
+        productDate:
+          type: string
+          format: date-time
+          maxLength: 0
+          description: "The product date. Date and Time in ISO 8601."
+          example: "2020-04-12T23:20:50.52Z"
+        packageIdentity:
+          type: string
+          maxLength: 17
+          description: "The identity of the Package / Unit of Measure."
+          example: PCE
+        quantity:
+          type: number
+          maxLength: 0
+          description: "The number of Lowest Units of Measure (Base Packages)."
+          example: 110
+        measuredQty:
+          type: number
+          maxLength: 0
+          description: "Measured Quantity. The quantity that was measured for the received goods. Used when Catch Measure at inbound is activated for the Product."
+          example: 35
+        inventoryStatusCode:
+          type: string
+          maxLength: 8
+          description: "The  Inventory status code that we have changed from."
+        productionLotIdentity:
+          type: string
+          maxLength: 40
+          description: "Manufacturing Lot The Manufacturing Lot for the goods."
+          example: PRODLOT12345
+        productionSubLotIdentity:
+          type: string
+          maxLength: 40
+          description: "Manufacturing Sublot The Manufacturing Sublot for the goods."
+          example: PRODSUBLOT123
+        marketingLotIdentity:
+          type: string
+          maxLength: 20
+          description: "Marketing Lot The Marketing Lot for the goods."
+          example: PROMTN123
+        qualityLotIdentity:
+          type: string
+          maxLength: 20
+          description: "Quality Lot Can be used for optional classification of the stored goods in the Warehouse (quality, color, etc)."
+          example: STORBAT1234
+        serialNumber:
+          type: string
+          maxLength: 21
+          description: "Serial Number A unique identity for a single Item Load. Only used for Case Pick and Serial Number handling!"
+          example: SERDKCM1235DESE
+        legalStatus:
+          type: boolean
+          nullable: true
+          description: "Indicates if Legal LOT should be used or not."
+          example: false
+        legalLOT:
+          type: string
+          maxLength: 35
+          description: "Legal LOT to be used."
     CommonClientId:
       type: object
       required: 
