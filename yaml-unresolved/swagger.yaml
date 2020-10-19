@@ -1460,7 +1460,7 @@ components:
       properties:
         customerOrderId:
           type: string
-          maxLength: 140
+          maxLength: 35
           description: "The identity of the Customer Order."
           example: SOUK123456
         customerOrderSequence:
@@ -3094,7 +3094,20 @@ components:
           properties:
             destinationAdress:
               $ref: '#/components/schemas/Customer'
+        #laston departure
+        
         - $ref: '#/components/schemas/CommonWarehouseId'
+        - type: object
+          properties:
+            assembleToStock:
+              type: boolean
+              description: Indicates (1=Yes,0=No) if the Pick Order Line is connected to an Assemble-to-Stock Order Line.
+              example: false
+            attributes:
+              type: array
+              description: Additional information about the customer order. These attributes are passed from the customer order back in the pick receipt
+              items:
+                $ref: '#/components/schemas/Attribute'
     CommonClientId:
       type: object
       required: 
