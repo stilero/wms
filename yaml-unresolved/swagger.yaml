@@ -887,7 +887,7 @@ components:
               detail:
                 example: Your request was denied. Resource already exists. Use PUT method to update resource.
     ServiceUnavailable:
-      description: Your request was denied. Resource already exists. Use PUT method to update resource.
+      description: An unexpected error occured.
       content:
         application/json:
           schema:
@@ -1566,7 +1566,6 @@ components:
           description: "Reference for the Cash-on-Delivery, usually a bank or giro account for the Invoicing Customer."
     Party:
       allOf:
-      - $ref: '#/components/schemas/CommonClientId'
       - type: object
         required:
           - partyId
@@ -1584,7 +1583,9 @@ components:
           partyType:
               type: string
               maxLength: 14
-              description: <p>The type of party used.</p><h1>Customer</h1><p>A customer receives goods, and is used for destination adress in <em>customer-order</em> endpoint </p><h1>Owner</h1><p>An owner is used in the <em>product</em> endpoint to set ownership of goods.</p><h1>Vendor</h1><p>Vendors are set for <em>purchase-order</em> endpoint, to specify which vendor the goods are delivered from.</p>
+              description: |
+                <p>The type of party used.</p><h1>Customer</h1><p>A customer receives goods, and is used for destination adress in <em>customer-order</em> endpoint </p><h1>Owner</h1><p>An owner is used in the <em>product</em> endpoint to set ownership of goods.</p><h1>Vendor</h1><p>Vendors are set for <em>purchase-order</em> endpoint, to specify which vendor the goods are delivered from.</p>
+                <p><em>To Be omitted in the spec and set in the mapping</em></p>
               default: customer
               enum: [customer, owner, vendor]
               example: customer
@@ -3086,6 +3087,14 @@ components:
           maxLength: 22
           description: "A Sub Number to make the Customer Return Order Line Number unique."
           example: 0
+    PickReceipt:
+      allOf:
+        - $ref: '#/components/schemas/CustomerOrderId'
+        - type: object
+          properties:
+            destinationAdress:
+              $ref: '#/components/schemas/Customer'
+        - $ref: '#/components/schemas/CommonWarehouseId'
     CommonClientId:
       type: object
       required: 
