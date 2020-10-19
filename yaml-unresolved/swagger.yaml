@@ -1336,7 +1336,6 @@ components:
     CustomerOrder:
       allOf:
       - $ref: '#/components/schemas/CustomerOrderId'
-      - $ref: '#/components/schemas/CommonClientId'
       - type: object
         required:
           - customerOrderId
@@ -1354,15 +1353,6 @@ components:
             maxLength: 140
             description: "A Reference text for the customer order. Could be used for paper work or additional search functionality."
             example: "REF:1234567"
-          destinationAdress:
-            #ShipToParty
-            $ref: '#/components/schemas/Customer'
-          endCustomerAdress:
-            #ShipToCus
-            $ref: '#/components/schemas/Customer'
-          invoicingAdress:
-            #BillToCustomer
-            $ref: '#/components/schemas/Customer'
           warehouseId:
             type: string
             maxLength: 4
@@ -1376,12 +1366,22 @@ components:
             enum: [high, mid, low]
             default: mid
             example: mid
+          destinationAdress:
+            #ShipToParty
+            $ref: '#/components/schemas/Customer'
+          endCustomerAdress:
+            #ShipToCus
+            $ref: '#/components/schemas/Customer'
+          invoicingAdress:
+            #BillToCustomer
+            $ref: '#/components/schemas/Customer'
           transportRequirements:
             $ref: '#/components/schemas/TransportRequirements'
           transportInformation:
             $ref: '#/components/schemas/TransportInformation'
           customerOrderLines:
             type: array
+            description: The customer order lines contains details about the goods ordered.
             items:
               $ref: '#/components/schemas/CustomerOrderLine'
           customerOrderMetaData:
