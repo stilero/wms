@@ -3127,6 +3127,34 @@ components:
           maxLength: 4
           description: The quantity of used packing material
           example: 12
+    PickReceiptLine:
+      allOf:
+        - $ref: '#/components/schemas/CustomerOrderLineNumber'
+        - $ref: '#/components/schemas/CommonProductOwner'
+        - $ref: '#/components/schemas/CommonUOM'
+        - type: object
+          properties:
+            pickedQuantity:
+              type: number
+              maxLength: 10
+              description: The quantity picked
+              example: 150
+            measuredQuantity:
+              type: number
+              maxLength: 10
+              description: The quantity measured during quality checks if quality checks are activated for client.
+              example: 160
+            restCode:
+              type: string
+              maxLength: 2
+              description: A code that explains why the picked quantity differs from the ordered quantity on the customer order line.
+              example: BL
+            departureIdentity:
+              type: string
+              maxLength: 10
+              description: The identity of the departure that the pick order was shipped on. DepartureId is a unique identifier used internally by the warehouse system.
+              example: 145675
+              
     CommonClientId:
       type: object
       required: 
