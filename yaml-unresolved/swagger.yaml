@@ -3099,10 +3099,6 @@ components:
         - $ref: '#/components/schemas/CommonWarehouseId'
         - type: object
           properties:
-            assembleToStock:
-              type: boolean
-              description: Indicates (1=Yes,0=No) if the Pick Order Line is connected to an Assemble-to-Stock Order Line.
-              example: false
             attributes:
               type: array
               description: Additional information about the customer order. These attributes are passed from the customer order back in the pick receipt
@@ -3139,6 +3135,15 @@ components:
               maxLength: 10
               description: The quantity picked
               example: 150
+            orderedQuantity:
+              type: number
+              maxLength: 10
+              description: The quantity ordered on the customer order
+              example: 150
+            quantityDiff:
+              type: number
+              maxLength: 10
+              description: The difference between picked quantity and ordered quantity. Picked < Ordered = negative number. Picked > Ordered = positive number.
             measuredQuantity:
               type: number
               maxLength: 10
@@ -3153,8 +3158,61 @@ components:
               type: string
               maxLength: 10
               description: The identity of the departure that the pick order was shipped on. DepartureId is a unique identifier used internally by the warehouse system.
-              example: 145675
-              
+              example: 1456755
+            DepartureWeekday:
+              type: number
+              maxLength: 1
+              description: The departure weekday number (1-7) where Monday = 1
+              example: 3
+        - $ref: '#/components/schemas/ProductLOT'
+        - type: object
+          properties:
+            marketingLotId:
+              type: string
+              maxLength: 80
+              description: "The Marketing Lot ."  
+              example: XTER2346
+            qualityLotId:
+              type: string
+              maxLength: 160
+              description: "The quality lot ID ."
+              example: PRODSUBLOT_XT-2445
+            freighterId:
+              type: string
+              maxLength: 35
+              description: The identity of the Forwarder that transports the goods from the Warehouse.
+              example: SCHENKER
+            expiryDate:
+              type: string
+              format: date
+              description: The date in ISO 8601 when the goods can no longer be used.
+              example: "2020-12-30"
+            shipDate:
+              type: string
+              format: date
+              description: The date in ISO 8601 when the goods was shipped from the warehouse
+              example: "2020-05-30"
+            consignmentNote:
+              type: string
+              maxLength: 35
+              description: The Forwarder's Consignment Number.
+              example: 123456789
+            packingSlipIdentity:
+              type: string
+              maxLength: 20
+              description: The identity / number of the Packing Slip.
+              example: 98756431
+        - $ref: '#/components/schemas/CommonInventoryStatusCode'
+        - $ref: '#/components/schemas/CommonSerial'
+        - $ref: '#/components/schemas/CommonItemLoadId'
+        - type: object
+          properties:
+            assembleToStock:
+              type: boolean
+              nullable: true
+              description: Indicates (1=Yes,0=No) if the Pick Order Line is connected to an Assemble-to-Stock Order Line.
+              example: false
+        - $ref: '#/components/schemas/CommonLoadCarrierId'
     CommonClientId:
       type: object
       required: 
@@ -3231,12 +3289,48 @@ components:
           pattern: '^[A-Z0-9]+$'
           example: GOT1
     CommonItemLoadId:
+      type: object
       properties:
         ItemLoadIdentity:
           type: string
           maxLength: 140
           description: "The identity of the Item Load. When goods are received to the warehouse they are assigned an internal warehouse identification of the goods called item load id."
           example: ITEID1234567
+    CommonLoadCarrierId:
+      type: object
+      properties:
+        loadCarrierId:
+          type: string
+          maxLength: 140
+          description: "The identity of the load carrier. Load carrier hold the goods, and could be pallets, cartons and packaged. Each load carrier has a unique ID that is used internally by the warehouse system. When the load carrier is sent out of the warehouse, the internal id could become an external id."
+          example: CARID1234567
+    CommonInventoryStatusCode:
+      type: object
+      properties:
+        inventoryStatusCode:
+          type: string
+          nullable: true
+          description: |
+            <p>The current status of the item load. Common status codes are</p>
+            <p>
+            <ul>
+              <li>00 - Free</li>
+              <li>BL - Blocked</li>
+              <li>QC - Quality Check</li>
+            </ul>
+            </p>
+          example: 00
+          default: 00
+    CommonSerial:
+      type: object
+      properties:
+        serialNumber:
+          type: string
+          nullable: true
+          description: |
+            <p>The serial number for the goods
+            </p>
+          example: XYZKEF123MDLSENN
     Subscription:
       type: object
       description: Details about a subscription
