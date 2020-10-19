@@ -1107,10 +1107,11 @@ components:
             maxLength: 140
             description: "The Clients internal Product Number for this order line. To be used for paper work and extra info."
             example: XYZ123456
-          customerOrderLineMetaData:
+          attributes:
             type: array
+            description: Extra information about the customer order line
             items:
-              $ref: '#/components/schemas/MetaData'
+              $ref: '#/components/schemas/Attribute'
     # NOT SUPPORTED IN THIS VERSION
     # Fields have been hidden to simplify API for end-users.
     
@@ -1384,10 +1385,11 @@ components:
             description: The customer order lines contains details about the goods ordered.
             items:
               $ref: '#/components/schemas/CustomerOrderLine'
-          customerOrderMetaData:
+          attributes:
+            description: Extra information about the customer order
             type: array
             items:
-              $ref: '#/components/schemas/MetaData'
+              $ref: '#/components/schemas/Attribute'
     # NOT SUPPORTED IN THIS VERSION
     # Fields have been hidden to simplify API for end-users.
       # GENERAL - TO BE SET IN MAPPING
@@ -1736,7 +1738,8 @@ components:
             enum: 
               - owner
             example: owner
-    MetaData:
+    Attribute:
+      description: Attributes are used to add extra information to an object.
       type: object
       required:
         - attribute
@@ -1745,19 +1748,17 @@ components:
         attribute:
           type: string
           maxLength: 3
-          description: "<p>The attribute controls how this metadata will be used and there are a couple of predefined attributes with special functions:
-            <ul><li><em>DEL</em> - (for customer-orders) Delivery instructions to forwarder. Could be used for i.e. time agreed service : <em>'Delivery time 18:00'</em></li></ul>
-            <ul><li><em>MKS</em> - (for customer-orders) Shipment memo. Could be used to set service point if transport service supports it i.e. Postnord: <em>'123456@posnord.se'</em></li></ul>
-            <ul><li><em>TSR</em> - (for customer-orders-lines) Transport Service Requirements. Is used to set the forwarder service code Postnord P18: <em>'18'</em></li></ul>
-            </p>
-            <p>Except for the predefined attributes, you can name your own attributes to use in paperwork.</p>"
+          description: |
+            "<p>Attibutes should be agreed prior to use, and there are a couple of predefined attributes that adds extra functionality to the order.</p>
+            <p>Except for the predefined attributes, you can name your own attributes to use in paperwork.</p>
+            <p>For example, to add <em>Recommended Retail Price (RRP) = €35</em> to an object, you could use the attribute RRP=€35</p>"
           pattern: '^[A-Z]{3}$'
-          example: DEL
+          example: RRP
         value:
           type: string
-          maxLength: 1600
-          description: "Free text to use with the attribute."
-          example: 'Delivery time 18:00'
+          maxLength: 35
+          description: "Free text value to use with the attribute."
+          example: '€35'
     Pagination:
       type: object
       properties:
@@ -1846,11 +1847,11 @@ components:
                 $ref: '#/components/schemas/VendorProductNumber'
             dangerousGoodsInfo:
               $ref: '#/components/schemas/dangerousGoodsInfo'
-            productMetaData:
+            attributes:
               type: array
-              description: "Use meta data to add extra fields and information to products."
+              description: "Use attributes to add extra information to products."
               items:
-                $ref: '#/components/schemas/ProductMetaData'
+                $ref: '#/components/schemas/Attribute'
             # HIDDEN FIELDS
             #GENERAL MAPPING - Set default in mapping
             # termart:
@@ -2164,27 +2165,6 @@ components:
             maxLength: 140
             description: "The proper shipping name to be used on paper work and declarations"
             example: "Explosive material"
-    ProductMetaData:
-      description: Product Metadata is used to add additional data to products.
-      allOf:
-        #- $ref: '#/components/schemas/CommonClientId'
-        #- $ref: '#/components/schemas/CommonProduct'
-        - type: object
-          required:
-            - attribute
-            - value
-          properties:
-            attribute:
-              type: string
-              maxLength: 3
-              description: "<p>The attribute controls how this metadata will be used and needs to be agreed prior to use.</p>"
-              pattern: '^[A-Z]{3}$'
-              example: DEL
-            value:
-              type: string
-              maxLength: 1600
-              description: "Attribute Value"
-              example: 'Delivery time 18:00'
     ProductDescription:
       description: Add product description to multiple language to support translated product descriptions.
       allOf:
@@ -2517,10 +2497,11 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/PurchaseOrderLine'
-            purchaseOrderMetaData:
+            attributes:
               type: array
+              description: Use attributes to add extra information about the purchase order.
               items:
-                $ref: '#/components/schemas/MetaData'
+                $ref: '#/components/schemas/Attribute'
     PurchaseOrderLine:
       allOf:
         - $ref: '#/components/schemas/PurchaseOrderLineNumber'
@@ -2593,10 +2574,11 @@ components:
               description: Additional transport information
               allOf:
                 - $ref: '#/components/schemas/AdditionalTransportInfo'
-            metaData:
+            attributes:
               type: array
+              description: Add extra information to the purchase order line
               items:
-                $ref: '#/components/schemas/MetaData'
+                $ref: '#/components/schemas/Attribute'
             #Hidden to simplify endpoint. Not used by any clients yet
             #legalLot:
             #  description: Settings for legal lot
@@ -2945,11 +2927,11 @@ components:
               maxLength: 68
               description: "The identity of the vehicle that transported the goods to the Warehouse. The identity can be the registration number, license plate or similar."
               example: ABC123
-            deliveryReceiptAttributes:
+            attributes:
               description: Additional information and attributes of the delivery receipt. These values are usually passed from the purchase order.
               type: array
               items:
-                $ref: '#/components/schemas/MetaData'
+                $ref: '#/components/schemas/Attribute'
             deliveryReceiptLines:
               description: The delivery receipt lines that the warehouse has received.
               type: array
@@ -3059,11 +3041,11 @@ components:
               description: Information about customer return orders
               allOf:
               - $ref: '#/components/schemas/LegalLot' 
-            properties:
-              description: Delivery receipt line properties
+            attributes:
+              description: Extra information about the delivery receipt line.
               type: array
               items:
-                $ref: '#/components/schemas/MetaData'
+                $ref: '#/components/schemas/Attribute'
     CustomerReturnOrderInfo:
       type: object
       properties:
