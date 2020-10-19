@@ -929,6 +929,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/DeliveryReceipt'
+    PickReceiptBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PickReceipt'
   schemas:
     Error:
       title: Error Response
