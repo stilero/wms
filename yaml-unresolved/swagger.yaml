@@ -6,11 +6,11 @@ servers:
 info:
   description: |
     <h1>OVERVIEW</h1>
-    <p>The Warehouse Management APIs provide an interface to Schenker Logistics Warehouse Management System (WMS) operations</p>
+    <p>The Schenker Logistics Rest-API provide an interface to Schenker Logistics Warehouse Management System (WMS) operations.</p>
     <h2>SCOPE</h2>
-    <p>These APIs cover services provided by Schenker Logistics. More specifically, the covered areas of functionality are:</p>
+    <p>This API covers the following scopes in the business processes of the WMS</p>
     <h3>Master Data</h3>
-    <p>Also known as an inventory master. The Item Master sends product information from the customer to the warehouse to enable the warehouse to receive deliveries of the product.</p>
+    <p>Master data holds information that supports the warehouse operations. The master data endpoints are used to send product information, vendor information that is needed to enable the warehouse to receive and send goods.</p>
     <h3>Inventory Management</h3>
     <p>The Inventory Management API provides the customer with the current inventory levels and status to enable inventory reconciliation.</p>
     <h3>Outbound</h3>
@@ -1517,6 +1517,43 @@ components:
           maxLength: 22
           description: "The customer order line number."
           example: 1
+    TransportRequirements:
+      type: object
+      description: The Transport requirements are used to further specify details that the forwarder will use when delivering the shipments. 
+      properties:
+        colletionPoint:
+          type: string
+          maxLength: 35
+          description: The collection point ID that the client want to pickup the shipment from. The ID is provided by the forwarder ID.
+          example: 12345@postnord_se
+        deliverTo:
+          type: string
+          maxLength: 100
+          description: The Name of the end customer to pickup the shipment.
+          example: John Smith
+        deliverToAccountId:
+          type: string
+          maxLength: 100
+          description: Account ID of the receiver of the shipment. Could be used for retailer or store ID when available. Leave blank if not used.
+          example: 43
+        deliveryInstructions:
+          type: string
+          maxLength: 100
+          description: Extra delivery instructions to the forwarder. Could be used to specify delivery time for time agreed service.
+          example: "Kl. 08:00"
+        serviceCodes:
+          description: Service Codes are used and combined for special transport services lite nofitication by SMS.
+          type: array
+          items:
+            $ref: '#/components/schemas/TransportRequirementCodes'
+    TransportRequirementCodes:
+      type: object
+      description: Service Codes are used and combined for special transport services lite nofitication by SMS.
+      properties:
+        serviceCode:
+          type: string
+          description: Service code provided by the forwarder. Could be used to set different requirements for the shipment like Notification by SMS (PostNord=A3), Time Agreed (PostNord=Q1) or carry in (PostNord=B7). See more details in the forwarder specifications for how to use and combine.
+          example: A3
     Party:
       allOf:
       - $ref: '#/components/schemas/CommonClientId'
