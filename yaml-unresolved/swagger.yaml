@@ -763,17 +763,17 @@ paths:
                   description: |
                     <p>The event you want to add a subscription to</p>
                     <h1>Available events</h1>
-                    <h2>deliveryReceiptFinished</h2>
+                    <h2>deliveryReceipt</h2>
                     <p>Triggered when goods from vendor purchase orders and customer return orders are received to the warehouse.</p>
-                    <h2>pickReceiptFinished</h2>
+                    <h2>pickReceipt</h2>
                     <p>Triggered when a customer order is picked and shipped from the warehouse.</p>
                     <h2>itemChange</h2>
                     <p>Triggered when on item changes</p>
                     <h2>inventorySnapshot</h2>
                     <p>Triggered nightly with storage quantities of all goods in the warehouse</p>
                   type: string
-                  enum: [deliveryReceiptFinished, pickReport, itemChange, inventorySnapshot]
-                  example: deliveryReceiptFinished
+                  enum: [deliveryReceipt, pickReceipt, itemChange, inventorySnapshot]
+                  example: deliveryReceipt
               required:
                 - callbackUrl
                 - event
@@ -782,8 +782,8 @@ paths:
           '{$request.body#/callbackUrl}':   # The callback URL,
                                             # Refers to the passed URL
             post:
-              summary: deliveryReceiptFinished - When purchase orders are received
-              description: The deliveryReceiptFinished is event triggered when purchase orders are received. It sends the a detailed response to the callback uri you have specified.
+              summary: deliveryReceipt - When purchase orders are received
+              description: The deliveryReceipt is triggered when purchase orders are received and finished. It sends details about the delivery to the callback uri you have specified.
               requestBody:   # Contents of the callback message
                 $ref: '#/components/requestBodies/DeliveryReceiptBody'
               responses:   # Expected responses to the callback message
@@ -793,8 +793,8 @@ paths:
           '{$request.body#/callbackUrl}':   # The callback URL,
                                             # Refers to the passed URL
             post:
-              summary: pickReceiptFinished - When picking is finished for customer order
-              description: The pickReceiptFinished event is triggered when customer orders are received. It sends a detailed pick receipt to the callback uri you have specified.
+              summary: pickReceipt - When picking is finished for customer order
+              description: The pickReceipt event is triggered when customer orders are picked and shipped. It sends a detailed pick receipt to the callback uri you have specified.
               requestBody:   # Contents of the callback message
                 $ref: '#/components/requestBodies/PickReceiptBody'
               responses:   # Expected responses to the callback message
@@ -3122,16 +3122,16 @@ components:
               description: Details about the pick order lines.
               items:
                 $ref: '#/components/schemas/PickReceiptLine'
-            attributes:
-              type: array
-              description: Additional information about the customer order. These attributes are passed from the customer order back in the pick receipt
-              items:
-                $ref: '#/components/schemas/Attribute'
             packingMaterials:
               type: array
               description: Additional information about the packing material used for the pick order.
               items:
                 $ref: '#/components/schemas/PackingMaterial'
+            attributes:
+              type: array
+              description: Additional information about the customer order. These attributes are passed from the customer order back in the pick receipt
+              items:
+                $ref: '#/components/schemas/Attribute'
     PackingMaterial:
       type: object
       description: Information about packing material usage
@@ -3247,7 +3247,6 @@ components:
         # Cncode
         - type: object
           properties:
-            
             serials:
               type: array
               description: Serial numbers scanned for the pick order line
