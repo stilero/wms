@@ -1369,11 +1369,6 @@ components:
             description: "The identity of the Warehouse."
             pattern: '^[A-Z0-9]+$'
             example: GOT1
-          deliveryMethodId:
-            type: string
-            maxLength: 68
-            description: "The identity of the method that will be used when shipping the goods from the Warehouse. This identy must be setup and agreed by warehouse before use. If omitted, the Warehouse Management system will select the most appropriate delivery method for the customer order"
-            example: SCHENKER_SP
           priority:
             type: string
             maxLength: 4
@@ -1381,47 +1376,10 @@ components:
             enum: [high, mid, low]
             default: mid
             example: mid
-          dispatchFee:
-            type: number
-            maxLength: 22
-            description: "Costs for Service Charge (Used for paperwork)"
-            example: 15
-          codFee:
-            type: number
-            maxLength: 22
-            description: "Cash on Delivery Fee."
-          #fre_party_qualifier:
-            #type: string
-            #maxLength: 12
-            #description: "Forwarder's Party Type The Type of Party that has a forwarder agreement with the Forwarder."
-            ##HARDCODED TO CU?
-          freightPartyId:
-            type: string
-            maxLength: 140
-            description: "The identity of the Party that has a forwarder agreement with the Forwarder."
-            example: SE-EXAMPLE
-          freightCost:
-            type: number
-            maxLength: 22
-            description: "The cost for transporting the goods to the destination address."
-          division:
-            type: string
-            maxLength: 68
-            description: "Division, department, section, workshop or similar subordinate unit of a company / organization."
-          termsOfDelivery:
-            type: number
-            maxLength: 3
-            description: "The Terms of Shipment for the Consignment stated as a code according to Combiterm 2000."
-            enum: [100,150,300,400]
-            example: 150
-          termsOfDeliveryLocation:
-            type: string
-            maxLength: 140
-            description: "The destination for the goods according to the Terms of Shipment. Received from the external Carrier Compliancy Provider."
-          codReference:
-            type: string
-            maxLength: 140
-            description: "Reference for the Cash-on-Delivery, usually a bank or giro account for the Invoicing Customer."
+          transportRequirements:
+            $ref: '#/components/schemas/TransportRequirements'
+          transportInformation:
+            $ref: '#/components/schemas/TransportInformation'
           customerOrderLines:
             type: array
             items:
@@ -1519,8 +1477,13 @@ components:
           example: 1
     TransportRequirements:
       type: object
-      description: The Transport requirements are used to further specify details that the forwarder will use when delivering the shipments. 
+      description: The Transport requirements are used to further specify details that the forwarder will use when delivering the shipments. This information will be transferred to the forwarder.
       properties:
+        deliveryMethodId:
+          type: string
+          maxLength: 35
+          description: "The identity of the method that will be used when shipping the goods from the Warehouse. This identy must be setup and agreed by warehouse before use. If omitted, the Warehouse Management system will select the most appropriate delivery method for the customer order"
+          example: SCHENKER_SP
         colletionPoint:
           type: string
           maxLength: 35
@@ -1529,7 +1492,7 @@ components:
         deliverTo:
           type: string
           maxLength: 100
-          description: The Name of the end customer to pickup the shipment.
+          description: The Name of the end customer to pickup the shipment. This will usually be the name you set in the destinationAdress.
           example: John Smith
         deliverToAccountId:
           type: string
@@ -1554,6 +1517,51 @@ components:
           type: string
           description: Service code provided by the forwarder. Could be used to set different requirements for the shipment like Notification by SMS (PostNord=A3), Time Agreed (PostNord=Q1) or carry in (PostNord=B7). See more details in the forwarder specifications for how to use and combine.
           example: A3
+    TransportInformation:
+      type: object
+      description: Extra information about the transport to be used for invoicing and paper work.Omit if not required.
+      properties:
+        dispatchFee:
+          type: number
+          maxLength: 22
+          description: "Costs for Service Charge (Used for paperwork)"
+          example: 15
+        codFee:
+          type: number
+          maxLength: 22
+          description: "Cash on Delivery Fee."
+        #fre_party_qualifier:
+          #type: string
+          #maxLength: 12
+          #description: "Forwarder's Party Type The Type of Party that has a forwarder agreement with the Forwarder."
+          ##HARDCODED TO CU?
+        freightPartyId:
+          type: string
+          maxLength: 140
+          description: "The identity of the Party that has a forwarder agreement with the Forwarder."
+          example: SE-EXAMPLE
+        freightCost:
+          type: number
+          maxLength: 22
+          description: "The cost for transporting the goods to the destination address."
+        division:
+            type: string
+            maxLength: 68
+            description: "Division, department, section, workshop or similar subordinate unit of a company / organization."
+        termsOfDelivery:
+          type: number
+          maxLength: 3
+          description: "The Terms of Shipment for the Consignment stated as a code according to Combiterm 2000."
+          enum: [100,150,300,400]
+          example: 150
+        termsOfDeliveryLocation:
+          type: string
+          maxLength: 140
+          description: "The destination for the goods according to the Terms of Shipment. Received from the external Carrier Compliancy Provider."
+        codReference:
+          type: string
+          maxLength: 140
+          description: "Reference for the Cash-on-Delivery, usually a bank or giro account for the Invoicing Customer."
     Party:
       allOf:
       - $ref: '#/components/schemas/CommonClientId'
