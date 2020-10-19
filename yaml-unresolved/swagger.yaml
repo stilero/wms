@@ -2875,10 +2875,11 @@ components:
       type: object
       properties:
         useLegalLot:
-          type: string
-          maxLength: 3
-          description: "Activate Legal lot. Set to yes to activate, no or blank to deactivate."
-          enum: [yes, no]
+          type: boolean
+          nullable: true
+          description: "Activate Legal lot?."
+          enum: [true, false]
+          example: false
         legalLOT:
           type: string
           maxLength: 35
@@ -3099,6 +3100,11 @@ components:
         - $ref: '#/components/schemas/CommonWarehouseId'
         - type: object
           properties:
+            pickReceiptLines:
+              type: array
+              description: Details about the pick order lines.
+              items:
+                $ref: '#/components/schemas/PickReceiptLine'
             attributes:
               type: array
               description: Additional information about the customer order. These attributes are passed from the customer order back in the pick receipt
@@ -3143,7 +3149,14 @@ components:
             quantityDiff:
               type: number
               maxLength: 10
-              description: The difference between picked quantity and ordered quantity. Picked < Ordered = negative number. Picked > Ordered = positive number.
+              description: |
+                <p>The difference between picked quantity and ordered quantity .
+                <ul>
+                  <li>Picked < Ordered = negative number</li>
+                  <li>Picked > Ordered = positive number</li>
+                </ul>
+                </p>
+                example: -15
             measuredQuantity:
               type: number
               maxLength: 10
@@ -3176,7 +3189,7 @@ components:
               type: string
               maxLength: 160
               description: "The quality lot ID ."
-              example: PRODSUBLOT_XT-2445
+              example: STORBAT_XT-2445
             freighterId:
               type: string
               maxLength: 35
@@ -3213,6 +3226,25 @@ components:
               description: Indicates (1=Yes,0=No) if the Pick Order Line is connected to an Assemble-to-Stock Order Line.
               example: false
         - $ref: '#/components/schemas/CommonLoadCarrierId'
+        - $ref: '#/components/schemas/LegalLot'
+        # Cncode
+        - type: object
+          properties:
+            attributes:
+              type: array
+              description: Additional information about the customer order line. These attributes are passed from the customer order back to the pick receipt
+              items:
+                $ref: '#/components/schemas/Attribute'
+            serials:
+              type: array
+              description: Serial numbers scanned for the pick order line
+              items:
+                $ref: '#/components/schemas/CommonSerial'
+            packingMaterials:
+              type: array
+              description: Packing materials used to pack the pick order line
+              items:
+                $ref: '#/components/schemas/CommonSerial'
     CommonClientId:
       type: object
       required: 
