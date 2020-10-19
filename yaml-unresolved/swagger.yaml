@@ -765,7 +765,7 @@ paths:
                     <h1>Available events</h1>
                     <h2>deliveryReceiptFinished</h2>
                     <p>Triggered when goods from vendor purchase orders and customer return orders are received to the warehouse.</p>
-                    <h2>pickReport</h2>
+                    <h2>pickReceiptFinished</h2>
                     <p>Triggered when a customer order is picked and shipped from the warehouse.</p>
                     <h2>itemChange</h2>
                     <p>Triggered when on item changes</p>
@@ -793,7 +793,7 @@ paths:
           '{$request.body#/callbackUrl}':   # The callback URL,
                                             # Refers to the passed URL
             post:
-              summary: pickReceiptFinished - When picking are finished for customer order
+              summary: pickReceiptFinished - When picking is finished for customer order
               description: The pickReceiptFinished event is triggered when customer orders are received. It sends a detailed pick receipt to the callback uri you have specified.
               requestBody:   # Contents of the callback message
                 $ref: '#/components/requestBodies/PickReceiptBody'
