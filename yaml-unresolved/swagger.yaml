@@ -3108,6 +3108,25 @@ components:
               description: Additional information about the customer order. These attributes are passed from the customer order back in the pick receipt
               items:
                 $ref: '#/components/schemas/Attribute'
+            packingMaterials:
+              type: array
+              description: Additional information about the packing material used for the pick order.
+              items:
+                $ref: '#/components/schemas/PackingMaterial'
+    PackingMaterial:
+      type: object
+      description: Information about packing material usage
+      properties:
+        materialType:
+          type: string
+          maxLength: 35
+          description: The Packing material id
+          example: XX4
+        quantity:
+          type: integer
+          maxLength: 4
+          description: The quantity of used packing material
+          example: 12
     CommonClientId:
       type: object
       required: 
