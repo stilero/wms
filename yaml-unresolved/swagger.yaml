@@ -3124,13 +3124,12 @@ components:
     PickReceipt:
       allOf:
         - $ref: '#/components/schemas/CustomerOrderId'
+        - $ref: '#/components/schemas/CommonWarehouseId'
         - type: object
           properties:
             destinationAdress:
               $ref: '#/components/schemas/Customer'
         #laston departure
-        
-        - $ref: '#/components/schemas/CommonWarehouseId'
         - type: object
           properties:
             pickReceiptLines:
@@ -3163,6 +3162,7 @@ components:
           description: The quantity of used packing material
           example: 12
     PickReceiptLine:
+      description: Details about the pick order
       allOf:
         - $ref: '#/components/schemas/CustomerOrderLineNumber'
         - $ref: '#/components/schemas/CommonProductOwner'
@@ -3365,6 +3365,7 @@ components:
                       <ul>
                         <li>Positive value - quantity increased</li>
                         <li>Negative value - quantity decreased</li>
+                        <li>0 - No change</li>
                       </ul>
                     </p>
                   example: 100
