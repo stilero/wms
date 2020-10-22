@@ -3447,6 +3447,29 @@ components:
           type: string
           maxLength: 35
           description: "Legal LOT to be used."
+    InventoryBalanceLine:
+      allOf:
+        - $ref: '#/components/schemas/CommonWarehouseId'
+        - $ref: '#/components/schemas/CommonProductOwner'
+        - $ref: '#/components/schemas/ProductLOT'
+        - $ref: '#/components/schemas/CommonUOM'
+        - $ref: '#/components/schemas/CommonInventoryStatusCode'
+        - type: object
+          properties:
+            freeQuantity:
+              #Free + Pick location
+              type: number
+              example: 400
+              description: The total available quantity in stock not reserved for customer orders or on hold. 
+            reservedForOrdersQuantity:
+              #PickedQuantity + TopickQuantity + CustomerReservedQuantity
+              type: number
+              example: 400
+              description: The total quantity reserved for orders that are not yet reported back from warehouse to client
+            blockedQuantity:
+              type: number
+              example: 400
+              description: The total quantity blocked
     CommonClientId:
       type: object
       required: 
