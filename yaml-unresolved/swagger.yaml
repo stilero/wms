@@ -3447,9 +3447,18 @@ components:
           type: string
           maxLength: 35
           description: "Legal LOT to be used."
-    InventoryBalanceLine:
+    InventoryBalance:
       allOf:
         - $ref: '#/components/schemas/CommonWarehouseId'
+        - type: object
+          properties:
+            details:
+              description: Details about the inventory balance
+              type: array
+              items:
+                $ref: '#/components/schemas/InventoryBalanceLine'
+    InventoryBalanceLine:
+      allOf:
         - $ref: '#/components/schemas/CommonProductOwner'
         - $ref: '#/components/schemas/ProductLOT'
         - $ref: '#/components/schemas/CommonUOM'
