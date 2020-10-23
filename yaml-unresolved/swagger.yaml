@@ -1294,6 +1294,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/PickReceipt'
+    ShipmentReceiptBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Shipment'
     InventoryChangeBody:
       required: true
       content:
