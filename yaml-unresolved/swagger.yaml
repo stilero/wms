@@ -2103,15 +2103,6 @@ components:
               <p>A unique identity for the party.</p>
               <p>If <em>partyId</em> provided already exists when you send the <em>Party</em> object in a customer-order, then the existing data for the party will be overwritten.</p> <p>To avoid this, you could use the <em>customerOrderId</em> concatenated with additional random characters.</p>
             example: CU123567X
-          partyType:
-            type: string
-            maxLength: 14
-            description: |
-              <p>The type of party used. A customer receives goods, and is used for destination adress in <em>customer-order</em> endpoint </p>
-            default: customer
-            enum: 
-              - customer
-            example: customer
     Vendor:
       allOf:
       - $ref: '#/components/schemas/Party'
@@ -2522,11 +2513,9 @@ components:
           - isHazardous
         properties:
           isHazardous:
-              type: string
-              maxLength: 3
-              description: "<p>Set <em>yes</em> if product is Hazardous or <em>no</em> if product is not hazardous.</p><p>Use <em>dangerousGoodsInfo</em> to add additional dangerous goods information.</p>" 
-              enum: [yes, no]
-              example: yes
+              type: boolean
+              description: "<p>Set <em>true</em> if product is Hazardous or <em>false</em> if product is not hazardous.</p><p>Use <em>dangerousGoodsInfo</em> to add additional dangerous goods information.</p>" 
+              example: true
           dgClass:
             type: number
             maxLength: 1
