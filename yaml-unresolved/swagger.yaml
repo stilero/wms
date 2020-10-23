@@ -1763,17 +1763,9 @@ components:
           partyId:
             type: string
             maxLength: 35
-            description: <p>A unique identity for the party.</p> <h1>Usage</h1><h2>For customer-order</h2><p>If <em>partyId</em> provided already exists when you send the <em>Party</em> object in a customer-order, then the existing data for the party will be overwritten.</p> <p>To avoid this, you could use the <em>customerOrderId</em> concatenated with additional random characters.</p>
+            description: |
+              <p>A unique identity</p> 
             example: CU123567X
-          partyType:
-              type: string
-              maxLength: 14
-              description: |
-                <p>The type of party used.</p><h1>Customer</h1><p>A customer receives goods, and is used for destination adress in <em>customer-order</em> endpoint </p><h1>Owner</h1><p>An owner is used in the <em>product</em> endpoint to set ownership of goods.</p><h1>Vendor</h1><p>Vendors are set for <em>purchase-order</em> endpoint, to specify which vendor the goods are delivered from.</p>
-                <p><em>To Be omitted in the spec and set in the mapping</em></p>
-              default: customer
-              enum: [customer, owner, vendor]
-              example: customer
           name1:
             type: string
             maxLength: 100
@@ -1890,14 +1882,44 @@ components:
       - $ref: '#/components/schemas/Party'
       - type: object
         properties:
+          partyId:
+            type: string
+            maxLength: 35
+            description: |
+              <p>A unique identity for the party.</p>
+              <p>If <em>partyId</em> provided already exists when you send the <em>Party</em> object in a customer-order, then the existing data for the party will be overwritten.</p> <p>To avoid this, you could use the <em>customerOrderId</em> concatenated with additional random characters.</p>
+            example: CU123567X
           partyType:
             type: string
             maxLength: 14
-            description: <p>The type of party used. A customer receives goods, and is used for destination adress in <em>customer-order</em> endpoint </p>
+            description: |
+              <p>The type of party used. A customer receives goods, and is used for destination adress in <em>customer-order</em> endpoint </p>
             default: customer
             enum: 
               - customer
             example: customer
+    PartyResponse:
+      allOf:
+      - type: object
+        properties:
+          partyType:
+              type: string
+              maxLength: 14
+              description: |
+                <p>The type of party used.</p><h1>Customer</h1><p>A customer receives goods, and is used for destination adress in <em>customer-order</em> endpoint </p><h1>Owner</h1><p>An owner is used in the <em>product</em> endpoint to set ownership of goods.</p><h1>Vendor</h1><p>Vendors are set for <em>purchase-order</em> endpoint, to specify which vendor the goods are delivered from.</p>
+                <p><em>To Be omitted in the spec and set in the mapping</em></p>
+              default: customer
+              enum: [customer, owner, vendor]
+              example: customer
+      - $ref: '#/components/schemas/Party'
+      - type: object
+        properties:
+          partyId:
+            type: string
+            maxLength: 35
+            description: |
+              <p>A unique identity for the party.</p>
+            example: CU123567X
     Vendor:
       allOf:
       - $ref: '#/components/schemas/Party'
