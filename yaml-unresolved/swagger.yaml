@@ -3866,30 +3866,15 @@ components:
         - type: object
           properties:
             productDateInformation:
-              description: Information about product and expiry dates
               $ref: '#/components/schemas/ProductDates'
             LOTInformation:
-              description: Information about product and expiry dates
               $ref: '#/components/schemas/ProductLOT'
         - type: object
           properties:
             measurements:
               description: Shipment measurements
               allOf:
-                - type: object
-                  properties:
-                    volume:
-                      type: number
-                      description: "The total Volume in m3 for the goods on this shipment line"
-                      example: 2.1
-                    weight:
-                      type: number
-                      description: "The total Weight in kg of the goods included in the Line."
-                      example: 30.2
-                    height:
-                      type: number
-                      maxLength: 0
-                      description: "The height in mm of the Pallet"
+                - $ref: '#/components/schemas/Measurements'
         - type: object
           properties:
             customerOrderInfo:
@@ -3924,155 +3909,95 @@ components:
               items:  
                 $ref: '#/components/schemas/Attribute'
     ShipmentCar:
+      allOf:
+      - $ref: '#/components/schemas/CommonLoadCarrierId'
+      - type: object
+        properties:
+          loadCarrierQualifier:
+            type: string
+            maxLength: 10
+            description: |
+              <p>Descripbes what type of load carrier ID that is used.</p>
+              <p>The load carrier type could be one of two types
+                <ul>
+                  <li>Shipment - the Identity is unique only within the Shipment</li>
+                  <li>SSCC - Serial Shipping Container Code, an externally unique identifier</li>
+                </ul>
+              </p>
+            enum: [SHIPMENT, SSCC]
+            example: SSCC
+          loadCarrierType:
+            type: string
+            maxLength: 3
+            description: "The identity of the Type of Load Carrier. Used internally in the warehouse"
+            example: PAL
+          externalLoadCarrierType:
+            type: string
+            maxLength: 20
+            description: "External Load Carrier Type. This type ID is used when communicating with an External system like the forwareder API."
+            example: CX
+          parentLoadCarrierId:
+            type: string
+            maxLength: 35
+            description: "The identity of the Load Carrier that the current Load Carrier is placed on, if any Otherwise blank."
+          consignmentId:
+            type: string
+            maxLength: 35
+            description: "The identity of the Consignment."
+            example: 1234567
+          forwarderLoadCarrierIdentity:
+            type: string
+            maxLength: 35
+            description: "The identity of the Load Carrier in the Forwarder's system. Might be different from the Load Carrier Identity in the Warehouse system."
+            example: 987321
+          forwarderConsignmentId:
+            type: string
+            maxLength: 35
+            description: "Forwarder unique Consignment Identity."
+            example: 5649876321456
+          trackingUrl:
+            type: string
+            maxLength: 1000
+            description: "The URL to the forwarder website for tracking the Consignment Package."
+            example: http://example.com/tracking?your_id=12345
+          destination:
+            $ref: '#/components/schemas/Customer'
+          endCustomer:
+            $ref: '#/components/schemas/Customer'
+          measurements:
+            allOf:
+            - $ref: '#/components/schemas/Measurements'
+            - type: object
+              properties:
+                width:
+                  type: number
+                  maxLength: 10
+                  description: "The Width in mm for the Load Carrier."
+                  example: 400
+                length:
+                  type: number
+                  maxLength: 10
+                  description: "The Length in mm for the Load Carrier."
+                  example: 280
+          #returnConsignmentIdentity:
+            #type: string
+            #maxLength: 50
+            #description: "Secondary Freight Identity The unique Secondary Freight Identity."
+    Measurements:
       type: object
-      required:
-        - asnoutid
-        - asnoutseq
-        - carid
       properties:
-        asnoutid:
-          type: string
-          maxLength: 35
-          description: "Outbound ASN Identity The identity / number of the outbound ASN."
-        asnoutseq:
+        volume:
+          type: number
+          description: "The total Volume in m3"
+          example: 2.1
+        weight:
+          type: number
+          description: "The total Weight in kg"
+          example: 30.2
+        height:
           type: number
           maxLength: 0
-          description: "ASN Sequence Number A Sequence Number to make the ASN identity unique."
-        shipfrompartynodeid:
-          type: string
-          maxLength: 35
-          description: "Ship-from Party Node Identity The identity of the Node for the Party that has shipped the goods to the Ship-to Party. So in this case the Ship-from Node is your own Warehouse geographical reference."
-        carid:
-          type: string
-          maxLength: 35
-          description: "Load Carrier Identity The identity of the Load Carrier."
-        carid_qualifier:
-          type: string
-          maxLength: 4
-          description: "Type of Load Carrier Identity SM  - Shipment, the Identity is unique only within the Shipment SSCC - Serial Shipping Container Code"
-        company_id:
-          type: string
-          maxLength: 17
-          description: "Client Identity The identity of the Client."
-        cartypid:
-          type: string
-          maxLength: 3
-          description: "Load Carrier Type Identity The identity of the Type of Load Carrier."
-        cartypid2:
-          type: string
-          maxLength: 20
-          description: "External Load Carrier Type Identity If defined this ID is used when communicating with an External system. The internal Load Carrier Type will be chosen from the External Load Carrier Type on an arbitrary basis in the inbound goods flow if the value is ambiguous."
-        carcarid:
-          type: string
-          maxLength: 35
-          description: "Load Carrier on Load Carrier Identity The identity of the Load Carrier that the current Load Carrier is placed on, if any."
-        arttrptypid:
-          type: string
-          maxLength: 5
-          description: "Transport Condition Identity Gives the conditions (normal, freeze, cold, dry, non-vibrating etc.) for the vehicle that transports the goods / product."
-        shiptopartynodeid:
-          type: string
-          maxLength: 35
-          description: "Ship-to Party Node Identity The identity of the Node for the Party that will receive the goods when they are shipped from the Ship-from Party."
-        shiptopartyid:
-          type: string
-          maxLength: 35
-          description: "Ship-to Party Identity The identity of the Party that will receive the goods when they are shipped from the Ship-from Party."
-        shiptopartyqualifier:
-          type: string
-          maxLength: 3
-          description: "Ship-to Party Type The type of Party that is the Ship-to Party."
-        shiptocusnodeid:
-          type: string
-          maxLength: 35
-          description: "Ship-to Customer Node Identity The identity of the Node for the Party that finally will receive the goods."
-        shiptocusid:
-          type: string
-          maxLength: 35
-          description: "Ship-to Customer Identity The Party that finally will receive the goods."
-        shiptocusqualifier:
-          type: string
-          maxLength: 3
-          description: "Ship-to Customer Type The type of Party that is the Ship-to Customer."
-        instructions:
-          type: string
-          maxLength: 400
-          description: "Instructions Free text for the ASN Line."
-        totwgt:
-          type: number
-          maxLength: 0
-          description: "Total Weight The total Weight for the Load Carrier and the included goods."
-        unit_weight:
-          type: string
-          maxLength: 17
-          description: "Weight The Weight unit."
-        totvol:
-          type: number
-          maxLength: 0
-          description: "Total Volume The total Volume for the Load Carrier and the included goods."
-        unit_volume:
-          type: string
-          maxLength: 17
-          description: "Volume The Volume unit."
-        tothgt:
-          type: number
-          maxLength: 0
-          description: "Total Height Total height for the Load Carrier and the included Item Loads. The value must be >= 0 and < 100."
-        unit_length:
-          type: string
-          maxLength: 17
-          description: "Length The Length unit."
-        shipfrompartyid:
-          type: string
-          maxLength: 35
-          description: "Ship-from Party Identity The identity of the Party that has shipped the goods to the Ship-to Party. So in this case the Ship-from Party is your own Warehouse."
-        proid:
-          type: string
-          maxLength: 35
-          description: "Process Identity (inserted by trigger)."
-        upddtm:
-          type: string
-          format: date
-          maxLength: 0
-          description: "Update Time (inserted by trigger)."
-        fpdeldtm:
-          type: string
-          format: date
-          maxLength: 0
-          description: "First Planned Delivery Date The earliest delivery date and time at Customer site."
-        lpdeldtm:
-          type: string
-          format: date
-          maxLength: 0
-          description: "Last Planned Delivery Date The latest delivery date and time at Customer site."
-        width:
-          type: number
-          maxLength: 0
-          description: "Width The Width for the Load Carrier."
-        length:
-          type: number
-          maxLength: 0
-          description: "Length The Length for the Load Carrier."
-        consignment_id:
-          type: string
-          maxLength: 35
-          description: "Consignment Identity The identity of the Consignment."
-        fre_carid:
-          type: string
-          maxLength: 35
-          description: "Forwarder Load Carrier Identity The identity of the Load Carrier in the Forwarder's system. Might be different from the Load Carrier Identity in the Warehouse system."
-        fre_consignment_id:
-          type: string
-          maxLength: 35
-          description: "Forwarder Consignment Identity Forwarder unique Consignment Identity."
-        tracking_url:
-          type: string
-          maxLength: 1000
-          description: "Tracking URL The URL to a home page for tracking the Consignment Package."
-        cc_seqno2:
-          type: string
-          maxLength: 50
-          description: "Secondary Freight Identity The unique Secondary Freight Identity."
+          description: "The height in mm"
     CommonIdSequence:
       type: object
       required:
@@ -4202,7 +4127,7 @@ components:
         loadCarrierId:
           type: string
           maxLength: 140
-          description: "The identity of the load carrier. Load carrier hold the goods, and could be pallets, cartons and packaged. Each load carrier has a unique ID that is used internally by the warehouse system. When the load carrier is sent out of the warehouse, the internal id could become an external id."
+          description: "The identity of the load carrier. Load carriers hold the goods, and could be pallets, cartons and other packages. Each load carrier has a unique ID that could be used either internally internally in the warehouse, or externally when sent as shipments. Also known as SSCC (Serial Shipping Container Code)."
           example: CARID1234567
     CommonInventoryStatusCode:
       type: object
