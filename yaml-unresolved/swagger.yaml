@@ -348,6 +348,66 @@ paths:
           $ref: '#/components/responses/NotFound'
         '503':
           $ref: '#/components/responses/ServiceUnavailable'
+  /master-data/vendors:
+    get:
+      deprecated: false
+      security:
+        - schenker_auth:
+            - 'read'
+      tags:
+        - master-data   
+      summary: Returns all vendors for client
+      description: |
+        <p>Returns a list of all vendors for the client.</p>
+        <p>A vendor, also known as a supplier or manufacturer, is required in order to create new purchase orders.</p>
+      operationId: getVendors
+      parameters: 
+        - $ref: '#/components/parameters/skipParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Vendor'
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+    post:
+      deprecated: false
+      tags:
+        - master-data   
+      summary: Creates a vendor 
+      description: |
+        <p>Creates a new Vendor for the client.</p>
+        <p>A vendor, also known as a supplier or manufacturer, is required in order to create new purchase orders. If you try to send in a purchase order where the vendor does not exist, your request will go to error. Make sure to update your vendor master data first.</p>
+      operationId: newVendor
+      security:
+        - schenker_auth:
+            - 'read'
+            - 'write'
+      responses:
+        '201':
+          description: vendor created
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vendor'
   /purchase-orders:
     get:
       deprecated: false
@@ -3657,17 +3717,23 @@ components:
             example: 'deliveryReceiptReport'
   securitySchemes:
     schenker_auth:
+      description: |
+        <p>Schenker logistics uses OAuth 2.0 for authentication. </p>
+        <p>Contact your integration team for aquiring an access token. </p>
+        <blockquote>Note to Schenker Team: We should preferably provide self-service provisioning depending on what Schield provides.</blockquote>
       type: oauth2
       flows:
         implicit:
           authorizationUrl: 'http://api.example.com/oauth/dialog'
           scopes:
-            'write': modify resources in your account
-            'read': read your resources
-            'update': update resources
-            'delete': delete resources
-            'subscribe': subscribe to webhooks
-    api_key:
-      type: apiKey
-      name: api_key
-      in: header
+            'write': Create new resources in your account
+            'read': Read your resources
+            'update': Update resources
+            'delete': Delete resources
+            'subscribe': subscribe to events sent from warehouse to client
+    #api_key:
+      #description: |
+      #  <p>Our authentication flow expects your API-key to be sent in the HTTP headers as described below.</p>
+      #type: apiKey
+      #name: api_key
+      #in: header
