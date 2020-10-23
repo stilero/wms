@@ -482,6 +482,142 @@ paths:
           $ref: '#/components/responses/NotFound'
         '503':
           $ref: '#/components/responses/ServiceUnavailable'
+  /master-data/owners:
+    get:
+      deprecated: false
+      security:
+        - schenker_auth:
+            - 'read'
+      tags:
+        - master-data   
+      summary: Returns all goods owners for client
+      description: |
+        <p>Returns a list of all goods owners for the client.</p>
+        <p>A goods owner can be used in many parts of the warehouse management. In most applications the owner id will be identical to your client id, but there are applications where you want to separate the goods further and that's where owner comes in handy.
+        </p>
+      operationId: getOwners
+      parameters: 
+        - $ref: '#/components/parameters/skipParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Owner'
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+    post:
+      deprecated: false
+      tags:
+        - master-data   
+      summary: Creates an owner 
+      description: |
+        <p>Creates a new goods owner for the client.</p>
+        <p>A goods owner can be used in many parts of the warehouse management. In most applications the owner id will be identical to your client id, but there are applications where you want to separate the goods further and that's where owner comes in handy.
+        </p>
+      operationId: newOwner
+      security:
+        - schenker_auth:
+            - 'read'
+            - 'write'
+      responses:
+        '201':
+          description: owner created
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Owner'
+  /master-data/owners/{ownerId}:
+    get:
+      deprecated: false
+      tags:
+        - master-data   
+      summary: Returns a goods owner based on id
+      description: |
+        By passing id you can get details of a specific goods owner
+      operationId: getOwnerById
+      security:
+        - schenker_auth:
+            - 'read'
+      parameters: 
+        - in: path
+          name: ownerId
+          description: Owner id to use
+          required: true
+          schema:
+            type: string
+          example: ABC1234567
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Owner'
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+    put:
+      deprecated: false
+      tags:
+        - master-data   
+      summary: Updates a goods owner based on id
+      description: |
+        Update owner with new data
+      operationId: updateOwnerById
+      security:
+        - schenker_auth:
+            - 'read'
+            - 'write'
+            - 'update'
+      parameters: 
+        - in: path
+          name: ownerId
+          description: owner id to use
+          required: true
+          schema:
+            type: string
+          example: ABC12345678
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Owner'
+      responses:
+        '201':
+          description: product stock group updated
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
   /purchase-orders:
     get:
       deprecated: false
@@ -1877,28 +2013,7 @@ components:
           #maxLength: 35
           #description: "The Customer's Identity in the Forwarder's system."
           #example: 1234567
-    Customer:
-      allOf:
-      - $ref: '#/components/schemas/Party'
-      - type: object
-        properties:
-          partyId:
-            type: string
-            maxLength: 35
-            description: |
-              <p>A unique identity for the party.</p>
-              <p>If <em>partyId</em> provided already exists when you send the <em>Party</em> object in a customer-order, then the existing data for the party will be overwritten.</p> <p>To avoid this, you could use the <em>customerOrderId</em> concatenated with additional random characters.</p>
-            example: CU123567X
-          partyType:
-            type: string
-            maxLength: 14
-            description: |
-              <p>The type of party used. A customer receives goods, and is used for destination adress in <em>customer-order</em> endpoint </p>
-            default: customer
-            enum: 
-              - customer
-            example: customer
-    PartyResponse:
+    PartyInOut:
       allOf:
       - type: object
         properties:
@@ -1920,32 +2035,33 @@ components:
             description: |
               <p>A unique identity for the party.</p>
             example: CU123567X
+    Customer:
+      allOf:
+      - $ref: '#/components/schemas/Party'
+      - type: object
+        properties:
+          partyId:
+            type: string
+            maxLength: 35
+            description: |
+              <p>A unique identity for the party.</p>
+              <p>If <em>partyId</em> provided already exists when you send the <em>Party</em> object in a customer-order, then the existing data for the party will be overwritten.</p> <p>To avoid this, you could use the <em>customerOrderId</em> concatenated with additional random characters.</p>
+            example: CU123567X
+          partyType:
+            type: string
+            maxLength: 14
+            description: |
+              <p>The type of party used. A customer receives goods, and is used for destination adress in <em>customer-order</em> endpoint </p>
+            default: customer
+            enum: 
+              - customer
+            example: customer
     Vendor:
       allOf:
       - $ref: '#/components/schemas/Party'
-      - type: object
-        properties:
-          partyType:
-            type: string
-            maxLength: 14
-            description: <p>Vendors are set for <em>purchase-order</em> endpoint, to specify which vendor the goods are delivered from.</p>
-            default: vendor
-            enum: 
-              - vendor
-            example: vendor
     Owner:
       allOf:
       - $ref: '#/components/schemas/Party'
-      - type: object
-        properties:
-          partyType:
-            type: string
-            maxLength: 14
-            description: <p>An owner is used in the <em>product</em> endpoint to set ownership of goods.</p>
-            default: owner
-            enum: 
-              - owner
-            example: owner
     Attribute:
       description: Attributes are used to add extra information to an object.
       type: object
