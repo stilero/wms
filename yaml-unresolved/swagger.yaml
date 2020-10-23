@@ -3816,6 +3816,7 @@ components:
     Shipment:
       allOf:
         - $ref: '#/components/schemas/CommonIdSequence'
+        - $ref: '#/components/schemas/CommonWarehouseId'
         - type: object
           required:
             - asnoutid
@@ -3839,93 +3840,71 @@ components:
               #format: date-time
               #description: Date and Time when the documents where issued in ISO 8601.
               #example: "2020-04-12T23:20:50.52Z"
-            
-            earliestArrivalDateTime:
-              type: string
-              format: date-time
-              maxLength: 7
-              description: "First possible Arrival Date and Time for the Vehicle."
-              example: "2020-04-12T23:20:50.52Z"
-            latestArrivalDateTime:
-              type: string
-              format: date
-              maxLength: 7
-              description: "Last possible Arrival Date and Time for the Vehicle."  
-              example: "2020-04-12T23:20:50.52Z"
-            exparrdtm:
-              type: string
-              format: date
-              maxLength: 0
-              description: "Expected Arrival Date and Time The date and time when the goods are estimated to arrive."
-            shipfrompartyid:
+        - $ref: '#/components/schemas/ArrivalDateTimes'      
+        - type: object
+          properties:
+            destination:
+              $ref: '#/components/schemas/Customer'
+            forwarderIdentity:
               type: string
               maxLength: 35
-              description: "Ship-from Party Identity The identity of the Party that has shipped the goods to the Ship-to Party. So in this case the Ship-from Party is your own Warehouse."
-            shipfrompartyqualifier:
-              type: string
-              maxLength: 3
-              description: "Ship-from Party Type The type of Party that is the Ship-from Party."
-            shiptopartynodeid:
-              type: string
-              maxLength: 35
-              description: "Ship-to Party Node Identity The identity of the Node for the Party that will receive the goods when they are shipped from the Ship-from Party."
-            shiptopartyid:
-              type: string
-              maxLength: 35
-              description: "Ship-to Party Identity The identity of the Party that will receive the goods when they are shipped from the Ship-from Party."
-            shiptopartyqualifier:
-              type: string
-              maxLength: 3
-              description: "Ship-to Party Type The type of Party that is the Ship-to Party."
-            whid:
-              type: string
-              maxLength: 4
-              description: "Warehouse Identity The identity of the Warehouse."
-            freid:
-              type: string
-              maxLength: 35
-              description: "Forwarder Identity The identity of the Forwarder that transports the goods to or from the Warehouse / Node."
+              description: "The identity of the Forwarder that transports the goods to or from the Warehouse."
+              example: SCHENKER
             instructions:
               type: string
               maxLength: 400
               description: "Instructions Free text for the ASN (Advance Shipping Notice)."
-            nocars:
-              type: number
-              maxLength: 0
-              description: "Number of Load Carriers The number of Load Carriers in the ASN (Advance Shipping Notice)."
-            truckid:
+              example: This is an instruction
+            
+            vehicleIdentity:
               type: string
               maxLength: 17
-              description: "Vehicle The identity of the vehicle that transports the goods to / from the Warehouse / Node. The identity can be the registration number, license plate or similar."
-            estvolume:
+              description: "The identity of the vehicle that transports the goods to / from the Warehouse / Node. The identity can be the registration number, license plate or similar."
+              example: ABC123
+            estimatedVolume:
               type: number
-              maxLength: 0
-              description: "Estimated Volume The calculated Volume for the goods included in the ASN."
-            unit_volume:
+              maxLength: 19
+              description: "Estimated Volume for the goods included in the ASN."
+              example: 4.3
+            volumeUOM:
               type: string
               maxLength: 17
-              description: "Volume The Volume unit."
-            consnote:
+              description: "The Volume unit."
+              example: dm3
+            billOfLadingNumber:
               type: string
               maxLength: 35
               description: "Bill of Lading The identity / number of the Bill of Lading."
-            dlvrynote:
+              example: ABJRKLM123545
+            packingSlipNumber:
               type: string
               maxLength: 35
               description: "Packing Slip The identity / number of the Packing Slip."
-            departure_id:
+              example: 12353445-1
+            shippedOnDepartureIdentity:
               type: string
               maxLength: 35
-              description: "Departure Identity The identity of the Departure."
-            proid:
-              type: string
-              maxLength: 35
-              description: "Process Identity (inserted by trigger)."
-            upddtm:
-              type: string
-              format: date
-              maxLength: 0
-              description: "Update Time (inserted by trigger)."
+              description: "Departure Identity. The identity of the Departure is an internal departure id used by warehouse system"
+              example: 123467
+            numberOfLoadCarriers:
+              type: number
+              maxLength: 8
+              description: "The number of Load Carriers in the ASN (Advance Shipping Notice)."
+              example: 3
+            loadCarriers:
+              description: Detailed information about the loadcarriers included in this shipment
+              type: array
+              items:
+                  $ref: '#/components/schemas/ShipmentCar'
+            shipmentLines:
+              description: Detailed information about the contents of this shipment
+              type: array
+              items:
+                  $ref: '#/components/schemas/ShipmentLine'
+            attributes:
+              type: array
+              items:  
+                $ref: '#/components/schemas/Attribute'
     ShipmentLine:
       allOf:
         - $ref: '#/components/schemas/CommonLineSequence'
@@ -4108,16 +4087,28 @@ components:
       properties:
         volume:
           type: number
-          description: "The total Volume in m3"
+          description: "The total Volume"
           example: 2.1
+        volumeUOM:
+          type: string
+          description: "The volume Unit of Measure"
+          example: dm3
         weight:
           type: number
-          description: "The total Weight in kg"
+          description: "The total Weight"
           example: 30.2
+        weightUOM:
+          type: string
+          description: "The weight Unit of Measure"
+          example: kg
         height:
           type: number
           maxLength: 0
           description: "The height in mm"
+        heightUOM:
+          type: string
+          description: "The height Unit of Measure"
+          example: cm
     CommonIdSequence:
       type: object
       required:
