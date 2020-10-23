@@ -3811,11 +3811,6 @@ components:
         - $ref: '#/components/schemas/CommonLineSequence'
         - $ref: '#/components/schemas/CommonLoadCarrierId'
         - type: object
-          required:
-            - asnoutid
-            - asnoutseq
-            - asnoutrowid
-            - asnoutrowseq
           properties:
             destination:
               $ref: '#/components/schemas/Customer'
@@ -3847,8 +3842,6 @@ components:
               example: Out of stock
         - $ref: '#/components/schemas/CommonUOM'
         - $ref: '#/components/schemas/CommonOwner'
-        - $ref: '#/components/schemas/ProductDates'
-        - $ref: '#/components/schemas/VendorProductNumber'
         - type: object
           properties:
             vendorId:
@@ -3856,36 +3849,46 @@ components:
               maxLength: 35
               description: "The identity of the Vendor."
               example: SUPPLIER123
-            vendorProductId:
-              type: string
-              maxLength: 35
-              description: "The Vendors identity of the Product."
-              example: VENDABC1234
+        - $ref: '#/components/schemas/VendorProductNumber'
+        - type: object
+          properties:
             purchasePrice:
               type: number
               maxLength: 22
               description: "Purchase price per Lowest Unit of Measure (Base Package) of the Product."
               example: 30.5
-        - $ref: '#/components/schemas/ProductLOT'
-        - type: object
-          properties:
             serialnumber:
               type: string
               maxLength: 21
               description: "Serial Number A unique identity for a single Item Load. Only used for Case Pick and Serial Number handling!"
               example: xnenwkl0-wemnklms12
-            volume:
-              type: number
-              description: "The total Volume in m3 for the goods on this shipment line"
-              example: 2.1
-            weight:
-              type: number
-              description: "The total Weight in kg of the goods included in the Line."
-              example: 30.2
-            height:
-              type: number
-              maxLength: 0
-              description: "The height in mm of the Pallet"
+        - type: object
+          properties:
+            productDateInformation:
+              description: Information about product and expiry dates
+              $ref: '#/components/schemas/ProductDates'
+            LOTInformation:
+              description: Information about product and expiry dates
+              $ref: '#/components/schemas/ProductLOT'
+        - type: object
+          properties:
+            measurements:
+              description: Shipment measurements
+              allOf:
+                - type: object
+                  properties:
+                    volume:
+                      type: number
+                      description: "The total Volume in m3 for the goods on this shipment line"
+                      example: 2.1
+                    weight:
+                      type: number
+                      description: "The total Weight in kg of the goods included in the Line."
+                      example: 30.2
+                    height:
+                      type: number
+                      maxLength: 0
+                      description: "The height in mm of the Pallet"
         - $ref: '#/components/schemas/CustomerOrderId'
         - $ref: '#/components/schemas/CustomerOrderLineNumber'
         - $ref: '#/components/schemas/CommonInventoryStatusCode'
