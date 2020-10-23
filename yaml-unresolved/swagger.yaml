@@ -1092,13 +1092,15 @@ paths:
                     <h2>deliveryReceipt</h2>
                     <p>Triggered when goods from vendor purchase orders and customer return orders are received to the warehouse.</p>
                     <h2>pickReceipt</h2>
-                    <p>Triggered when a customer order is picked and shipped from the warehouse.</p>
+                    <p>Triggered when a customer order is picked and finished in the warehouse.</p>
+                    <h2>shipmentReceipt</h2>
+                    <p>Triggered when a customer order is shipped from the warehouse.</p>
                     <h2>inventoryChange</h2>
                     <p>Triggered when changes are made to inventory</p>
                     <h2>inventoryBalance</h2>
                     <p>Triggered nightly with storage quantities of all goods in the warehouse</p>
                   type: string
-                  enum: [deliveryReceipt, pickReceipt, inventoryChange, inventoryBalance]
+                  enum: [deliveryReceipt, pickReceipt, shipmentReceipt, inventoryChange, inventoryBalance]
                   example: deliveryReceipt
               required:
                 - callbackUrl
@@ -1123,6 +1125,17 @@ paths:
               description: The pickReceipt event is triggered when customer orders are picked and shipped. It sends a detailed pick receipt to the callback uri you have specified.
               requestBody:   # Contents of the callback message
                 $ref: '#/components/requestBodies/PickReceiptBody'
+              responses:   # Expected responses to the callback message
+                '200':
+                  description: Your server returns this code if it accepts the callback
+        shipmentReceipt:
+          '{$request.body#/callbackUrl}':   # The callback URL,
+                                            # Refers to the passed URL
+            post:
+              summary: shipmentReceipt - When a shipment is sent from the warehouse
+              description: The shipmentReceipt event is triggered when customer orders are shipped from the warehouse. It sends a detailed information about the contents of the shipment to the callback uri you have specified.
+              requestBody:   # Contents of the callback message
+                $ref: '#/components/requestBodies/ShipmentReceiptBody'
               responses:   # Expected responses to the callback message
                 '200':
                   description: Your server returns this code if it accepts the callback
