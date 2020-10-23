@@ -2202,6 +2202,8 @@ components:
               description: "The identity of the Lowest Unit of Measure / Base Package of this Product"
               example: PCE
               default: PCE
+            dangerousGoodsInfo:
+              $ref: '#/components/schemas/dangerousGoodsInfo'
             packages:
               type: array
               description: "Add additional packages to the product apart from the lowest unit of measure. This is where you add cartons and pallets for the product."
@@ -2227,8 +2229,6 @@ components:
               description: "Use Vendor / Supplier product numbers to add additional product numbers provided by vendor. Otherwise omit."
               items:
                 $ref: '#/components/schemas/VendorProductNumber'
-            dangerousGoodsInfo:
-              $ref: '#/components/schemas/dangerousGoodsInfo'
             attributes:
               type: array
               description: "Use attributes to add extra information to products."
@@ -2677,11 +2677,9 @@ components:
               description: "The total Volume for the Package."
               example: 0.3
             isPallet:
-              type: string
-              maxLength: 3
-              description: "Set yes if this package is a pallet, otherwise no"
-              enum: [yes, no]
-              example: yes
+              type: boolean
+              description: "Set true if this package is a pallet, otherwise false"
+              example: true
             
             
             
@@ -3864,7 +3862,7 @@ components:
           ownerId:
               type: string
               maxLength: 140
-              description: "The identity of the Owner of the product. I most applications this ID will be identical to clientId"
+              description: "The identity of the Owner of the product. In most applications this ID will be identical to clientId"
               example: SE-EXAMPLE
     CommonUOM:
       type: object
