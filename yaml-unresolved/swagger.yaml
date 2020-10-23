@@ -109,7 +109,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ProductItem'
+                  $ref: '#/components/schemas/Product'
         '400':
           $ref: '#/components/responses/InvalidInput'
         '403':
@@ -130,6 +130,30 @@ paths:
       responses:
         '201':
           description: product created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    format: string
+                    description: ID of the created resource.
+          links:
+            GetProductById:
+              operationId: getProductById
+              parameters:
+                productId: '$response.body#/id'
+              description: >
+                The `id` value returned in the response can be used as
+                the `productId` parameter in `GET /master-data/products/{productId}` to see details about the product.
+            UpdateProductById:
+              operationId: updateProductById
+              parameters:
+                productId: '$response.body#/id'
+              description: >
+                The `id` value returned in the response can be used as
+                the `productId` parameter in `PUT /master-data/products/{productId}` to update the product.
         '400':
           $ref: '#/components/responses/InvalidInput'
         '403':
