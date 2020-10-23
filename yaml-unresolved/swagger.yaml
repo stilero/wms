@@ -2152,22 +2152,17 @@ components:
     Product:
       description: Product
       required:
-        - productDescription
+        - productName
       allOf:
-        #- $ref: '#/components/schemas/CommonClientId'
-        - $ref: '#/components/schemas/CommonProductOwner'
-        #- $ref: '#/components/schemas/CommonUOM'
+        - $ref: '#/components/schemas/CommonProduct'
+        - $ref: '#/components/schemas/CommonProductName'
+        - $ref: '#/components/schemas/CommonOwner'
         - type: object
           required: 
             - ownerId
             - lowestUnitOfMeasure
           properties:
-            productDescription:
-              type: string
-              maxLength: 1024
-              description: "The description / name of the Product."
-              example: A red widget for doing interesting stuff
-            productDescription2:
+            productNamne2:
               type: string
               maxLength: 1024
               description: "Extra description / name of the Product."
@@ -3822,350 +3817,96 @@ components:
             - asnoutrowid
             - asnoutrowseq
           properties:
-            #shipfrompartynodeid:
-              #type: string
-              #maxLength: 35
-              #description: "Ship-from Party Node Identity The identity of the Node for the Party that has shipped the goods to the Ship-to Party. So in this case the Ship-from Node is your own Warehouse geographical reference."
-            #shiptopartynodeid:
-              #type: string
-              #maxLength: 35
-              #description: "Ship-to Party Node Identity The identity of the Node for the Party that will receive the goods when they are shipped from the Ship-from Party."
-            destinationAdress:
+            destination:
               $ref: '#/components/schemas/Customer'
-            endCustomerAdress:
+            endCustomer:
               $ref: '#/components/schemas/Customer'
-        - $ref: '#/components/schemas/CommonProductOwner'
+        - $ref: '#/components/schemas/CommonProduct'
+        - $ref: '#/components/schemas/CommonProductName'
+        - type: object
+          required:
+            - shippedQuantity
+          properties:
+            shippedQuantity:
+              type: number
+              description: "The number of units of measure that have been picked for the Pick Order Line."
+              example: 100
+            diffQuantity:
+              type: number
+              description: "The difference between Ordered Quantity and Shipped Quantity in units of measure."
+              example: -10
+            discrepancyCode:
+              type: string
+              maxLength: 3
+              description: "Discrepancy Code to explain why the shipped quantity differs from the ordered quantity."
+              example: S
+            discrepancyText:
+              type: string
+              maxLength: 35
+              description: "Free text desription of the Discrepancy Code."
+              example: Out of stock
+        - $ref: '#/components/schemas/CommonUOM'
+        - $ref: '#/components/schemas/CommonOwner'
+        - $ref: '#/components/schemas/ProductDates'
+        - $ref: '#/components/schemas/VendorProductNumber'
         - type: object
           properties:
-            supid:
+            vendorId:
               type: string
               maxLength: 35
-              description: "Vendor Identity The identity of the Vendor."
-            artname:
-              type: string
-              maxLength: 256
-              description: "Product Description The description / name of the Product. It is displayed in the dialogs for the ASN Line. Could be another Product Description than that in the Product table."
-            artidqualifier:
-              type: string
-              maxLength: 1
-              description: "Product Number Type Indicates whether the Product has a known Identity within the Warehouse: 0 = Without known Product Number. Alternative Number in ARTID2 (e.g. transit goods) 1 = With known Identity in ARTID"
-            artid2:
+              description: "The identity of the Vendor."
+              example: SUPPLIER123
+            vendorProductId:
               type: string
               maxLength: 35
-              description: "Alternative Product Number E.g. transit goods unknown within the Warehouse."
-            artname2:
-              type: string
-              maxLength: 256
-              description: "Product Description The extra description / name of the Product."
-            artdate:
-              type: string
-              format: date
-              maxLength: 0
-              description: "Product Date The Product Date as stated by the Product Date Type (Arrival Date, Manufacturing Date or Expiry Date)."
-            expirydate:
-              type: string
-              format: date
-              maxLength: 0
-              description: "Expiry Date The date when the goods can no longer be used."
-            manufacturingdate:
-              type: string
-              format: date
-              maxLength: 0
-              description: "Manufacturing Date The date when the goods were manufactured."
-            supartid:
-              type: string
-              maxLength: 35
-              description: "Vendor Product Number The Vendors identity of the Product."
-            purprice:
+              description: "The Vendors identity of the Product."
+              example: VENDABC1234
+            purchasePrice:
               type: number
-              maxLength: 0
-              description: "Purchase Price Purchase price per Lowest Unit of Measure (Base Package) of the Product."
-            pakid:
-              type: string
-              maxLength: 17
-              description: "Unit of Measure The identity of the Unit of Measure / Package. Has to be the Lowest Unit of Measure / Base Package for the Product."
-            prodlot:
-              type: string
-              maxLength: 40
-              description: "Manufacturing Lot The Manufacturing Lot that the picked goods have to belong to (if required by Manufacturing Lot Requirement)."
-            prodsublot:
-              type: string
-              maxLength: 40
-              description: "Manufacturing Sublot The Manufacturing Sublot that the picked goods have to belong to (if required by Manufacturing Lot Requirement)."
-            produnit:
-              type: string
-              maxLength: 20
-              description: "Manufacturing Unit The identity of the unit that has produced the goods / Item Load."
-            promotn:
-              type: string
-              maxLength: 20
-              description: "Marketing Lot The Marketing Lot that the picked goods have to belong to."
-            sernumb:
+              maxLength: 22
+              description: "Purchase price per Lowest Unit of Measure (Base Package) of the Product."
+              example: 30.5
+        - $ref: '#/components/schemas/ProductLOT'
+        - type: object
+          properties:
+            serialnumber:
               type: string
               maxLength: 21
               description: "Serial Number A unique identity for a single Item Load. Only used for Case Pick and Serial Number handling!"
-            storbat:
-              type: string
-              maxLength: 20
-              description: "Quality Lot Can be used for optional classification of the stored goods in the Warehouse (quality, color, etc)."
-            pickqty:
-              type: number
-              maxLength: 0
-              description: "Picked Quantity The number of Pick Packages (Case Pick) or Lowest Units of Measure (Pallet Pick) that have been picked for the Pick Order Line."
-            measqty:
-              type: number
-              maxLength: 0
-              description: "Measured Quantity The quantity that was measured for the received goods. Used when Catch Measure at inbound is activated for the Product. If the received goods results in several Item Loads, then the registered measured quantity is divided by the number of Item Loads and each one of them gets an equal part."
-            measure_qualifier:
-              type: string
-              maxLength: 4
-              description: "Catch Measure Unit States in which unit to measure the goods if Catch Measure is set."
+              example: xnenwkl0-wemnklms12
             volume:
               type: number
-              maxLength: 0
-              description: "Volume The total Volume for the goods included in the ASN Line."
-            unit_volume:
-              type: string
-              maxLength: 17
-              description: "Volume The Volume unit."
+              description: "The total Volume in m3 for the goods on this shipment line"
+              example: 2.1
             weight:
               type: number
-              maxLength: 0
-              description: "Weight The total Weight of the goods included in the Line."
-            unit_weight:
-              type: string
-              maxLength: 17
-              description: "Weight The Weight unit."
+              description: "The total Weight in kg of the goods included in the Line."
+              example: 30.2
             height:
               type: number
               maxLength: 0
-              description: "Height The height of the Pallet, for internal use only."
-            unit_length:
-              type: string
-              maxLength: 17
-              description: "Length The Length unit."
-            coid:
-              type: string
-              maxLength: 35
-              description: "Customer Order Number The identity of the Customer Order. Used for transit / warehouse transfer goods."
-            coseq:
-              type: number
-              maxLength: 0
-              description: "Customer Order Sequence Number A Sequence Number used by the Host system to make it possible to send a Customer Order more than once (e.g. backorder). Used for transit / warehouse transfer goods."
-            copos:
-              type: number
-              maxLength: 0
-              description: "Customer Order Line Number The identity of the Customer Order Line. Used for transit / warehouse transfer goods."
-            cosubpos:
-              type: number
-              maxLength: 0
-              description: "Customer Order Line Sub Number Used as an extra identity of the Customer Order Line. Used for transit / warehouse transfer goods."
-            corowkitpos:
-              type: number
-              maxLength: 0
-              description: "Customer Order Line Kit Position The Customer Order Line contains an Assembly Product. Used for transit / warehouse transfer goods."
-            originpoid:
-              type: string
-              maxLength: 35
-              description: "Original Customer Purchase Order Number The final recipients Purchase Order Number reference. Used for transit goods."
-            originposeq:
-              type: number
-              maxLength: 0
-              description: "Original Customer Purchase Order Sequence Number The final recipients Purchase Order Sequence Number reference. Used for transit goods."
-            originpopos:
-              type: number
-              maxLength: 0
-              description: "Original Customer Purchase Order Line Number The final recipients Purchase Order Line Number reference. Used for transit goods."
-            originposubpos:
-              type: number
-              maxLength: 0
-              description: "Original Customer Purchase Order Line Sub Number The final recipients Purchase Order Line Sub Number reference. Used for transit goods."
-            origincusref:
-              type: string
-              maxLength: 35
-              description: "Original Customer Reference The final recipients Customer Reference. Used for transit goods."
-            blockcod:
-              type: string
-              maxLength: 8
-              description: "Hold Code A Hold Code may be applied on an Item Load or a Pick Location to temporarily restrict its processing."
-            blockdays:
-              type: number
-              maxLength: 0
-              description: "Number of Hold Days The number of Hold Days is after how many days the hold will be released automatically if it has not been removed manually before that."
-            blockkey:
-              type: string
-              maxLength: 12
-              description: "Hold Key If a Hold Key is registered for the Hold then the same key value has to be entered to remove the hold manually."
-            blocktxt:
-              type: string
-              maxLength: 200
-              description: "Hold Text Free hold text."
-            almdate:
-              type: string
-              format: date
-              maxLength: 0
-              description: "Automatic Release Date Only used for Hold Codes that have the Release Hold Automatically set. Then this is the Date when the hold is automatically removed if it has not already been removed manually."
+              description: "The height in mm of the Pallet"
+        - $ref: '#/components/schemas/CustomerOrderId'
+        - $ref: '#/components/schemas/CustomerOrderLineNumber'
+        - $ref: '#/components/schemas/CommonInventoryStatusCode'
+        - type: object
+          properties:
             instructions:
               type: string
               maxLength: 400
-              description: "Instructions Free text for the ASN Line."
-            iteid_pre:
-              type: string
-              maxLength: 35
-              description: "Predefined Load Carrier Identity The Item Load is on / in a Load Carrier that already has got the identity (SSCC) attached."
-            artid_shipfrompartner:
-              type: string
-              maxLength: 35
-              description: "Product Number The Product Number at the Ship-from Party site."
-            artid_shiptopartner:
-              type: string
-              maxLength: 35
-              description: "Product Number The Product Number at the Ship-to Party site."
-            artid_global:
-              type: string
-              maxLength: 35
-              description: "Product Number Global Product Number."
-            packing_material:
-              type: string
-              maxLength: 1
-              description: "Packing Material Indicates (1=Yes,0=No) if this line is Packing Material."
-            cotype:
+              description: "Instructions Free text for the Shipment Line."
+              example: These are our instructions
+            #iteid_pre:
+              #type: string
+              #maxLength: 35
+              #description: "Predefined Load Carrier Identity The Item Load is on / in a Load Carrier that already has got the identity (SSCC) attached."
+            customerOrderTypeCode:
               type: string
               maxLength: 2
-              description: "Customer Order Type The type of the Customer Order. Comes from the Host System and does not control any logic in the Warehouse except for what is described below: - LO = Local Order inhibits sending of Order-related information via the HAPI and EDI interface, such as Pick Result and Receipt Report. - Other values are just information in the Warehouse system."
-            poid:
-              type: string
-              maxLength: 35
-              description: "Purchase Order Number The identity of the Purchase Order."
-            poseq:
-              type: number
-              maxLength: 0
-              description: "Purchase Order Sequence Number When there are multiple occurrences of the Purchase Order in the Warehouse system this tells in which order they have been received from the host system."
-            popos:
-              type: number
-              maxLength: 0
-              description: "Purchase Order Line Number The identity of the Purchase Order Line."
-            posubpos:
-              type: number
-              maxLength: 0
-              description: "Purchase Order Line Sub Number Used as an extra identity of the Purchase Order Line."
-            artidsaleable:
-              type: string
-              maxLength: 35
-              description: "Stocked Product Number This is only used if you want to include information about a Packing Material connected to the product. Then this field shows the identity of the Stocked Product for the saleable form of the Packing Material. This way the system can identify the Lowest Unit of Measure for the received product."
-            artidsaleable_global:
-              type: string
-              maxLength: 20
-              description: "Product Number Global Product Number."
-            frompartyid:
-              type: string
-              maxLength: 35
-              description: "From Party Identity Party where the goods originated from. Used for returns."
-            frompartyqualifier:
-              type: string
-              maxLength: 3
-              description: "From Party Type The type of Party that is the From Party."
-            croid:
-              type: string
-              maxLength: 35
-              description: "Customer Return Order Number The identity of the Customer Return Order."
-            croseq:
-              type: number
-              maxLength: 0
-              description: "Customer Return Order Sequence Number A Sequence Number to make the Customer Return Order identity unique."
-            cropos:
-              type: number
-              maxLength: 0
-              description: "Customer Return Order Line Number The number of the Customer Return Order Line."
-            crokitpos:
-              type: number
-              maxLength: 0
-              description: "Kit Indicates (1=Yes,0=No) if the Customer Return Order Line contains a Kit Product."
-            crosubpos:
-              type: number
-              maxLength: 0
-              description: "Customer Return Order Line Sub Number A Sub Number to make the Customer Return Order Line Number unique."
-            actcodid:
-              type: string
-              maxLength: 2
-              description: "Action Code Identity. The identity of the Action Code for the Action that has been performed for the inspected received goods."
-            actcodreq:
-              type: string
-              maxLength: 1
-              description: "Action Code Requirement Indicates (1=Yes,0=No, default: Yes) if it is allowed to change the Action Code."
-            reasoncode:
-              type: string
-              maxLength: 2
-              description: "Reason Code Is used for Customer Return Orders and states the Code for the Reason why the goods are returned."
-            reasontext:
-              type: string
-              maxLength: 400
-              description: "Reason Text Is used for Customer Return Orders and states the Reason why the goods are returned."
-            shiptosupid:
-              type: string
-              maxLength: 35
-              description: "Ship-to Vendor Identity The identity of the Party / Vendor that finally will receive the returned goods."
-            shiptosupqualifier:
-              type: string
-              maxLength: 3
-              description: "Ship-to Vendor Type Type of Party that is the Ship-to Vendor."
-            restqty:
-              type: number
-              maxLength: 0
-              description: "Discrepancy Quantity The number of Pick Packages (Case Pick) or Lowest Units of Measure (Pallet Pick) that were NOT picked (Ordered Quantity - Picked Quantity)."
-            restcod:
-              type: string
-              maxLength: 3
-              description: "Discrepancy Code When required, you register a Discrepancy Code for the pick order line to explain why the pick result differs from the customer order line."
-            restcodtxt:
-              type: string
-              maxLength: 35
-              description: "Discrepancy Code Description The description / name of the Discrepancy Code."
-            ownid_shiptocus:
-              type: string
-              maxLength: 35
-              description: "Owner Identity at Final Node The identity of the Owner that will be registered for the goods at the Final Node (the Ship-to Customer)."
-            selltocusid:
-              type: string
-              maxLength: 35
-              description: "Sell-to Customer Identity The Customer that made the Order according to the Customer Order."
-            selltocusqualifier:
-              type: string
-              maxLength: 17
-              description: "Sell-to Customer Type The type of Party that is the Sell-to Customer."
-            shipfrompartyid:
-              type: string
-              maxLength: 35
-              description: "Ship-from Party Identity The identity of the Party that has shipped the goods to the Ship-to Party. So in this case the Ship-from Party is your own Warehouse."
-            sup_partynodeid:
-              type: string
-              maxLength: 35
-              description: "Vendor Party Node Identity The identity of the Node for the Party / Vendor that finally will receive the returned goods."
-            reserve_for_assembly:
-              type: string
-              maxLength: 1
-              description: "Reserve for Assembly Controls (1=Yes,0=No) if the goods should be used for an Assembly Order. The goods will first be shipped to the Ship-to Customer and then be reserved for an Assembly Order."
-            proid:
-              type: string
-              maxLength: 35
-              description: "Process Identity (inserted by trigger)."
-            upddtm:
-              type: string
-              format: date
-              maxLength: 0
-              description: "Update Time (inserted by trigger)."
-            wws_legalstatus:
-              type: string
-              maxLength: 2
-              description: "WWS Legal Status Legal Status is a coded value where  0 - Free and 1 - Legal handling."
-            wws_legallot:
-              type: string
-              maxLength: 35
-              description: "WWS Legal Lot Describes the legal LOT to be used."
-            wws_cncode:
-              type: string
-              maxLength: 35
-              description: "WWS CNCode CN(Combined Nomenclature) code set up for product."
+              description: "The type of the Customer Order."
+              example: N
+        - $ref: '#/components/schemas/PurchaseOrderId'
+        - $ref: '#/components/schemas/PurchaseOrderLineNumber'
     CommonIdSequence:
       type: object
       required:
@@ -4226,25 +3967,28 @@ components:
           maxLength: 140
           description: "The identity of the Product."
           example: abc1234567
-          
+    CommonProductName:
+      type: object
+      description: Base model for product name.
+      properties:
+        productName:
+              type: string
+              maxLength: 1024
+              description: "The name of the Product."
+              example: Red Widget
+    CommonOwner:
+      type: object
+      description: Base model for products owners.
+      properties:
+        ownerId:
+            type: string
+            maxLength: 140
+            description: "The identity of the Owner of the product. In most applications this ID will be identical to clientId"
+            example: SE-EXAMPLE
     CommonProductOwner:
       allOf:
       - $ref: '#/components/schemas/CommonProduct'
-      - type: object
-        required: 
-          - productId
-        description: Base model for products with fields used in all IMI Models. Used for inheritance.
-        properties:
-          productId:
-            type: string
-            maxLength: 140
-            description: "The identity of the Product."
-            example: abc1234567
-          ownerId:
-              type: string
-              maxLength: 140
-              description: "The identity of the Owner of the product. In most applications this ID will be identical to clientId"
-              example: SE-EXAMPLE
+      - $ref: '#/components/schemas/CommonOwner'
     CommonUOM:
       type: object
       description: Unit Of Measure
