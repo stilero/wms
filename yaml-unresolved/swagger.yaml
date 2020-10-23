@@ -3862,6 +3862,7 @@ components:
               maxLength: 21
               description: "Serial Number A unique identity for a single Item Load. Only used for Case Pick and Serial Number handling!"
               example: xnenwkl0-wemnklms12
+        - $ref: '#/components/schemas/CommonInventoryStatusCode'
         - type: object
           properties:
             productDateInformation:
@@ -3889,27 +3890,39 @@ components:
                       type: number
                       maxLength: 0
                       description: "The height in mm of the Pallet"
-        - $ref: '#/components/schemas/CustomerOrderId'
-        - $ref: '#/components/schemas/CustomerOrderLineNumber'
-        - $ref: '#/components/schemas/CommonInventoryStatusCode'
         - type: object
           properties:
-            instructions:
-              type: string
-              maxLength: 400
-              description: "Instructions Free text for the Shipment Line."
-              example: These are our instructions
-            #iteid_pre:
-              #type: string
-              #maxLength: 35
-              #description: "Predefined Load Carrier Identity The Item Load is on / in a Load Carrier that already has got the identity (SSCC) attached."
-            customerOrderTypeCode:
-              type: string
-              maxLength: 2
-              description: "The type of the Customer Order."
-              example: N
-        - $ref: '#/components/schemas/PurchaseOrderId'
-        - $ref: '#/components/schemas/PurchaseOrderLineNumber'
+            customerOrderInfo:
+              description: Order information
+              allOf:
+              - $ref: '#/components/schemas/CustomerOrderId'
+              - $ref: '#/components/schemas/CustomerOrderLineNumber'
+              - type: object
+                properties:
+                  customerOrderTypeCode:
+                    type: string
+                    maxLength: 2
+                    description: "The type of the Customer Order."
+                    example: N
+                  instructions:
+                    type: string
+                    maxLength: 400
+                    description: "Instructions Free text for the Shipment Line."
+                    example: These are our instructions
+        - type: object
+          properties:
+            purchaseOrderInfo:
+              allOf:
+              - $ref: '#/components/schemas/PurchaseOrderId'
+              - $ref: '#/components/schemas/PurchaseOrderLineNumber'
+            serialnumbers:
+              type: array
+              items:  
+                $ref: '#/components/schemas/CommonSerial'
+            attributes:
+              type: array
+              items:  
+                $ref: '#/components/schemas/Attribute'
     CommonIdSequence:
       type: object
       required:
