@@ -408,6 +408,80 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Vendor'
+  /master-data/vendors/{vendorId}:
+    get:
+      deprecated: false
+      tags:
+        - master-data   
+      summary: Returns a vendor based on id
+      description: |
+        By passing id you can get details of a specific vendor
+      operationId: getVendorById
+      security:
+        - schenker_auth:
+            - 'read'
+      parameters: 
+        - in: path
+          name: vendorId
+          description: Vendor id to use
+          required: true
+          schema:
+            type: string
+          example: ABC1234567
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Vendor'
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+    put:
+      deprecated: false
+      tags:
+        - master-data   
+      summary: Updates a vendor based on id
+      description: |
+        Update vendor with new data
+      operationId: updateVendorById
+      security:
+        - schenker_auth:
+            - 'read'
+            - 'write'
+            - 'update'
+      parameters: 
+        - in: path
+          name: vendorId
+          description: vendor id to use
+          required: true
+          schema:
+            type: string
+          example: ABC12345678
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vendor'
+      responses:
+        '201':
+          description: product stock group updated
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
   /purchase-orders:
     get:
       deprecated: false
