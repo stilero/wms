@@ -1815,7 +1815,6 @@ components:
     CustomerOrderOut:
       description: Customer order details for the request response.
       allOf:
-      - $ref: '#/components/schemas/CustomerOrder'
       - type: object
         properties:
           insertDateTime:
@@ -1842,6 +1841,7 @@ components:
                 </ul>
               </p>
             example: started
+      - $ref: '#/components/schemas/CustomerOrder'
     CustomerOrderId:
       type: object
       properties:
