@@ -1160,12 +1160,14 @@ paths:
                     <p>Triggered when a customer order is picked and finished in the warehouse.</p>
                     <h2>shipmentReceipt</h2>
                     <p>Triggered when a customer order is shipped from the warehouse.</p>
+                    <h2>customerOrderStatus</h2>
+                    <p>Triggered when the status on a customer order is changed.</p>
                     <h2>inventoryChange</h2>
                     <p>Triggered when changes are made to inventory</p>
                     <h2>inventoryBalance</h2>
                     <p>Triggered nightly with storage quantities of all goods in the warehouse</p>
                   type: string
-                  enum: [deliveryReceipt, pickReceipt, shipmentReceipt, inventoryChange, inventoryBalance]
+                  enum: [deliveryReceipt, pickReceipt, shipmentReceipt, shipmentReceipt, inventoryChange, inventoryBalance]
                   example: deliveryReceipt
               required:
                 - callbackUrl
@@ -1201,6 +1203,17 @@ paths:
               description: The shipmentReceipt event is triggered when customer orders are shipped from the warehouse. It sends a detailed information about the contents of the shipment to the callback uri you have specified.
               requestBody:   # Contents of the callback message
                 $ref: '#/components/requestBodies/ShipmentReceiptBody'
+              responses:   # Expected responses to the callback message
+                '200':
+                  description: Your server returns this code if it accepts the callback
+        customerOrderStatus:
+          '{$request.body#/callbackUrl}':   # The callback URL,
+                                            # Refers to the passed URL
+            post:
+              summary: customerOrderStatus - When the customer order status changes
+              description: The customerOrderStatus event is triggered when a customer order status is changed. It sends detailed information about the customer order to the callback uri you have specified.
+              requestBody:   # Contents of the callback message
+                $ref: '#/components/requestBodies/CustomerOrderBody'
               responses:   # Expected responses to the callback message
                 '200':
                   description: Your server returns this code if it accepts the callback
@@ -1372,6 +1385,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/PickReceipt'
+    CustomerOrderBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CustomerOrderOut'
     ShipmentReceiptBody:
       required: true
       content:
