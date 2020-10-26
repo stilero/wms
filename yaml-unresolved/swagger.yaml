@@ -1401,15 +1401,6 @@ components:
             A URI reference that identifies the specific
             occurrence of the problem.  It may or may not yield further
             information if dereferenced.
-    WhoAmI:
-      title: WhoAmI
-      type: object
-      description: ''
-      xml:
-        name: WhoAmI
-        namespace: http://im.se/wms/webservices/
-        attribute: false
-        wrapped: false
     WhoAmIResponse:
       title: WhoAmIResponse
       type: object
@@ -1428,14 +1419,6 @@ components:
         namespace: http://im.se/wms/webservices/
         attribute: false
         wrapped: false
-    WhoAmIIn:
-      title: WhoAmIIn
-      required:
-      - WhoAmI
-      type: object
-      properties:
-        WhoAmI:
-          $ref: '#/components/schemas/WhoAmI'
     WhoAmIOut:
       title: WhoAmIOut
       required:
@@ -1444,42 +1427,6 @@ components:
       properties:
         WhoAmIResponse:
           $ref: '#/components/schemas/WhoAmIResponse'
-    InventoryItem:
-      type: object
-      required:
-        - id
-        - name
-        - manufacturer
-        - releaseDate
-      properties:
-        id:
-          type: string
-          format: uuid
-          example: d290f1ee-6c54-4b01-90e6-d701748f0851
-        name:
-          type: string
-          example: Widget Adapter
-        releaseDate:
-          type: string
-          format: date-time
-          example: '2016-08-29T09:12:33.001Z'
-        manufacturer:
-          $ref: '#/components/schemas/Manufacturer'
-    Manufacturer:
-      required:
-        - name
-      properties:
-        name:
-          type: string
-          example: ACME Corporation
-        homePage:
-          type: string
-          format: url
-          example: 'https://www.acme-corp.com'
-        phone:
-          type: string
-          example: 408-867-5309
-      type: object
     CustomerOrderLine:
       allOf:
       - $ref: '#/components/schemas/CustomerOrderLineNumber'
@@ -1739,25 +1686,6 @@ components:
           #type: string
           #maxLength: 4
           #description: "Print Guarantee Certificate Controls (1=Yes,0=No) if a Guarantee Certificate shall be printed."
-    CustomerOrderList:
-      type: object
-      properties:
-        customerOrderId:
-          type: string
-          maxLength: 140
-          description: "The identity of the Customer Order."
-          example: SOUK123456
-        customerOrderSequence:
-          type: number
-          maxLength: 22
-          description: "A Sequence Number to make it possible to send a Customer Order more than once (e.g. backorder)."
-          example: 1
-          default: 0
-        customerOrderType:
-          type: string
-          maxLength: 2
-          description: "The Customer Order Type to classify this order. customer order types used must be agreed and activated by Warhouse prior to use. Common values are 'N' for normal orders, and 'E' for ecom order."
-          example: N
     CustomerOrder:
       allOf:
       - $ref: '#/components/schemas/CustomerOrderId'
@@ -2116,28 +2044,6 @@ components:
           #maxLength: 35
           #description: "The Customer's Identity in the Forwarder's system."
           #example: 1234567
-    PartyInOut:
-      allOf:
-      - type: object
-        properties:
-          partyType:
-              type: string
-              maxLength: 14
-              description: |
-                <p>The type of party used.</p><h1>Customer</h1><p>A customer receives goods, and is used for destination adress in <em>customer-order</em> endpoint </p><h1>Owner</h1><p>An owner is used in the <em>product</em> endpoint to set ownership of goods.</p><h1>Vendor</h1><p>Vendors are set for <em>purchase-order</em> endpoint, to specify which vendor the goods are delivered from.</p>
-                <p><em>To Be omitted in the spec and set in the mapping</em></p>
-              default: customer
-              enum: [customer, owner, vendor]
-              example: customer
-      - $ref: '#/components/schemas/Party'
-      - type: object
-        properties:
-          partyId:
-            type: string
-            maxLength: 35
-            description: |
-              <p>A unique identity for the party.</p>
-            example: CU123567X
     Customer:
       allOf:
       - $ref: '#/components/schemas/Party'
@@ -2179,23 +2085,6 @@ components:
             <p>Free text value to use with the attribute.</p>
             <p>For example, to add <em>Recommended Retail Price (RRP) = €35</em> to an object, you would set the value <em>€35</em></p>
           example: '€35'
-    Pagination:
-      type: object
-      properties:
-        limit:
-          type: number
-          format: int32
-          minimum: 0
-          maximum: 100
-          description: "Maxumum number of results to return."
-          example: 100
-        offset:
-          type: number
-          format: int32
-          minimum: 0
-          maximum: 10000
-          description: "An offset for the pagination. Set which result to start from."
-          example: 200
     Product:
       description: Product
       required:
@@ -2511,22 +2400,6 @@ components:
               #type: string
               #maxLength: 4
               #description: "WWS Artval Legal Lot Configuration if Legal Lot shall be used or not."
-            
-    ProductItem:
-      description: Product
-      allOf:
-        - $ref: '#/components/schemas/CommonProduct'
-        - type: object
-          required: 
-            - ownerId
-            - lowestUnitOfMeasure
-          properties:
-            productDescription:
-              type: string
-              maxLength: 1024
-              description: "The description / name of the Product."
-              example: A red widget for doing interesting stuff
-
     ProductNumber:
       description: This is used for adding additional product numbers to the WMS. Additional product numbers used for identifying the product and support non-standard barcodes. EAN, GTIN and other standard barcodes should use the EAN-part of the product endpoint.
       allOf:
