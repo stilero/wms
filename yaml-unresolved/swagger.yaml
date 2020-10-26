@@ -85,7 +85,37 @@ paths:
               schema:
                 $ref: '#/components/schemas/WhoAmIOut'
       deprecated: false
-    
+  /master-data:
+    get:
+      deprecated: false
+      security:
+        - schenker_auth:
+            - 'read'
+      tags:
+        - master-data   
+      summary: Returns links to all available master data resources
+      description: |
+        Returns a list of all available master data resources
+      operationId: getMasterdata
+      parameters: 
+        - $ref: '#/components/parameters/skipParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                example: [/master-data/products,/master-data/product-stock-group, /master-data/vendors,  /master-data/owners]
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'  
   /master-data/products:
     get:
       deprecated: false
@@ -1371,8 +1401,6 @@ components:
             A URI reference that identifies the specific
             occurrence of the problem.  It may or may not yield further
             information if dereferenced.
-
-
     WhoAmI:
       title: WhoAmI
       type: object
