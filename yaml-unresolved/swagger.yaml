@@ -1092,6 +1092,41 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '503':
           $ref: '#/components/responses/ServiceUnavailable'
+  /inventory/{productId}:
+    get:
+      deprecated: false
+      security:
+        - schenker_auth:
+            - 'read'
+      tags:
+        - inventory   
+      summary: Returns inventory balance report for product
+      description: |
+        <p>Returns an inventory balance report for the specified product</p>
+        <p>Please note that the balance levels are generated once daily, usually when operations are not running.</p>
+        <p>You can also subscribe to this balance report by using the /subscribe endpoint.</p>
+      operationId: getInventoryBalanceByProductId
+      parameters: 
+        - in: path
+          name: productId
+          description: product id to use
+          required: true
+          schema:
+            type: string
+          example: ABC1234567
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventoryBalance'
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
   /subscribe:
     post:
       summary: Subscribe to events in the WMS
