@@ -271,7 +271,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '503':
           $ref: '#/components/responses/ServiceUnavailable'
-  /master-data/product-stock-group:
+  /master-data/product-stock-groups:
     get:
       deprecated: false
       tags:
@@ -328,7 +328,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ProductStockGroup'
-  /master-data/product-stock-group/{productStockGroupId}:
+  /master-data/product-stock-groups/{productStockGroupId}:
     get:
       deprecated: false
       tags:
