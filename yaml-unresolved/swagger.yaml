@@ -3483,7 +3483,7 @@ components:
           example: 0
     PickReceipt:
       allOf:
-        - $ref: '#/components/schemas/CustomerOrderId'
+        - $ref: '#/components/schemas/OrderId'
         - $ref: '#/components/schemas/CommonWarehouseId'
         - type: object
           properties:
