@@ -1902,7 +1902,7 @@ components:
         orderSequence:
           type: number
           maxLength: 22
-          description: "A Sequence Number to make it possible to send a Customer Order more than once (e.g. backorder)."
+          description: "When there are multiple occurrences of the Purchase Order in the Warehouse system this tells in which order they have been received from the host system. A Sequence Number makes it possible to send an  Order more than once (e.g. backorder)."
           example: 1
           default: 0
     OrderLineNumber:
@@ -2828,13 +2828,13 @@ components:
     PurchaseOrder:
       description: Purchase orders contains information about goods delivered to the warehouse
       allOf:
-        - $ref: '#/components/schemas/PurchaseOrderId'
+        - $ref: '#/components/schemas/OrderId'
         - $ref: '#/components/schemas/CommonWarehouseId'
         - $ref: '#/components/schemas/CommonClientId'
         - type: object
           required:
-            - purchaseOrderId
-            - purchaseOrderSequence
+            - orderId
+            - orderSequence
             - vendorId
             - purchaseOrderTypeId
           properties:
