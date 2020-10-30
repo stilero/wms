@@ -1773,24 +1773,15 @@ components:
     CustomerOrder:
       allOf:
       - $ref: '#/components/schemas/OrderId'
+      - $ref: '#/components/schemas/OrderType'
+      - $ref: '#/components/schemas/CommonWarehouseId'
       - type: object
         required:
           - orderId
           - orderSequence
-          - orderType
+          - orderTypeId
           - warehouseId
         properties:
-          orderType:
-            type: string
-            maxLength: 2
-            description: "The Customer Order Type to classify this order. customer order types used must be agreed and activated by Warhouse prior to use. Common values are 'N' for normal orders, and 'E' for ecom order."
-            example: N
-          warehouseId:
-            type: string
-            maxLength: 4
-            description: "The identity of the Warehouse."
-            pattern: '^[A-Z0-9]+$'
-            example: GOT1
           orderReference:
             type: string
             maxLength: 140
@@ -1905,6 +1896,22 @@ components:
           description: "When there are multiple occurrences of the Purchase Order in the Warehouse system this tells in which order they have been received from the host system. A Sequence Number makes it possible to send an  Order more than once (e.g. backorder)."
           example: 1
           default: 0
+    OrderType:
+      type: object
+      properties:
+        orderTypeId:
+          type: string
+          maxLength: 2
+          description: |
+            <p>The identity of the order type. The order type must be agreed with host prior to use.</p>
+            <p>Common values are 
+              <ul>
+                <li>N - Normal orders</li>
+                <li>E - Ecom orders</li>
+                <li>R - Returns</li>
+              </p>"
+          example: N
+          default: N
     OrderLineNumber:
       type: object
       properties:
@@ -2830,22 +2837,14 @@ components:
       allOf:
         - $ref: '#/components/schemas/OrderId'
         - $ref: '#/components/schemas/CommonWarehouseId'
-        - $ref: '#/components/schemas/CommonClientId'
+        - $ref: '#/components/schemas/OrderType'
+        - $ref: '#/components/schemas/ArrivalDateTimes'
         - type: object
           required:
             - orderId
             - orderSequence
             - vendorId
-            - purchaseOrderTypeId
-          properties:
-            purchaseOrderTypeId:
-              type: string
-              maxLength: 8
-              description: "<p>The identity of the Type of Purchase Order. Purchase order type must be agreed with host prior to use.</p><p>Common values are <ul><li>N - Normal purchase orders</li><li>R - Returns</li></p>"
-              example: N
-              default: N
-        - $ref: '#/components/schemas/ArrivalDateTimes'
-        - type: object
+            - orderTypeId
           properties:
             transportMethod:
               type: string
@@ -2868,7 +2867,7 @@ components:
               maxLength: 68
               description: "Division Division, department, section, workshop or similar subordinate unit of a company / organization."
               example: home depot
-            purchaseOrderLines:
+            orderLines:
               type: array
               items:
                 $ref: '#/components/schemas/PurchaseOrderLine'
