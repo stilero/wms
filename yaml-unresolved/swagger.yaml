@@ -59,6 +59,7 @@ paths:
       summary: Server heartbeat operation
       description: >-
         Test if the server is responding.
+      operationId: ping
       security: []
       responses:
         '200':
@@ -833,6 +834,35 @@ paths:
           $ref: '#/components/responses/NotFound'
         '503':
           $ref: '#/components/responses/ServiceUnavailable'
+  /receipts/:
+    get:
+      deprecated: false
+      tags:
+        - inbound   
+      summary: Returns all activ receipt based on receipt id
+      description: |
+        By passing receipt id you can get details of a specific receipt
+      operationId: getReceipts
+      security:
+        - schenker_auth:
+            - 'read'
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeliveryReceipt'
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
   /receipts/{receiptId}:
     get:
       deprecated: false
@@ -1371,7 +1401,7 @@ components:
           format: int32
           minimum: 0
           maximum: 100
-          default: 10
+          default: 30
   requestBodies:
     DeliveryReceiptBody:
       required: true
@@ -1742,30 +1772,30 @@ components:
           #description: "Print Guarantee Certificate Controls (1=Yes,0=No) if a Guarantee Certificate shall be printed."
     CustomerOrder:
       allOf:
-      - $ref: '#/components/schemas/CustomerOrderId'
+      - $ref: '#/components/schemas/OrderId'
       - type: object
         required:
-          - customerOrderId
-          - customerOrderSequence
-          - customerOrderType
+          - orderId
+          - orderSequence
+          - orderType
           - warehouseId
         properties:
-          customerOrderType:
+          orderType:
             type: string
             maxLength: 2
             description: "The Customer Order Type to classify this order. customer order types used must be agreed and activated by Warhouse prior to use. Common values are 'N' for normal orders, and 'E' for ecom order."
             example: N
-          customerOrderReference:
-            type: string
-            maxLength: 140
-            description: "A Reference text for the customer order. Could be used for paper work or additional search functionality."
-            example: "REF:1234567"
           warehouseId:
             type: string
             maxLength: 4
             description: "The identity of the Warehouse."
             pattern: '^[A-Z0-9]+$'
             example: GOT1
+          orderReference:
+            type: string
+            maxLength: 140
+            description: "A Reference text for the customer order. Could be used for paper work or additional search functionality."
+            example: "REF:1234567"
           priority:
             type: string
             maxLength: 4
@@ -1786,7 +1816,7 @@ components:
             $ref: '#/components/schemas/TransportRequirements'
           transportInformation:
             $ref: '#/components/schemas/TransportInformation'
-          customerOrderLines:
+          orderLines:
             type: array
             description: The customer order lines contains details about the goods ordered.
             items:
@@ -1861,6 +1891,28 @@ components:
               </p>
             example: started
       - $ref: '#/components/schemas/CustomerOrder'
+    OrderId:
+      type: object
+      properties:
+        orderId:
+          type: string
+          maxLength: 35
+          description: "The identity of the Order."
+          example: SOUK123456
+        orderSequence:
+          type: number
+          maxLength: 22
+          description: "A Sequence Number to make it possible to send a Customer Order more than once (e.g. backorder)."
+          example: 1
+          default: 0
+    OrderLineNumber:
+      type: object
+      properties:
+        orderLineNumber:
+          type: number
+          maxLength: 22
+          description: "The order line number."
+          example: 1
     CustomerOrderId:
       type: object
       properties:
