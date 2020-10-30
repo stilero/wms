@@ -1318,6 +1318,22 @@ components:
                 example: 400
               detail:
                 example: Your request contains bad data or are missing mandatory parameters. Check your data and resend.
+    InvalidToken:
+      description: Unauthorized Request
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Error'
+            properties:
+              type:
+                example: 'http://developer.example.com/errors/unauthorized'
+              title:
+                example: Invalid token
+              status: 
+                example: 401
+              detail:
+                example: Your token is not valid, please reauthorize your request with a valid token             
     Unauthorized:
       description: Unauthorized Request
       content:
@@ -1513,13 +1529,13 @@ components:
           $ref: '#/components/schemas/WhoAmIResponse'
     CustomerOrderLine:
       allOf:
-      - $ref: '#/components/schemas/CustomerOrderLineNumber'
+      - $ref: '#/components/schemas/OrderLineNumber'
       - $ref: '#/components/schemas/CommonProductOwner'
       - $ref: '#/components/schemas/CommonQuantity'
       - $ref: '#/components/schemas/CommonUOM'
       - type: object
         required:
-          - customerOrderLineNumber
+          - orderLineNumber
           - quantity
           - warehouseId
         properties:
@@ -2846,17 +2862,17 @@ components:
             - vendorId
             - orderTypeId
           properties:
+            vendorId:
+              type: string
+              maxLength: 140
+              description: "The identity of the Vendor that sent the goods. Vendor identity must be sent to host system prior to use. Use endpoint <em>master-data/vendor</em> to add new vendors."
+              example: VEND-ACME
             transportMethod:
               type: string
               maxLength: 68
               description: "How the goods are transported (boat, plane, train, vehicle, etc). Only used as information." 
               enum: [boat, plane, train, vehicle, other]
               example: vehicle
-            vendorId:
-              type: string
-              maxLength: 140
-              description: "The identity of the Vendor that sent the goods. Vendor identity must be sent to host system prior to use. Use endpoint <em>master-data/vendor</em> to add new vendors."
-              example: VEND-ACME
             instructions:
               type: string
               maxLength: 1600
