@@ -113,6 +113,8 @@ paths:
                 example: [/master-data/products,/master-data/product-stock-group, /master-data/vendors,  /master-data/owners]
         '400':
           $ref: '#/components/responses/InvalidInput'
+        '401':
+          $ref: '#/components/responses/InvalidToken'  
         '403':
           $ref: '#/components/responses/Unauthorized'
         '503':
@@ -143,6 +145,8 @@ paths:
                   $ref: '#/components/schemas/Product'
         '400':
           $ref: '#/components/responses/InvalidInput'
+        '401':
+          $ref: '#/components/responses/InvalidToken'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '503':
@@ -187,6 +191,8 @@ paths:
                 the `productId` parameter in `PUT /master-data/products/{productId}` to update the product.
         '400':
           $ref: '#/components/responses/InvalidInput'
+        '401':
+          $ref: '#/components/responses/InvalidToken'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '409':
@@ -229,6 +235,8 @@ paths:
                   $ref: '#/components/schemas/Product'
         '400':
           $ref: '#/components/responses/InvalidInput'
+        '401':
+          $ref: '#/components/responses/InvalidToken'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -266,6 +274,8 @@ paths:
           description: product updated
         '400':
           $ref: '#/components/responses/InvalidInput'
+        '401':
+          $ref: '#/components/responses/InvalidToken'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -298,6 +308,8 @@ paths:
                   $ref: '#/components/schemas/ProductStockGroup'
         '400':
           $ref: '#/components/responses/InvalidInput'
+        '401':
+          $ref: '#/components/responses/InvalidToken'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '503':
@@ -318,6 +330,8 @@ paths:
           description: product stock group created
         '400':
           $ref: '#/components/responses/InvalidInput'
+        '401':
+          $ref: '#/components/responses/InvalidToken'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '409':
@@ -360,6 +374,8 @@ paths:
                   $ref: '#/components/schemas/ProductStockGroup'
         '400':
           $ref: '#/components/responses/InvalidInput'
+        '401':
+          $ref: '#/components/responses/InvalidToken'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -397,6 +413,8 @@ paths:
           description: product stock group updated
         '400':
           $ref: '#/components/responses/InvalidInput'
+        '401':
+          $ref: '#/components/responses/InvalidToken'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -430,6 +448,8 @@ paths:
                   $ref: '#/components/schemas/Vendor'
         '400':
           $ref: '#/components/responses/InvalidInput'
+        '401':
+          $ref: '#/components/responses/InvalidToken'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '503':
@@ -452,6 +472,8 @@ paths:
           description: vendor created
         '400':
           $ref: '#/components/responses/InvalidInput'
+        '401':
+          $ref: '#/components/responses/InvalidToken'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '409':
@@ -494,6 +516,8 @@ paths:
                   $ref: '#/components/schemas/Vendor'
         '400':
           $ref: '#/components/responses/InvalidInput'
+        '401':
+          $ref: '#/components/responses/InvalidToken'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -531,6 +555,8 @@ paths:
           description: product stock group updated
         '400':
           $ref: '#/components/responses/InvalidInput'
+        '401':
+          $ref: '#/components/responses/InvalidToken'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -565,6 +591,8 @@ paths:
                   $ref: '#/components/schemas/Owner'
         '400':
           $ref: '#/components/responses/InvalidInput'
+        '401':
+          $ref: '#/components/responses/InvalidToken'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '503':
@@ -588,6 +616,8 @@ paths:
           description: owner created
         '400':
           $ref: '#/components/responses/InvalidInput'
+        '401':
+          $ref: '#/components/responses/InvalidToken'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '409':
@@ -630,6 +660,8 @@ paths:
                   $ref: '#/components/schemas/Owner'
         '400':
           $ref: '#/components/responses/InvalidInput'
+        '401':
+          $ref: '#/components/responses/InvalidToken'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -667,6 +699,8 @@ paths:
           description: product stock group updated
         '400':
           $ref: '#/components/responses/InvalidInput'
+        '401':
+          $ref: '#/components/responses/InvalidToken'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -699,6 +733,8 @@ paths:
                   $ref: '#/components/schemas/OrderList'
         '400':
           $ref: '#/components/responses/InvalidInput'
+        '401':
+          $ref: '#/components/responses/InvalidToken'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '503':
@@ -719,6 +755,8 @@ paths:
           description: purchase order created
         '400':
           $ref: '#/components/responses/InvalidInput'
+        '401':
+          $ref: '#/components/responses/InvalidToken'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '409':
@@ -760,6 +798,8 @@ paths:
                   $ref: '#/components/schemas/PurchaseOrderOut'
         '400':
           $ref: '#/components/responses/InvalidInput'
+        '401':
+          $ref: '#/components/responses/InvalidToken'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -796,6 +836,8 @@ paths:
           description: customer order updated
         '400':
           $ref: '#/components/responses/InvalidInput'
+        '401':
+          $ref: '#/components/responses/InvalidToken'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -828,6 +870,8 @@ paths:
           description: purchase order deleted
         '400':
           $ref: '#/components/responses/InvalidInput'
+        '401':
+          $ref: '#/components/responses/InvalidToken'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -857,6 +901,8 @@ paths:
                   $ref: '#/components/schemas/DeliveryReceipt'
         '400':
           $ref: '#/components/responses/InvalidInput'
+        '401':
+          $ref: '#/components/responses/InvalidToken'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -893,6 +939,8 @@ paths:
                   $ref: '#/components/schemas/DeliveryReceipt'
         '400':
           $ref: '#/components/responses/InvalidInput'
+        '401':
+          $ref: '#/components/responses/InvalidToken'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -925,6 +973,8 @@ paths:
                   $ref: '#/components/schemas/OrderList'
         '400':
           $ref: '#/components/responses/InvalidInput'
+        '401':
+          $ref: '#/components/responses/InvalidToken'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '503':
@@ -945,6 +995,8 @@ paths:
           description: customer order created
         '400':
           $ref: '#/components/responses/InvalidInput'
+        '401':
+          $ref: '#/components/responses/InvalidToken'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '409':
@@ -986,6 +1038,8 @@ paths:
                   $ref: '#/components/schemas/CustomerOrderOut'
         '400':
           $ref: '#/components/responses/InvalidInput'
+        '401':
+          $ref: '#/components/responses/InvalidToken'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -1022,6 +1076,8 @@ paths:
           description: customer order updated
         '400':
           $ref: '#/components/responses/InvalidInput'
+        '401':
+          $ref: '#/components/responses/InvalidToken'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -1054,6 +1110,8 @@ paths:
           description: customer order deleted
         '400':
           $ref: '#/components/responses/InvalidInput'
+        '401':
+          $ref: '#/components/responses/InvalidToken'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -1086,6 +1144,8 @@ paths:
                   $ref: '#/components/schemas/Subscription'
         '400':
           $ref: '#/components/responses/InvalidInput'
+        '401':
+          $ref: '#/components/responses/InvalidToken'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '503':
@@ -1118,6 +1178,8 @@ paths:
                   $ref: '#/components/schemas/InventoryBalance'
         '400':
           $ref: '#/components/responses/InvalidInput'
+        '401':
+          $ref: '#/components/responses/InvalidToken'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '503':
@@ -1153,6 +1215,8 @@ paths:
                 $ref: '#/components/schemas/InventoryBalance'
         '400':
           $ref: '#/components/responses/InvalidInput'
+        '401':
+          $ref: '#/components/responses/InvalidToken'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '503':
