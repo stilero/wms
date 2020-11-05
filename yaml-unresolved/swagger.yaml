@@ -2032,6 +2032,7 @@ components:
           description: "The identity of the method that will be used when shipping the goods from the Warehouse. This identy must be setup and agreed by warehouse before use. If omitted, the Warehouse Management system will select the most appropriate delivery method for the customer order"
           example: SCHENKER_SP
         colletionPoint:
+          #COFTSMKS
           type: string
           maxLength: 35
           description: The collection point ID that the client want to pickup the shipment from. The ID is provided by the forwarder ID.
@@ -2047,10 +2048,17 @@ components:
           description: Account ID of the receiver of the shipment. Could be used for retailer or store ID when available. Leave blank if not used.
           example: 43
         deliveryInstructions:
+          #COFTXDEL
           type: string
           maxLength: 100
           description: Extra delivery instructions to the forwarder. Could be used to specify delivery time for time agreed service.
           example: "Kl. 08:00"
+        transportInstructions:
+          #COROWFTXTRA
+          type: string
+          maxLength: 100
+          description: Extra transport instructions to the forwarder. Could be used to specify transport instructions to the forwarder.
+          example: "Handle with care"
         serviceCodes:
           description: Service Codes are used and combined for special transport services lite nofitication by SMS.
           type: array
